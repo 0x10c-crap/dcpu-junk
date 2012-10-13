@@ -1,0 +1,33 @@
+.macro prints(x, y, message)
+    call(prints, x, y, message)
+.endmacro
+
+.macro call(func, param)
+    .if param !== A
+        SET A, param
+    .endif
+    JSR func
+.endmacro
+
+.macro call(func, param1, param2)
+    .if param1 !== A
+        SET A, param1
+    .endif
+    .if param2 !== B
+        SET B, param2
+    .endif
+    JSR func
+.endmacro
+
+.macro call(func, param1, param2, param3)
+    .if param1 !== A
+        SET A, param1
+    .endif
+    .if param2 !== B
+        SET B, param2
+    .endif
+    .if param3 !== C
+        SET C, param3
+    .endif
+    JSR func
+.endmacro

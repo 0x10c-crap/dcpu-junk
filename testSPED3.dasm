@@ -1,0 +1,60 @@
+find_sped3:
+    HWN A
+    SUB A, 1
+find_sped3_loop:
+    IFE A, -1
+        SET PC, POP
+    SET PUSH, A
+        HWQ A
+        IFE A, 0xbf3c
+            IFE B, 0x42ba
+                SET PC, sped3_found
+    SET A, POP
+    SUB A, 1
+    SET PC, find_sped3_loop
+sped3_found:
+    SET I, POP
+
+    SET X, test_shape
+    SET Y, test_shape_end - test_shape / 2
+    SET A, 1
+    HWI I
+    
+    SET X, 0
+rotate:
+    SET A, 2
+    ADD X, 10
+    HWI I
+    SET A, 0
+wait:
+    HWI I
+    IFE B, 1
+        SET PC, rotate
+    SET PC, wait
+    
+test_shape:
+    .equ black 0
+    .equ red 1
+    .equ green 2
+    .equ blue 3
+    .equ dim 0
+    .equ bright 1
+   ; Coordinates range from 0...255 inclusive
+   ;.dat XXX | (YYY << 8), (intensity << 11) | (color << 8) | ZZZ
+    .dat 000 | (000 << 8), (dim       << 10) | (green << 8) | 000
+    .dat 000 | (255 << 8), (dim       << 10) | (green << 8) | 000
+    .dat 255 | (255 << 8), (dim       << 10) | (green << 8) | 000
+    .dat 255 | (000 << 8), (dim       << 10) | (green << 8) | 000
+    .dat 000 | (000 << 8), (dim       << 10) | (green << 8) | 000
+    .dat 000 | (000 << 8), (dim       << 10) | (green << 8) | 255
+    .dat 255 | (000 << 8), (dim       << 10) | (green << 8) | 255
+    .dat 255 | (000 << 8), (dim       << 10) | (green << 8) | 000
+    .dat 255 | (000 << 8), (dim       << 10) | (green << 8) | 255
+    .dat 255 | (255 << 8), (dim       << 10) | (green << 8) | 255
+    .dat 255 | (255 << 8), (dim       << 10) | (green << 8) | 000
+    .dat 255 | (255 << 8), (dim       << 10) | (green << 8) | 255
+    .dat 000 | (255 << 8), (dim       << 10) | (green << 8) | 255
+    .dat 000 | (000 << 8), (dim       << 10) | (green << 8) | 255
+    .dat 000 | (255 << 8), (dim       << 10) | (green << 8) | 255
+    .dat 000 | (255 << 8), (dim       << 10) | (green << 8) | 000
+test_shape_end:

@@ -1,0 +1,78 @@
+; Fye boh natch eee
+    
+	JSR screen_init
+    ; c = a
+    ; a = a + b
+    ; b = c
+    SET X, 1 ; a
+    SET Y, 1 ; b
+    SET A, 0
+    SET B, 0
+fib_loop:
+    SET Z, X
+	ADD X, Y
+    SET Y, Z
+    SET C, X
+    JSR print_num
+    SET A, 10000
+burn_time:
+	SUB A, 1
+    IFN A, 0
+    	SET PC, burn_time
+    SET PC, fib_loop
+
+;;; Subroutines follow
+
+; print_num(x, y, value)
+print_num:
+	MUL B, A
+    ADD B, A
+    ADD B, 0x7FFF
+    SET PUSH, C
+digit_loop:
+	ADD B, 1
+	DIV C, 10
+    IFN C, 0
+    	SET PC, digit_loop
+    SET C, POP
+print_num_loop:
+	SET A, C
+    MOD A, 10
+    ADD A, 0xF030 ; '0'
+    SET [B], A
+    SUB B, 1
+    DIV C, 10
+    IFN C, 0
+    	SET PC, print_num_loop
+    SET PC, POP
+	
+; n-bit add
+; add_n(a, b, bits)
+add_n:
+	
+
+; Sets up the screen(s)
+; Connects all screens to 0x8000
+screen_init:
+    HWN A
+    SUB A, 1
+screen_init_loop:
+    IFE A, 0xFFFF
+        SET PC, POP
+    SET PUSH, A
+        HWQ A
+        IFE A, 0xf615
+            IFE B, 0x7349
+                SET PC, init_screen
+    SET A, POP
+    SUB A, 1
+    SET PC, screen_init_loop
+init_screen:
+    SET A, POP
+    SET C, A
+    SET A, 0
+    SET B, 0x8000 ; screen_buffer
+    HWI C
+    SET A, C
+    SUB A, 1
+    SET PC, screen_init_loop

@@ -1,0 +1,1775 @@
+minesweeper.dasm (line 1):    [0x0000] 7C20 099F       jsr map_hardware
+minesweeper.dasm (line 3):    [0x0002] 8401            set A, 0
+minesweeper.dasm (line 4):    [0x0003] 7C21 8000       set B, 0x8000
+minesweeper.dasm (line 5):    [0x0005] 7A40 099D       hwi [screen]
+minesweeper.dasm (line 7):    [0x0007] 8801            set A, 1
+minesweeper.dasm (line 8):    [0x0008] 7C21 8180       set B, 0x8180
+minesweeper.dasm (line 9):    [0x000A] 7A40 099D       hwi [screen]
+minesweeper.dasm (line 25):   [0x000C] 7C20 00F0       JSR intro
+minesweeper.dasm (line 27):   [0x000E] 7C01 07DD       SET A, tile0
+minesweeper.dasm (line 28):   [0x0010] 7C21 0059       SET B, 89
+minesweeper.dasm (line 29):   [0x0012] 7C41 8182       SET C, 0x8182
+minesweeper.dasm (line 30):   [0x0014] 7C20 098F       JSR storetiles
+minesweeper.dasm (line 31):   [0x0016]               :restart
+minesweeper.dasm (line 32):   [0x0016] 87C1 0201       SET [gamestate], 0
+minesweeper.dasm (line 33):   [0x0018] 87C1 0039       SET [gametimer], 0
+minesweeper.dasm (line 34):   [0x001A] 87C1 04CD       SET [game_started], 0
+minesweeper.dasm (line 35):   [0x001C] AFC1 04C6       SET [old_select_x], 10
+minesweeper.dasm (line 36):   [0x001E] AFC1 04C7       SET [old_select_y], 10
+minesweeper.dasm (line 37):   [0x0020] 7C20 01D7       JSR clear_board
+minesweeper.dasm (line 38):   [0x0022] 7C01 063D       SET A, boardtiles_l1
+minesweeper.dasm (line 39):   [0x0024] 7C21 0180       SET B, 384
+minesweeper.dasm (line 40):   [0x0026] 7C41 8000       SET C, 0x8000
+minesweeper.dasm (line 41):   [0x0028] 7C20 0616       JSR drawtiles
+minesweeper.dasm (line 43):   [0x002A] 7C01 00ED       SET A, minestext
+minesweeper.dasm (line 44):   [0x002C] 8C21            SET B, 2
+minesweeper.dasm (line 45):   [0x002D] 7C41 8122       SET C, 0x8122
+minesweeper.dasm (line 46):   [0x002F] 7C81 8F00       SET Y, 0x8F00
+minesweeper.dasm (line 47):   [0x0031] 7C20 01F0       JSR drawtext
+minesweeper.dasm (line 48):   [0x0033] 7C20 029F       JSR draw_timer
+minesweeper.dasm (line 50):   [0x0035] 7C20 0495       JSR change_selection
+minesweeper.dasm (line 51):   [0x0037] 7F81 0222       SET PC, gameloop
+minesweeper.dasm (line 53):   [0x0039]               :gametimer DAT 0
+minesweeper.dasm (line 53):   [0x0039]                 .DAT 0
+minesweeper.dasm (line 53):   [0x0039]                      0000
+minesweeper.dasm (line 54):   [0x003A]               :timer_second_value DAT 575
+minesweeper.dasm (line 54):   [0x003A]                 .DAT 575
+minesweeper.dasm (line 54):   [0x003A]                      023F
+minesweeper.dasm (line 55):   [0x003B]               :youwintext DAT 0x004F, 0x0050, 0x0051, 0x0052, 0x0053, 0x0054, 0x0055
+minesweeper.dasm (line 55):   [0x003B]                 .DAT 0x004F, 0x0050, 0x0051, 0x0052, 0x0053, 0x0054, 0x0055
+minesweeper.dasm (line 55):   [0x003B]                      004F 0050 0051 0052 0053 0054 0055
+minesweeper.dasm (line 56):   [0x0042]               :youlosetext DAT 0x004F, 0x0050, 0x0051, 0x0056, 0x0057, 0x0058, 0x0059
+minesweeper.dasm (line 56):   [0x0042]                 .DAT 0x004F, 0x0050, 0x0051, 0x0056, 0x0057, 0x0058, 0x0059
+minesweeper.dasm (line 56):   [0x0042]                      004F 0050 0051 0056 0057 0058 0059
+minesweeper.dasm (line 57):   [0x0049]               :logosmiley1 DAT 0x0000, 0xF014, 0xF015, 0xF016, 0xF017, 0x0000
+minesweeper.dasm (line 57):   [0x0049]                 .DAT 0x0000, 0xF014, 0xF015, 0xF016, 0xF017, 0x0000
+minesweeper.dasm (line 57):   [0x0049]                      0000 F014 F015 F016 F017 0000
+minesweeper.dasm (line 58):   [0x004F]               :logosmiley2 DAT 0xF033, 0xF034, 0xF035, 0xF036, 0xF037, 0xF038
+minesweeper.dasm (line 58):   [0x004F]                 .DAT 0xF033, 0xF034, 0xF035, 0xF036, 0xF037, 0xF038
+minesweeper.dasm (line 58):   [0x004F]                      F033 F034 F035 F036 F037 F038
+minesweeper.dasm (line 59):   [0x0055]               :logosmiley3 DAT 0x0000, 0xF039, 0xF03A, 0xF03B, 0xF03C, 0x0000
+minesweeper.dasm (line 59):   [0x0055]                 .DAT 0x0000, 0xF039, 0xF03A, 0xF03B, 0xF03C, 0x0000
+minesweeper.dasm (line 59):   [0x0055]                      0000 F039 F03A F03B F03C 0000
+minesweeper.dasm (line 60):   [0x005B]               :logosmiley2g DAT 0xF033, 0xF018, 0xF05C, 0xF07C, 0xF01C, 0xF038
+minesweeper.dasm (line 60):   [0x005B]                 .DAT 0xF033, 0xF018, 0xF05C, 0xF07C, 0xF01C, 0xF038
+minesweeper.dasm (line 60):   [0x005B]                      F033 F018 F05C F07C F01C F038
+minesweeper.dasm (line 62):   [0x0061]               :blklogosmiley1 DAT 0xFF00, 0x0F14, 0x0F15, 0x0F16, 0x0F17, 0xFF00
+minesweeper.dasm (line 62):   [0x0061]                 .DAT 0xFF00, 0x0F14, 0x0F15, 0x0F16, 0x0F17, 0xFF00
+minesweeper.dasm (line 62):   [0x0061]                      FF00 0F14 0F15 0F16 0F17 FF00
+minesweeper.dasm (line 63):   [0x0067]               :blklogosmiley2 DAT 0x0F33, 0x0F18, 0x0F5C, 0x0F7C, 0x0F1C, 0x0F38
+minesweeper.dasm (line 63):   [0x0067]                 .DAT 0x0F33, 0x0F18, 0x0F5C, 0x0F7C, 0x0F1C, 0x0F38
+minesweeper.dasm (line 63):   [0x0067]                      0F33 0F18 0F5C 0F7C 0F1C 0F38
+minesweeper.dasm (line 64):   [0x006D]               :blklogosmiley3 DAT 0xFF00, 0x0F39, 0x0F3A, 0x0F3B, 0x0F3C, 0xFF00
+minesweeper.dasm (line 64):   [0x006D]                 .DAT 0xFF00, 0x0F39, 0x0F3A, 0x0F3B, 0x0F3C, 0xFF00
+minesweeper.dasm (line 64):   [0x006D]                      FF00 0F39 0F3A 0F3B 0F3C FF00
+minesweeper.dasm (line 66):   [0x0073]               :spectrum DAT 0x0001, 0x0009, 0x0003, 0x000B, 0x0003, 0x0009
+minesweeper.dasm (line 66):   [0x0073]                 .DAT 0x0001, 0x0009, 0x0003, 0x000B, 0x0003, 0x0009
+minesweeper.dasm (line 66):   [0x0073]                      0001 0009 0003 000B 0003 0009
+minesweeper.dasm (line 68):   [0x0079]               :glasses1 DAT 0xF019, 0xF01A, 0xF01B, 0xF01C
+minesweeper.dasm (line 68):   [0x0079]                 .DAT 0xF019, 0xF01A, 0xF01B, 0xF01C
+minesweeper.dasm (line 68):   [0x0079]                      F019 F01A F01B F01C
+minesweeper.dasm (line 69):   [0x007D]               :glasses2 DAT 0xF01D, 0xF01E, 0xF01F, 0xF03D
+minesweeper.dasm (line 69):   [0x007D]                 .DAT 0xF01D, 0xF01E, 0xF01F, 0xF03D
+minesweeper.dasm (line 69):   [0x007D]                      F01D F01E F01F F03D
+minesweeper.dasm (line 70):   [0x0081]               :glasses3 DAT 0xF03F, 0xF03F, 0xF03F, 0xF03F
+minesweeper.dasm (line 70):   [0x0081]                 .DAT 0xF03F, 0xF03F, 0xF03F, 0xF03F
+minesweeper.dasm (line 70):   [0x0081]                      F03F F03F F03F F03F
+minesweeper.dasm (line 71):   [0x0085]               :glasses4 DAT 0x0000, 0xF05F, 0xF07D, 0xF07E
+minesweeper.dasm (line 71):   [0x0085]                 .DAT 0x0000, 0xF05F, 0xF07D, 0xF07E
+minesweeper.dasm (line 71):   [0x0085]                      0000 F05F F07D F07E
+minesweeper.dasm (line 72):   [0x0089]               :glasblank DAT 0x0000, 0x0000, 0x0000, 0x0000
+minesweeper.dasm (line 72):   [0x0089]                 .DAT 0x0000, 0x0000, 0x0000, 0x0000
+minesweeper.dasm (line 72):   [0x0089]                      0000 0000 0000 0000
+minesweeper.dasm (line 74):   [0x008D]               :minewhitetop DAT 0xF000, 0xF001, 0xF002, 0xF003, 0xF004, 0xF005, 0xF006, 0xF007, 0xF008, 0xF009, 0xF00A, 0xF00B, 0xF00C, 0xF00D, 0xF00E, 0xF00F, 0xF010, 0xF011, 0xF012
+minesweeper.dasm (line 74):   [0x008D]                 .DAT 0xF000, 0xF001, 0xF002, 0xF003, 0xF004, 0xF005, 0xF006, 0xF007, 0xF008, 0xF009, 0xF00A, 0xF00B, 0xF00C, 0xF00D, 0xF00E, 0xF00F, 0xF010, 0xF011, 0xF012
+minesweeper.dasm (line 74):   [0x008D]                      F000 F001 F002 F003 F004 F005 F006 F007
+minesweeper.dasm (line 74):   [0x0095]                      F008 F009 F00A F00B F00C F00D F00E F00F
+minesweeper.dasm (line 74):   [0x009D]                      F010 F011 F012
+minesweeper.dasm (line 76):   [0x00A0]               :minewhitebtm DAT 0xF020, 0xF021, 0xF022, 0xF023, 0xF024, 0xF025, 0xF026, 0xF027, 0xF028, 0xF029, 0xF02A, 0xF02B, 0xF02C, 0xF02D, 0xF02E, 0xF02F, 0xF030, 0xF031, 0xF032, 0xF032
+minesweeper.dasm (line 76):   [0x00A0]                 .DAT 0xF020, 0xF021, 0xF022, 0xF023, 0xF024, 0xF025, 0xF026, 0xF027, 0xF028, 0xF029, 0xF02A, 0xF02B, 0xF02C, 0xF02D, 0xF02E, 0xF02F, 0xF030, 0xF031, 0xF032, 0xF032
+minesweeper.dasm (line 76):   [0x00A0]                      F020 F021 F022 F023 F024 F025 F026 F027
+minesweeper.dasm (line 76):   [0x00A8]                      F028 F029 F02A F02B F02C F02D F02E F02F
+minesweeper.dasm (line 76):   [0x00B0]                      F030 F031 F032 F032
+minesweeper.dasm (line 78):   [0x00B4]               :sweeperwhitetop DAT 0xF040, 0xF041, 0xF042, 0xF043, 0xF044, 0xF045, 0xF046, 0xF047, 0xF048, 0xF049, 0xF04A, 0xF04B, 0xF04C, 0xF04D, 0xF04E, 0xF04F, 0xF050, 0xF051, 0xF052, 0xF053, 0xF054, 0xF055, 0xF056, 0xF057, 0xF058, 0xF059, 0xF05A, 0xF05B
+minesweeper.dasm (line 78):   [0x00B4]                 .DAT 0xF040, 0xF041, 0xF042, 0xF043, 0xF044, 0xF045, 0xF046, 0xF047, 0xF048, 0xF049, 0xF04A, 0xF04B, 0xF04C, 0xF04D, 0xF04E, 0xF04F, 0xF050, 0xF051, 0xF052, 0xF053, 0xF054, 0xF055, 0xF056, 0xF057, 0xF058, 0xF059, 0xF05A, 0xF05B
+minesweeper.dasm (line 78):   [0x00B4]                      F040 F041 F042 F043 F044 F045 F046 F047
+minesweeper.dasm (line 78):   [0x00BC]                      F048 F049 F04A F04B F04C F04D F04E F04F
+minesweeper.dasm (line 78):   [0x00C4]                      F050 F051 F052 F053 F054 F055 F056 F057
+minesweeper.dasm (line 78):   [0x00CC]                      F058 F059 F05A F05B
+minesweeper.dasm (line 80):   [0x00D0]               :sweeperwhitebtm DAT 0xF060, 0xF061, 0xF062, 0xF063, 0xF064, 0xF065, 0xF066, 0xF067, 0xF068, 0xF069, 0xF06A, 0xF06B, 0xF06C, 0xF06D, 0xF06E, 0xF06F, 0xF070, 0xF071, 0xF072, 0xF073, 0xF074, 0xF075, 0xF076, 0xF077, 0xF078, 0xF079, 0xF07A, 0xF07B
+minesweeper.dasm (line 80):   [0x00D0]                 .DAT 0xF060, 0xF061, 0xF062, 0xF063, 0xF064, 0xF065, 0xF066, 0xF067, 0xF068, 0xF069, 0xF06A, 0xF06B, 0xF06C, 0xF06D, 0xF06E, 0xF06F, 0xF070, 0xF071, 0xF072, 0xF073, 0xF074, 0xF075, 0xF076, 0xF077, 0xF078, 0xF079, 0xF07A, 0xF07B
+minesweeper.dasm (line 80):   [0x00D0]                      F060 F061 F062 F063 F064 F065 F066 F067
+minesweeper.dasm (line 80):   [0x00D8]                      F068 F069 F06A F06B F06C F06D F06E F06F
+minesweeper.dasm (line 80):   [0x00E0]                      F070 F071 F072 F073 F074 F075 F076 F077
+minesweeper.dasm (line 80):   [0x00E8]                      F078 F079 F07A F07B
+minesweeper.dasm (line 82):   [0x00EC]               :mines DAT 10
+minesweeper.dasm (line 82):   [0x00EC]                 .DAT 10
+minesweeper.dasm (line 82):   [0x00EC]                      000A
+minesweeper.dasm (line 83):   [0x00ED]               :minestext DAT 0x004E, 0x0045, 0x004E
+minesweeper.dasm (line 83):   [0x00ED]                 .DAT 0x004E, 0x0045, 0x004E
+minesweeper.dasm (line 83):   [0x00ED]                      004E 0045 004E
+minesweeper.dasm (line 85):   [0x00F0]               :intro
+minesweeper.dasm (line 86):   [0x00F0] 7C01 088F       SET A, intro0
+minesweeper.dasm (line 87):   [0x00F2] 7C21 0080       SET B, 128
+minesweeper.dasm (line 88):   [0x00F4] 7C41 8180       SET C, 0x8180
+minesweeper.dasm (line 89):   [0x00F6] 7C20 098F       JSR storetiles
+minesweeper.dasm (line 90):   [0x00F8] 84C1            SET I, 0
+minesweeper.dasm (line 91):   [0x00F9] 7C01 8000       SET A, 0x8000
+minesweeper.dasm (line 93):   [0x00FB] 7C01 0049       SET A, logosmiley1
+minesweeper.dasm (line 94):   [0x00FD] 9821            SET B, 5
+minesweeper.dasm (line 95):   [0x00FE] 7C41 808D       SET C, 0x808D
+minesweeper.dasm (line 96):   [0x0100] 7C20 0616       JSR drawtiles
+minesweeper.dasm (line 97):   [0x0102] 7C01 004F       SET A, logosmiley2
+minesweeper.dasm (line 98):   [0x0104] 9821            SET B, 5
+minesweeper.dasm (line 99):   [0x0105] 7C41 80AD       SET C, 0x80AD
+minesweeper.dasm (line 100):  [0x0107] 7C20 0616       JSR drawtiles
+minesweeper.dasm (line 101):  [0x0109] 7C01 0055       SET A, logosmiley3
+minesweeper.dasm (line 102):  [0x010B] 9821            SET B, 5
+minesweeper.dasm (line 103):  [0x010C] 7C41 80CD       SET C, 0x80CD
+minesweeper.dasm (line 104):  [0x010E] 7C20 0616       JSR drawtiles
+minesweeper.dasm (line 106):  [0x0110] 84C1            SET I, 0
+minesweeper.dasm (line 108):  [0x0111]               :glasses_fall_loop
+minesweeper.dasm (line 110):  [0x0111] 84E1            SET J, 0
+minesweeper.dasm (line 111):  [0x0112]               :slowdown_anim
+minesweeper.dasm (line 112):  [0x0112] 88E2            ADD J, 1
+minesweeper.dasm (line 113):  [0x0113] 7CF3 03E8       IFN J, 1000
+minesweeper.dasm (line 114):  [0x0115] 7F81 0112       SET PC, slowdown_anim
+minesweeper.dasm (line 116):  [0x0117] 9021            SET B, 3
+minesweeper.dasm (line 117):  [0x0118] 1861            SET X, I
+minesweeper.dasm (line 118):  [0x0119] 9068            MOD X, 3
+minesweeper.dasm (line 119):  [0x011A] 7C41 800E       SET C, 0x800E
+minesweeper.dasm (line 120):  [0x011C] 18A1            SET Z, I
+minesweeper.dasm (line 121):  [0x011D] 90A6            DIV Z, 3
+minesweeper.dasm (line 122):  [0x011E] 7CA4 0020       MUL Z, 32
+minesweeper.dasm (line 123):  [0x0120] 1442            ADD C, Z
+minesweeper.dasm (line 125):  [0x0121] 8472            IFE X, 0
+minesweeper.dasm (line 126):  [0x0122] 7C01 0079       SET A, glasses1
+minesweeper.dasm (line 127):  [0x0124] 8872            IFE X, 1
+minesweeper.dasm (line 128):  [0x0125] 7C01 007D       SET A, glasses2
+minesweeper.dasm (line 129):  [0x0127] 8C72            IFE X, 2
+minesweeper.dasm (line 130):  [0x0128] 7C01 0081       SET A, glasses3
+minesweeper.dasm (line 132):  [0x012A] 7C20 0616       JSR drawtiles
+minesweeper.dasm (line 134):  [0x012C] 7C01 0089       SET A, glasblank
+minesweeper.dasm (line 135):  [0x012E] 7C43 0020       SUB C, 32
+minesweeper.dasm (line 136):  [0x0130] 7C20 0616       JSR drawtiles
+minesweeper.dasm (line 138):  [0x0132] 8C72            IFE X, 2
+minesweeper.dasm (line 139):  [0x0133] 7C20 01D0       JSR glassesbottom
+minesweeper.dasm (line 141):  [0x0135] 88C2            ADD I, 1
+minesweeper.dasm (line 143):  [0x0136] C8D3            IFN I, 17
+minesweeper.dasm (line 144):  [0x0137] 7F81 0111       SET PC, glasses_fall_loop
+minesweeper.dasm (line 147):  [0x0139] 7C01 0049       SET A, logosmiley1
+minesweeper.dasm (line 148):  [0x013B] 9821            SET B, 5
+minesweeper.dasm (line 149):  [0x013C] 7C41 808D       SET C, 0x808D
+minesweeper.dasm (line 150):  [0x013E] 7C20 0616       JSR drawtiles
+minesweeper.dasm (line 151):  [0x0140] 7C01 005B       SET A, logosmiley2g
+minesweeper.dasm (line 152):  [0x0142] 9821            SET B, 5
+minesweeper.dasm (line 153):  [0x0143] 7C41 80AD       SET C, 0x80AD
+minesweeper.dasm (line 154):  [0x0145] 7C20 0616       JSR drawtiles
+minesweeper.dasm (line 155):  [0x0147] 7C01 0055       SET A, logosmiley3
+minesweeper.dasm (line 156):  [0x0149] 9821            SET B, 5
+minesweeper.dasm (line 157):  [0x014A] 7C41 80CD       SET C, 0x80CD
+minesweeper.dasm (line 158):  [0x014C] 7C20 0616       JSR drawtiles
+minesweeper.dasm (line 160):  [0x014E] 7C01 008D       SET A, minewhitetop
+minesweeper.dasm (line 161):  [0x0150] CC21            SET B, 18
+minesweeper.dasm (line 162):  [0x0151] 7C41 8046       SET C, 0x8046
+minesweeper.dasm (line 163):  [0x0153] 7C20 0616       JSR drawtiles
+minesweeper.dasm (line 164):  [0x0155] 7C01 00A0       SET A, minewhitebtm
+minesweeper.dasm (line 165):  [0x0157] CC21            SET B, 18
+minesweeper.dasm (line 166):  [0x0158] 7C41 8066       SET C, 0x8066
+minesweeper.dasm (line 167):  [0x015A] 7C20 0616       JSR drawtiles
+minesweeper.dasm (line 169):  [0x015C] 7C01 00B4       SET A, sweeperwhitetop
+minesweeper.dasm (line 170):  [0x015E] F021            SET B, 27
+minesweeper.dasm (line 171):  [0x015F] 7C41 80E2       SET C, 0x80E2
+minesweeper.dasm (line 172):  [0x0161] 7C20 0616       JSR drawtiles
+minesweeper.dasm (line 173):  [0x0163] 7C01 00D0       SET A, sweeperwhitebtm
+minesweeper.dasm (line 174):  [0x0165] F021            SET B, 27
+minesweeper.dasm (line 175):  [0x0166] 7C41 8102       SET C, 0x8102
+minesweeper.dasm (line 176):  [0x0168] 7C20 0616       JSR drawtiles
+minesweeper.dasm (line 178):  [0x016A] 84E1            SET J, 0
+minesweeper.dasm (line 179):  [0x016B]               :wait_logo
+minesweeper.dasm (line 180):  [0x016B] 88E2            ADD J, 1
+minesweeper.dasm (line 181):  [0x016C] 7CF3 03E8       IFN J, 1000
+minesweeper.dasm (line 182):  [0x016E] 7F81 016B       SET PC, wait_logo
+minesweeper.dasm (line 184):  [0x0170] 84E1            SET J, 0
+minesweeper.dasm (line 185):  [0x0171] 7C01 8000       SET A, 0x8000
+minesweeper.dasm (line 186):  [0x0173]               :white_screen
+minesweeper.dasm (line 187):  [0x0173] 7D01 FF00       SET [A], 0xFF00
+minesweeper.dasm (line 188):  [0x0175] 88E2            ADD J, 1
+minesweeper.dasm (line 189):  [0x0176] 8802            ADD A, 1
+minesweeper.dasm (line 190):  [0x0177] 7CF3 0180       IFN J, 384
+minesweeper.dasm (line 191):  [0x0179] 7F81 0173       SET PC, white_screen
+minesweeper.dasm (line 195):  [0x017B] 7C01 0061       SET A, blklogosmiley1
+minesweeper.dasm (line 196):  [0x017D] 9821            SET B, 5
+minesweeper.dasm (line 197):  [0x017E] 7C41 808D       SET C, 0x808D
+minesweeper.dasm (line 198):  [0x0180] 7C20 0616       JSR drawtiles
+minesweeper.dasm (line 199):  [0x0182] 7C01 0067       SET A, blklogosmiley2
+minesweeper.dasm (line 200):  [0x0184] 9821            SET B, 5
+minesweeper.dasm (line 201):  [0x0185] 7C41 80AD       SET C, 0x80AD
+minesweeper.dasm (line 202):  [0x0187] 7C20 0616       JSR drawtiles
+minesweeper.dasm (line 203):  [0x0189] 7C01 006D       SET A, blklogosmiley3
+minesweeper.dasm (line 204):  [0x018B] 9821            SET B, 5
+minesweeper.dasm (line 205):  [0x018C] 7C41 80CD       SET C, 0x80CD
+minesweeper.dasm (line 206):  [0x018E] 7C20 0616       JSR drawtiles
+minesweeper.dasm (line 208):  [0x0190] 84E1            SET J, 0
+minesweeper.dasm (line 209):  [0x0191]               :cycle_logo
+minesweeper.dasm (line 210):  [0x0191] 88E2            ADD J, 1
+minesweeper.dasm (line 213):  [0x0192] 7C01 008D       SET A, minewhitetop
+minesweeper.dasm (line 214):  [0x0194] CC21            SET B, 18
+minesweeper.dasm (line 215):  [0x0195] 7C41 8046       SET C, 0x8046
+minesweeper.dasm (line 216):  [0x0197] 7C20 01B3       JSR drawrainbow
+minesweeper.dasm (line 217):  [0x0199] 7C01 00A0       SET A, minewhitebtm
+minesweeper.dasm (line 218):  [0x019B] CC21            SET B, 18
+minesweeper.dasm (line 219):  [0x019C] 7C41 8066       SET C, 0x8066
+minesweeper.dasm (line 220):  [0x019E] 7C20 01B3       JSR drawrainbow
+minesweeper.dasm (line 222):  [0x01A0] 7C01 00B4       SET A, sweeperwhitetop
+minesweeper.dasm (line 223):  [0x01A2] F021            SET B, 27
+minesweeper.dasm (line 224):  [0x01A3] 7C41 80E2       SET C, 0x80E2
+minesweeper.dasm (line 225):  [0x01A5] 7C20 01B3       JSR drawrainbow
+minesweeper.dasm (line 226):  [0x01A7] 7C01 00D0       SET A, sweeperwhitebtm
+minesweeper.dasm (line 227):  [0x01A9] F021            SET B, 27
+minesweeper.dasm (line 228):  [0x01AA] 7C41 8102       SET C, 0x8102
+minesweeper.dasm (line 229):  [0x01AC] 7C20 01B3       JSR drawrainbow
+minesweeper.dasm (line 231):  [0x01AE] 7CF3 0042       IFN J, 66
+minesweeper.dasm (line 232):  [0x01B0] 7F81 0191       SET PC, cycle_logo
+minesweeper.dasm (line 234):  [0x01B2] 6381            SET PC, POP
+minesweeper.dasm (line 236):  [0x01B3]               :drawrainbow
+minesweeper.dasm (line 237):  [0x01B3] 1B01            SET PUSH, I
+minesweeper.dasm (line 238):  [0x01B4] 0B01            SET PUSH, C
+minesweeper.dasm (line 239):  [0x01B5] 84C1            SET I, 0
+minesweeper.dasm (line 240):  [0x01B6] 1C61            SET X, J
+minesweeper.dasm (line 241):  [0x01B7] 9C68            MOD X, 6
+minesweeper.dasm (line 243):  [0x01B8]               :drawrainbow_loop
+minesweeper.dasm (line 244):  [0x01B8] 2141            SET [C], [A]
+minesweeper.dasm (line 245):  [0x01B9] A54F            SHL [C], 8
+minesweeper.dasm (line 246):  [0x01BA] A54D            SHR [C], 8
+minesweeper.dasm (line 247):  [0x01BB] 7D42 0F00       ADD [C], 0x0F00
+minesweeper.dasm (line 248):  [0x01BD] 0C81            SET Y, X
+minesweeper.dasm (line 249):  [0x01BE] 7C82 0073       ADD Y, spectrum
+minesweeper.dasm (line 250):  [0x01C0] 3081            SET Y, [Y]
+minesweeper.dasm (line 251):  [0x01C1] B48F            SHL Y, 12
+minesweeper.dasm (line 252):  [0x01C2] 114B            BOR [C], Y
+minesweeper.dasm (line 253):  [0x01C3] 8842            ADD C, 1
+minesweeper.dasm (line 254):  [0x01C4] 8802            ADD A, 1
+minesweeper.dasm (line 255):  [0x01C5] 88C2            ADD I, 1
+minesweeper.dasm (line 256):  [0x01C6] 8862            ADD X, 1
+minesweeper.dasm (line 257):  [0x01C7] 9C68            MOD X, 6
+minesweeper.dasm (line 258):  [0x01C8] 04D4            IFG I, B
+minesweeper.dasm (line 259):  [0x01C9] 7F81 01CD       SET PC, drawrainbow_end
+minesweeper.dasm (line 260):  [0x01CB] 7F81 01B8       SET PC, drawrainbow_loop
+minesweeper.dasm (line 262):  [0x01CD]               :drawrainbow_end
+minesweeper.dasm (line 263):  [0x01CD] 6041            SET C, POP
+minesweeper.dasm (line 264):  [0x01CE] 60C1            SET I, POP
+minesweeper.dasm (line 265):  [0x01CF] 6381            SET PC, POP
+minesweeper.dasm (line 267):  [0x01D0]               :glassesbottom
+minesweeper.dasm (line 268):  [0x01D0] 7C42 0040       ADD C, 64
+minesweeper.dasm (line 269):  [0x01D2] 7C01 0085       SET A, glasses4
+minesweeper.dasm (line 270):  [0x01D4] 7C20 0616       JSR drawtiles
+minesweeper.dasm (line 271):  [0x01D6] 6381            SET PC, POP
+minesweeper.dasm (line 273):  [0x01D7]               :clear_board
+minesweeper.dasm (line 274):  [0x01D7] 84C1            SET I, 0
+minesweeper.dasm (line 275):  [0x01D8] 7CE1 051F       SET J, board
+minesweeper.dasm (line 276):  [0x01DA] 7C81 04CE       SET Y, flag
+minesweeper.dasm (line 278):  [0x01DC]               :clearboard_loop
+minesweeper.dasm (line 279):  [0x01DC] 85E1            SET [J], 0
+minesweeper.dasm (line 280):  [0x01DD] 8581            SET [Y], 0
+minesweeper.dasm (line 281):  [0x01DE] 88E2            ADD J, 1
+minesweeper.dasm (line 282):  [0x01DF] 8882            ADD Y, 1
+minesweeper.dasm (line 283):  [0x01E0] 88C2            ADD I, 1
+minesweeper.dasm (line 284):  [0x01E1] 7CD3 0051       IFN I, 81
+minesweeper.dasm (line 285):  [0x01E3] 7F81 01DC       SET PC, clearboard_loop
+minesweeper.dasm (line 287):  [0x01E5] 7C01 0373       SET A, tiletypes_left
+minesweeper.dasm (line 288):  [0x01E7] AC02            ADD A, 10
+minesweeper.dasm (line 289):  [0x01E8] 7D01 8701       SET [A], 0x8701
+minesweeper.dasm (line 291):  [0x01EA] 7C01 037F       SET A, tiletypes_right
+minesweeper.dasm (line 292):  [0x01EC] AC02            ADD A, 10
+minesweeper.dasm (line 293):  [0x01ED] 7D01 8702       SET [A], 0x8702
+minesweeper.dasm (line 295):  [0x01EF] 6381            SET PC, POP
+minesweeper.dasm (line 297):  [0x01F0]               :drawtext
+minesweeper.dasm (line 298):  [0x01F0] 1B01            SET PUSH, I
+minesweeper.dasm (line 299):  [0x01F1] 84C1            SET I, 0
+minesweeper.dasm (line 300):  [0x01F2] 0F01            SET PUSH, X
+minesweeper.dasm (line 302):  [0x01F3]               :drawtext_loop
+minesweeper.dasm (line 303):  [0x01F3] 2061            SET X, [A]
+minesweeper.dasm (line 304):  [0x01F4] 106B            BOR X, Y
+minesweeper.dasm (line 305):  [0x01F5] 0D41            SET [C], X
+minesweeper.dasm (line 306):  [0x01F6] 8842            ADD C, 1
+minesweeper.dasm (line 307):  [0x01F7] 8802            ADD A, 1
+minesweeper.dasm (line 308):  [0x01F8] 88C2            ADD I, 1
+minesweeper.dasm (line 309):  [0x01F9] 04D4            IFG I, B
+minesweeper.dasm (line 310):  [0x01FA] 7F81 01FE       SET PC, drawtext_end
+minesweeper.dasm (line 311):  [0x01FC] 7F81 01F3       SET PC, drawtext_loop
+minesweeper.dasm (line 313):  [0x01FE]               :drawtext_end
+minesweeper.dasm (line 314):  [0x01FE] 6061            SET X, POP
+minesweeper.dasm (line 315):  [0x01FF] 60C1            SET I, POP
+minesweeper.dasm (line 316):  [0x0200] 6381            SET PC, POP
+minesweeper.dasm (line 318):  [0x0201]               :gamestate DAT 0
+minesweeper.dasm (line 318):  [0x0201]                 .DAT 0
+minesweeper.dasm (line 318):  [0x0201]                      0000
+minesweeper.dasm (line 320):  [0x0202]               :endgame
+minesweeper.dasm (line 322):  [0x0202] 8BD2 0201       IFE [gamestate], 1
+minesweeper.dasm (line 323):  [0x0204] 7C01 003B       SET A, youwintext
+minesweeper.dasm (line 324):  [0x0206] 8FD2 0201       IFE [gamestate], 2
+minesweeper.dasm (line 325):  [0x0208] 7C01 0042       SET A, youlosetext
+minesweeper.dasm (line 326):  [0x020A] 9C21            SET B, 6
+minesweeper.dasm (line 327):  [0x020B] 7C41 816C       SET C, 0x816C
+minesweeper.dasm (line 328):  [0x020D] 8BD2 0201       IFE [gamestate], 1
+minesweeper.dasm (line 329):  [0x020F] 7C81 9700       SET Y, 0x9700
+minesweeper.dasm (line 330):  [0x0211] 8FD2 0201       IFE [gamestate], 2
+minesweeper.dasm (line 331):  [0x0213] 7C81 4700       SET Y, 0x4700
+minesweeper.dasm (line 332):  [0x0215] 7C20 01F0       JSR drawtext
+minesweeper.dasm (line 334):  [0x0217]               :endgame_loop
+minesweeper.dasm (line 338):  [0x0217] 8801            set a, 1
+minesweeper.dasm (line 339):  [0x0218] 8441            set c, 0
+minesweeper.dasm (line 340):  [0x0219]               :buffloop2
+minesweeper.dasm (line 341):  [0x0219] 7E40 0001       hwi 1
+minesweeper.dasm (line 347):  [0x021B] 8452            ife c, 0
+minesweeper.dasm (line 348):  [0x021C] 7F81 0219       SET pc, buffloop2
+minesweeper.dasm (line 350):  [0x021E] C852            IFE c, 0x0011
+minesweeper.dasm (line 351):  [0x021F] DF81            SET PC, restart
+minesweeper.dasm (line 356):  [0x0220] 7F81 0217       SET PC, endgame_loop
+minesweeper.dasm (line 364):  [0x0222]               :gameloop
+minesweeper.dasm (line 365):  [0x0222] 87D3 0201       IFN [gamestate], 0
+minesweeper.dasm (line 366):  [0x0224] 7F81 0202       SET PC, endgame
+minesweeper.dasm (line 367):  [0x0226] 8BC2 04CC       ADD [timer], 1
+minesweeper.dasm (line 368):  [0x0228] 87D2 04CD       IFE [game_started], 0
+minesweeper.dasm (line 369):  [0x022A] 7F81 023D       SET PC, skip_timer
+minesweeper.dasm (line 371):  [0x022C] 7801 04CC       SET A, [timer]
+minesweeper.dasm (line 372):  [0x022E] 7808 003A       MOD A, [timer_second_value]
+minesweeper.dasm (line 373):  [0x0230] 8413            IFN A, 0
+minesweeper.dasm (line 374):  [0x0231] 7F81 023D       SET PC, skip_timer
+minesweeper.dasm (line 376):  [0x0233] 8BC2 0039       ADD [gametimer], 1
+minesweeper.dasm (line 377):  [0x0235] 7FD4 03E7 0039  IFG [gametimer], 999
+minesweeper.dasm (line 378):  [0x0238] 7FC1 03E7 0039  SET [gametimer], 999
+minesweeper.dasm (line 380):  [0x023B] 7C20 029F       JSR draw_timer
+minesweeper.dasm (line 382):  [0x023D]               :skip_timer
+minesweeper.dasm (line 385):  [0x023D] 7C01 1000       set A, 0x1000
+minesweeper.dasm (line 386):  [0x023F] 7C20 09B4       jsr pause
+minesweeper.dasm (line 388):  [0x0241] 8421            set B, 0
+minesweeper.dasm (line 389):  [0x0242]               :buffloop
+minesweeper.dasm (line 390):  [0x0242] 8C01            set A, 2
+minesweeper.dasm (line 391):  [0x0243] 7C21 0082       set B, 0x0082
+minesweeper.dasm (line 392):  [0x0245] 7E40 0001       hwi 1
+minesweeper.dasm (line 393):  [0x0247] 8852            ife C, 1
+minesweeper.dasm (line 394):  [0x0248] 7F81 0265       set pc, buffloop_end
+minesweeper.dasm (line 395):  [0x024A] 7C21 0080       set B, 0x0080
+minesweeper.dasm (line 396):  [0x024C] 7E40 0001       hwi 1
+minesweeper.dasm (line 397):  [0x024E] 8852            ife C, 1
+minesweeper.dasm (line 398):  [0x024F] 7F81 0265       set pc, buffloop_end
+minesweeper.dasm (line 399):  [0x0251] 7C21 0083       set B, 0x0083
+minesweeper.dasm (line 400):  [0x0253] 7E40 0001       hwi 1
+minesweeper.dasm (line 401):  [0x0255] 8852            ife C, 1
+minesweeper.dasm (line 402):  [0x0256] 7F81 0265       set pc, buffloop_end
+minesweeper.dasm (line 403):  [0x0258] 7C21 0081       set B, 0x0081
+minesweeper.dasm (line 404):  [0x025A] 7E40 0001       hwi 1
+minesweeper.dasm (line 405):  [0x025C] 8852            ife C, 1
+minesweeper.dasm (line 406):  [0x025D] 7F81 0265       set pc, buffloop_end
+minesweeper.dasm (line 407):  [0x025F] 8801            set A, 1
+minesweeper.dasm (line 408):  [0x0260] 7E40 0001       hwi 1
+minesweeper.dasm (line 409):  [0x0262] 8452            ife C, 0
+minesweeper.dasm (line 410):  [0x0263] 7F81 0242       SET pc, buffloop
+minesweeper.dasm (line 411):  [0x0265]               :buffloop_end
+minesweeper.dasm (line 413):  [0x0265] 8852            ife C, 1
+minesweeper.dasm (line 414):  [0x0266] 0441            set C, B
+minesweeper.dasm (line 416):  [0x0267] 8401            SET A, 0
+minesweeper.dasm (line 417):  [0x0268] 7C52 0082       IFE c, 0x0082
+minesweeper.dasm (line 418):  [0x026A] 8C01            SET A, 2
+minesweeper.dasm (line 419):  [0x026B] 7C52 0080       IFE c, 0x0080
+minesweeper.dasm (line 420):  [0x026D] 9401            SET A, 4
+minesweeper.dasm (line 421):  [0x026E] 7C52 0083       IFE c, 0x0083
+minesweeper.dasm (line 422):  [0x0270] 8801            SET A, 1
+minesweeper.dasm (line 423):  [0x0271] 7C52 0081       IFE c, 0x0081
+minesweeper.dasm (line 424):  [0x0273] 9001            SET A, 3
+minesweeper.dasm (line 425):  [0x0274] C852            IFE c, 0x0011
+minesweeper.dasm (line 426):  [0x0275] 7C20 02DA       JSR action
+minesweeper.dasm (line 427):  [0x0277] 7C52 0066       IFE c, 0x0066
+minesweeper.dasm (line 428):  [0x0279] 7C20 02CB       JSR flagspace
+minesweeper.dasm (line 430):  [0x027B] 8413            IFN A, 0
+minesweeper.dasm (line 431):  [0x027C] 7C20 0280       JSR select_move
+minesweeper.dasm (line 436):  [0x027E] 7F81 0222       SET PC, gameloop
+minesweeper.dasm (line 438):  [0x0280]               :select_move
+minesweeper.dasm (line 439):  [0x0280] 8812            IFE A, 1
+minesweeper.dasm (line 440):  [0x0281] 8BC2 04CA       ADD [select_x], 1
+minesweeper.dasm (line 441):  [0x0283] 8C12            IFE A, 2
+minesweeper.dasm (line 442):  [0x0284] 8BC3 04CA       SUB [select_x], 1
+minesweeper.dasm (line 443):  [0x0286] 9012            IFE A, 3
+minesweeper.dasm (line 444):  [0x0287] 8BC2 04CB       ADD [select_y], 1
+minesweeper.dasm (line 445):  [0x0289] 9412            IFE A, 4
+minesweeper.dasm (line 446):  [0x028A] 8BC3 04CB       SUB [select_y], 1
+minesweeper.dasm (line 447):  [0x028C] AFD4 04CA       IFG [select_x], 10
+minesweeper.dasm (line 448):  [0x028E] 87C1 04CA       SET [select_x], 0
+minesweeper.dasm (line 449):  [0x0290] AFD4 04CB       IFG [select_y], 10
+minesweeper.dasm (line 450):  [0x0292] 87C1 04CB       SET [select_y], 0
+minesweeper.dasm (line 451):  [0x0294] A7D4 04CA       IFG [select_x], 8
+minesweeper.dasm (line 452):  [0x0296] A7C1 04CA       SET [select_x], 8
+minesweeper.dasm (line 453):  [0x0298] A7D4 04CB       IFG [select_y], 8
+minesweeper.dasm (line 454):  [0x029A] A7C1 04CB       SET [select_y], 8
+minesweeper.dasm (line 456):  [0x029C] 7C20 0495       JSR change_selection
+minesweeper.dasm (line 457):  [0x029E] 6381            SET PC, POP
+minesweeper.dasm (line 459):  [0x029F]               :draw_timer
+minesweeper.dasm (line 460):  [0x029F] 0301            SET PUSH, A
+minesweeper.dasm (line 461):  [0x02A0] 0701            SET PUSH, B
+minesweeper.dasm (line 462):  [0x02A1] 0B01            SET PUSH, C
+minesweeper.dasm (line 463):  [0x02A2] 7C01 813B       SET A, 0x813B
+minesweeper.dasm (line 465):  [0x02A4] 7841 0039       SET C, [gametimer]
+minesweeper.dasm (line 466):  [0x02A6] 7C46 0064       DIV C, 100
+minesweeper.dasm (line 467):  [0x02A8] AC48            MOD C, 10
+minesweeper.dasm (line 468):  [0x02A9] 7C21 8F44       SET B, 0x8F44
+minesweeper.dasm (line 469):  [0x02AB] 0822            ADD B, C
+minesweeper.dasm (line 470):  [0x02AC] 8452            IFE C, 0
+minesweeper.dasm (line 471):  [0x02AD] 7C21 8F4E       SET B, 0x8F4E
+minesweeper.dasm (line 473):  [0x02AF] 0501            SET [A], B
+minesweeper.dasm (line 474):  [0x02B0] 8802            ADD A, 1
+minesweeper.dasm (line 476):  [0x02B1] 7841 0039       SET C, [gametimer]
+minesweeper.dasm (line 477):  [0x02B3] AC46            DIV C, 10
+minesweeper.dasm (line 478):  [0x02B4] AC48            MOD C, 10
+minesweeper.dasm (line 479):  [0x02B5] 7C21 8F44       SET B, 0x8F44
+minesweeper.dasm (line 480):  [0x02B7] 0822            ADD B, C
+minesweeper.dasm (line 481):  [0x02B8] 8452            IFE C, 0
+minesweeper.dasm (line 482):  [0x02B9] 7C21 8F4E       SET B, 0x8F4E
+minesweeper.dasm (line 484):  [0x02BB] 0501            SET [A], B
+minesweeper.dasm (line 485):  [0x02BC] 8802            ADD A, 1
+minesweeper.dasm (line 487):  [0x02BD] 7841 0039       SET C, [gametimer]
+minesweeper.dasm (line 488):  [0x02BF] AC48            MOD C, 10
+minesweeper.dasm (line 489):  [0x02C0] 7C21 8F44       SET B, 0x8F44
+minesweeper.dasm (line 490):  [0x02C2] 0822            ADD B, C
+minesweeper.dasm (line 491):  [0x02C3] 8452            IFE C, 0
+minesweeper.dasm (line 492):  [0x02C4] 7C21 8F4E       SET B, 0x8F4E
+minesweeper.dasm (line 494):  [0x02C6] 0501            SET [A], B
+minesweeper.dasm (line 496):  [0x02C7] 6041            SET C, POP
+minesweeper.dasm (line 497):  [0x02C8] 6021            SET B, POP
+minesweeper.dasm (line 498):  [0x02C9] 6001            SET A, POP
+minesweeper.dasm (line 499):  [0x02CA] 6381            SET PC, POP
+minesweeper.dasm (line 501):  [0x02CB]               :flagspace
+minesweeper.dasm (line 502):  [0x02CB] 0301            SET PUSH, A
+minesweeper.dasm (line 503):  [0x02CC] 7801 04CA       SET A, [select_x]
+minesweeper.dasm (line 504):  [0x02CE] 7821 04CB       SET B, [select_y]
+minesweeper.dasm (line 505):  [0x02D0] A824            MUL B, 9
+minesweeper.dasm (line 506):  [0x02D1] 0402            ADD A, B
+minesweeper.dasm (line 507):  [0x02D2] 7C02 04CE       ADD A, flag
+minesweeper.dasm (line 508):  [0x02D4] 8902            ADD [A], 1
+minesweeper.dasm (line 509):  [0x02D5] 8D08            MOD [A], 2
+minesweeper.dasm (line 511):  [0x02D6] 7C20 036A       JSR redraw_board
+minesweeper.dasm (line 513):  [0x02D8] 6001            SET A, POP
+minesweeper.dasm (line 514):  [0x02D9] 6381            SET PC, POP
+minesweeper.dasm (line 516):  [0x02DA]               :action
+minesweeper.dasm (line 517):  [0x02DA] 87D2 04CD       IFE [game_started], 0
+minesweeper.dasm (line 518):  [0x02DC] 7C20 0451       JSR generate_board
+minesweeper.dasm (line 520):  [0x02DE] 8BC1 04CD       SET [game_started], 1
+minesweeper.dasm (line 522):  [0x02E0] 0301            SET PUSH, A
+minesweeper.dasm (line 523):  [0x02E1] 0B01            SET PUSH, C
+minesweeper.dasm (line 525):  [0x02E2] 7801 04CA       SET A, [select_x]
+minesweeper.dasm (line 526):  [0x02E4] 7821 04CB       SET B, [select_y]
+minesweeper.dasm (line 527):  [0x02E6] 0061            SET X, A
+minesweeper.dasm (line 528):  [0x02E7] 0481            SET Y, B
+minesweeper.dasm (line 529):  [0x02E8] A824            MUL B, 9
+minesweeper.dasm (line 530):  [0x02E9] 0402            ADD A, B
+minesweeper.dasm (line 531):  [0x02EA] 00A1            SET Z, A
+minesweeper.dasm (line 532):  [0x02EB] 7CA2 04CE       ADD Z, flag
+minesweeper.dasm (line 533):  [0x02ED] 7C02 051F       ADD A, board
+minesweeper.dasm (line 535):  [0x02EF] 89B2            IFE [Z], 1
+minesweeper.dasm (line 536):  [0x02F0] 7F81 02F8       SET PC, end_action
+minesweeper.dasm (line 538):  [0x02F2] 8512            IFE [A], 0
+minesweeper.dasm (line 539):  [0x02F3] 7F81 02FB       SET PC, mine_seek
+minesweeper.dasm (line 540):  [0x02F5] AD12            IFE [A], 10
+minesweeper.dasm (line 541):  [0x02F6] 7C20 0434       JSR lose
+minesweeper.dasm (line 543):  [0x02F8]               :end_action
+minesweeper.dasm (line 545):  [0x02F8] 6041            SET C, POP
+minesweeper.dasm (line 546):  [0x02F9] 6001            SET A, POP
+minesweeper.dasm (line 548):  [0x02FA] 6381            SET PC, POP
+minesweeper.dasm (line 550):  [0x02FB]               :mine_seek
+minesweeper.dasm (line 551):  [0x02FB] 88A1            SET Z, 1
+minesweeper.dasm (line 552):  [0x02FC] 84C1            SET I, 0
+minesweeper.dasm (line 553):  [0x02FD] 7CE1 0570       SET J, surrounding_work
+minesweeper.dasm (line 554):  [0x02FF] 8514            IFG [A], 0
+minesweeper.dasm (line 555):  [0x0300] 88C2            ADD I, 1
+minesweeper.dasm (line 556):  [0x0301] 23F4 000A       IFG 10, [A]
+minesweeper.dasm (line 557):  [0x0303] 88C2            ADD I, 1
+minesweeper.dasm (line 558):  [0x0304] 88D4            IFG I, 1
+minesweeper.dasm (line 559):  [0x0305] 6381            SET PC, POP
+minesweeper.dasm (line 561):  [0x0306] 0301            SET PUSH, A
+minesweeper.dasm (line 562):  [0x0307] 0701            SET PUSH, B
+minesweeper.dasm (line 563):  [0x0308] 0B01            SET PUSH, C
+minesweeper.dasm (line 565):  [0x0309] 7C01 062D       SET A, surprised_top
+minesweeper.dasm (line 566):  [0x030B] 9021            SET B, 3
+minesweeper.dasm (line 567):  [0x030C] 7C41 800E       SET C, 0x800E
+minesweeper.dasm (line 568):  [0x030E] 7C20 0616       JSR drawtiles
+minesweeper.dasm (line 570):  [0x0310] 7C01 0631       SET A, surprised_btm
+minesweeper.dasm (line 571):  [0x0312] 9021            SET B, 3
+minesweeper.dasm (line 572):  [0x0313] 7C41 802E       SET C, 0x802E
+minesweeper.dasm (line 573):  [0x0315] 7C20 0616       JSR drawtiles
+minesweeper.dasm (line 575):  [0x0317] 6041            SET C, POP
+minesweeper.dasm (line 576):  [0x0318] 6021            SET B, POP
+minesweeper.dasm (line 577):  [0x0319] 6001            SET A, POP
+minesweeper.dasm (line 579):  [0x031A] 84C1            SET I, 0
+minesweeper.dasm (line 580):  [0x031B] 7C20 03CE       JSR check_surroundings
+minesweeper.dasm (line 581):  [0x031D] 84D2            IFE I, 0
+minesweeper.dasm (line 582):  [0x031E] 7F81 033C       SET PC, skip_surrounding_loop
+minesweeper.dasm (line 584):  [0x0320]               :mine_seek_loop
+minesweeper.dasm (line 585):  [0x0320] 7C20 035E       JSR move_surrounding_table
+minesweeper.dasm (line 586):  [0x0322] 7CE1 0570       SET J, surrounding_work
+minesweeper.dasm (line 587):  [0x0324] 84C1            SET I, 0
+minesweeper.dasm (line 589):  [0x0325]               :surrounding_process_loop
+minesweeper.dasm (line 590):  [0x0325] 85F2            IFE [J], 0
+minesweeper.dasm (line 591):  [0x0326] 7F81 0335       SET PC, skip_surrounding
+minesweeper.dasm (line 592):  [0x0328] 1C81            SET Y, J
+minesweeper.dasm (line 593):  [0x0329] 7C83 0570       SUB Y, surrounding_work
+minesweeper.dasm (line 594):  [0x032B] 1001            SET A, Y
+minesweeper.dasm (line 595):  [0x032C] 7C02 051F       ADD A, board
+minesweeper.dasm (line 596):  [0x032E] A886            DIV Y, 9
+minesweeper.dasm (line 597):  [0x032F] 1C61            SET X, J
+minesweeper.dasm (line 598):  [0x0330] 7C63 0570       SUB X, surrounding_work
+minesweeper.dasm (line 599):  [0x0332] A868            MOD X, 9
+minesweeper.dasm (line 600):  [0x0333] 7C20 03CE       JSR check_surroundings
+minesweeper.dasm (line 601):  [0x0335]               :skip_surrounding
+minesweeper.dasm (line 602):  [0x0335] 88E2            ADD J, 1
+minesweeper.dasm (line 603):  [0x0336] 8DF3            IFN [J], 2
+minesweeper.dasm (line 604):  [0x0337] 7F81 0325       SET PC, surrounding_process_loop
+minesweeper.dasm (line 606):  [0x0339] 84D3            IFN I, 0
+minesweeper.dasm (line 607):  [0x033A] 7F81 0320       SET PC, mine_seek_loop
+minesweeper.dasm (line 609):  [0x033C]               :skip_surrounding_loop
+minesweeper.dasm (line 611):  [0x033C] 7C20 036A       JSR redraw_board
+minesweeper.dasm (line 613):  [0x033E] 7C01 0625       SET A, norm_top
+minesweeper.dasm (line 614):  [0x0340] 9021            SET B, 3
+minesweeper.dasm (line 615):  [0x0341] 7C41 800E       SET C, 0x800E
+minesweeper.dasm (line 616):  [0x0343] 7C20 0616       JSR drawtiles
+minesweeper.dasm (line 618):  [0x0345] 7C01 0629       SET A, norm_btm
+minesweeper.dasm (line 619):  [0x0347] 9021            SET B, 3
+minesweeper.dasm (line 620):  [0x0348] 7C41 802E       SET C, 0x802E
+minesweeper.dasm (line 621):  [0x034A] 7C20 0616       JSR drawtiles
+minesweeper.dasm (line 623):  [0x034C] 7C20 0350       JSR wincheck
+minesweeper.dasm (line 625):  [0x034E] 7F81 02F8       SET PC, end_action
+minesweeper.dasm (line 627):  [0x0350]               :wincheck
+minesweeper.dasm (line 628):  [0x0350] 7C01 051F       SET A, board
+minesweeper.dasm (line 629):  [0x0352] 84C1            SET I, 0
+minesweeper.dasm (line 631):  [0x0353]               :wincheckloop
+minesweeper.dasm (line 632):  [0x0353] 8512            IFE [A], 0
+minesweeper.dasm (line 633):  [0x0354] 6381            SET PC, POP
+minesweeper.dasm (line 634):  [0x0355] 88C2            ADD I, 1
+minesweeper.dasm (line 635):  [0x0356] 8802            ADD A, 1
+minesweeper.dasm (line 636):  [0x0357] 7CD3 0051       IFN I, 81
+minesweeper.dasm (line 637):  [0x0359] 7F81 0353       SET PC, wincheckloop
+minesweeper.dasm (line 638):  [0x035B] 8BC1 0201       SET [gamestate], 1
+minesweeper.dasm (line 639):  [0x035D] 6381            SET PC, POP
+minesweeper.dasm (line 641):  [0x035E]               :move_surrounding_table
+minesweeper.dasm (line 642):  [0x035E] 7C01 05C2       SET A, surrounding_next
+minesweeper.dasm (line 643):  [0x0360] 7C21 0570       SET B, surrounding_work
+minesweeper.dasm (line 645):  [0x0362]               :move_s_table_loop
+minesweeper.dasm (line 646):  [0x0362] 2121            SET [B], [A]
+minesweeper.dasm (line 647):  [0x0363] 8501            SET [A], 0
+minesweeper.dasm (line 648):  [0x0364] 8802            ADD A, 1
+minesweeper.dasm (line 649):  [0x0365] 8822            ADD B, 1
+minesweeper.dasm (line 650):  [0x0366] 8D13            IFN [A], 2
+minesweeper.dasm (line 651):  [0x0367] 7F81 0362       SET PC, move_s_table_loop
+minesweeper.dasm (line 652):  [0x0369] 6381            SET PC, POP
+minesweeper.dasm (line 654):  [0x036A]               :redraw_board
+minesweeper.dasm (line 655):  [0x036A] 8461            SET X, 0
+minesweeper.dasm (line 656):  [0x036B] 8481            SET Y, 0
+minesweeper.dasm (line 657):  [0x036C] 84C1            SET I, 0
+minesweeper.dasm (line 658):  [0x036D] 7C01 051F       SET A, board
+minesweeper.dasm (line 659):  [0x036F] 7CA1 04CE       SET Z, flag
+minesweeper.dasm (line 660):  [0x0371] 7F81 038B       SET PC, redraw_loop
+minesweeper.dasm (line 663):  [0x0373]               :tiletypes_left DAT 0x8701, 0x7F1E, 0x7F21, 0x7F23, 0x7F25, 0x7F27, 0x7F29, 0x7F2B, 0x7F2D, 0x7F2F, 0x8701, 0x3B31
+minesweeper.dasm (line 663):  [0x0373]                 .DAT 0x8701, 0x7F1E, 0x7F21, 0x7F23, 0x7F25, 0x7F27, 0x7F29, 0x7F2B, 0x7F2D, 0x7F2F, 0x8701, 0x3B31
+minesweeper.dasm (line 663):  [0x0373]                      8701 7F1E 7F21 7F23 7F25 7F27 7F29 7F2B
+minesweeper.dasm (line 663):  [0x037B]                      7F2D 7F2F 8701 3B31
+minesweeper.dasm (line 666):  [0x037F]               :tiletypes_right DAT 0x8702, 0x7F1F, 0x7F22, 0x7F24, 0x7F26, 0x7F28, 0x7F2A, 0x7F2C, 0x7F2E, 0x7F30, 0x8702, 0x3B32
+minesweeper.dasm (line 666):  [0x037F]                 .DAT 0x8702, 0x7F1F, 0x7F22, 0x7F24, 0x7F26, 0x7F28, 0x7F2A, 0x7F2C, 0x7F2E, 0x7F30, 0x8702, 0x3B32
+minesweeper.dasm (line 666):  [0x037F]                      8702 7F1F 7F22 7F24 7F26 7F28 7F2A 7F2C
+minesweeper.dasm (line 666):  [0x0387]                      7F2E 7F30 8702 3B32
+minesweeper.dasm (line 668):  [0x038B]               :redraw_loop
+minesweeper.dasm (line 669):  [0x038B] 0C21            SET B, X
+minesweeper.dasm (line 670):  [0x038C] 1041            SET C, Y
+minesweeper.dasm (line 671):  [0x038D] 8C24            MUL B, 2
+minesweeper.dasm (line 672):  [0x038E] A022            ADD B, 7
+minesweeper.dasm (line 673):  [0x038F] 8C42            ADD C, 2
+minesweeper.dasm (line 674):  [0x0390] 7C44 0020       MUL C, 32
+minesweeper.dasm (line 675):  [0x0392] 0822            ADD B, C
+minesweeper.dasm (line 676):  [0x0393] 7C22 8000       ADD B, 0x8000
+minesweeper.dasm (line 678):  [0x0395] 2041            SET C, [A]
+minesweeper.dasm (line 680):  [0x0396] 89B3            IFN [Z], 1
+minesweeper.dasm (line 681):  [0x0397] 7F81 039F       SET PC, ingame_continue
+minesweeper.dasm (line 683):  [0x0399] 7CE1 0373       SET J, tiletypes_left
+minesweeper.dasm (line 684):  [0x039B] 20E2            ADD J, [A]
+minesweeper.dasm (line 686):  [0x039C] 7DF2 8701       IFE [J], 0x8701
+minesweeper.dasm (line 687):  [0x039E] B041            SET C, 11
+minesweeper.dasm (line 689):  [0x039F]               :ingame_continue
+minesweeper.dasm (line 690):  [0x039F] 7CE1 0373       SET J, tiletypes_left
+minesweeper.dasm (line 691):  [0x03A1] 08E2            ADD J, C
+minesweeper.dasm (line 692):  [0x03A2] 3D21            SET [B], [J]
+minesweeper.dasm (line 694):  [0x03A3] 8822            ADD B, 1
+minesweeper.dasm (line 696):  [0x03A4] 7CE1 037F       SET J, tiletypes_right
+minesweeper.dasm (line 697):  [0x03A6] 08E2            ADD J, C
+minesweeper.dasm (line 698):  [0x03A7] 3D21            SET [B], [J]
+minesweeper.dasm (line 700):  [0x03A8] 88C2            ADD I, 1
+minesweeper.dasm (line 701):  [0x03A9] 8862            ADD X, 1
+minesweeper.dasm (line 702):  [0x03AA] 8802            ADD A, 1
+minesweeper.dasm (line 703):  [0x03AB] 88A2            ADD Z, 1
+minesweeper.dasm (line 704):  [0x03AC] A474            IFG X, 8
+minesweeper.dasm (line 705):  [0x03AD] 8882            ADD Y, 1
+minesweeper.dasm (line 706):  [0x03AE] A474            IFG X, 8
+minesweeper.dasm (line 707):  [0x03AF] 8461            SET X, 0
+minesweeper.dasm (line 708):  [0x03B0] 1BF4 0051       IFG 81, I
+minesweeper.dasm (line 709):  [0x03B2] 7F81 038B       SET PC, redraw_loop
+minesweeper.dasm (line 711):  [0x03B4] 7C20 03BC       JSR redefine_selection
+minesweeper.dasm (line 712):  [0x03B6] 7C20 0495       JSR change_selection
+minesweeper.dasm (line 714):  [0x03B8] 8BC2 03BB       ADD [moves], 1
+minesweeper.dasm (line 716):  [0x03BA] 6381            SET PC, POP
+minesweeper.dasm (line 718):  [0x03BB]               :moves DAT 0
+minesweeper.dasm (line 718):  [0x03BB]                 .DAT 0
+minesweeper.dasm (line 718):  [0x03BB]                      0000
+minesweeper.dasm (line 720):  [0x03BC]               :redefine_selection
+minesweeper.dasm (line 721):  [0x03BC] 7821 04CA       SET B, [select_x]
+minesweeper.dasm (line 722):  [0x03BE] 7841 04CB       SET C, [select_y]
+minesweeper.dasm (line 723):  [0x03C0] 8C24            MUL B, 2
+minesweeper.dasm (line 724):  [0x03C1] A022            ADD B, 7
+minesweeper.dasm (line 725):  [0x03C2] 8C42            ADD C, 2
+minesweeper.dasm (line 726):  [0x03C3] 7C44 0020       MUL C, 32
+minesweeper.dasm (line 727):  [0x03C5] 0822            ADD B, C
+minesweeper.dasm (line 728):  [0x03C6] 7C22 8000       ADD B, 0x8000
+minesweeper.dasm (line 729):  [0x03C8] 27C1 04C8       SET [old_select_tile1], [B]
+minesweeper.dasm (line 730):  [0x03CA] 8822            ADD B, 1
+minesweeper.dasm (line 731):  [0x03CB] 27C1 04C9       SET [old_select_tile2], [B]
+minesweeper.dasm (line 732):  [0x03CD] 6381            SET PC, POP
+minesweeper.dasm (line 734):  [0x03CE]               :check_surroundings
+minesweeper.dasm (line 735):  [0x03CE] 88A1            SET Z, 1
+minesweeper.dasm (line 737):  [0x03CF] 8862            ADD X, 1
+minesweeper.dasm (line 738):  [0x03D0] 8802            ADD A, 1
+minesweeper.dasm (line 739):  [0x03D1] 7C20 042D       JSR checkblock
+minesweeper.dasm (line 740):  [0x03D3] 8883            SUB Y, 1
+minesweeper.dasm (line 741):  [0x03D4] A803            SUB A, 9
+minesweeper.dasm (line 742):  [0x03D5] 7C20 042D       JSR checkblock
+minesweeper.dasm (line 743):  [0x03D7] 8863            SUB X, 1
+minesweeper.dasm (line 744):  [0x03D8] 8803            SUB A, 1
+minesweeper.dasm (line 745):  [0x03D9] 7C20 042D       JSR checkblock
+minesweeper.dasm (line 746):  [0x03DB] 8863            SUB X, 1
+minesweeper.dasm (line 747):  [0x03DC] 8803            SUB A, 1
+minesweeper.dasm (line 748):  [0x03DD] 7C20 042D       JSR checkblock
+minesweeper.dasm (line 749):  [0x03DF] 8882            ADD Y, 1
+minesweeper.dasm (line 750):  [0x03E0] A802            ADD A, 9
+minesweeper.dasm (line 751):  [0x03E1] 7C20 042D       JSR checkblock
+minesweeper.dasm (line 752):  [0x03E3] 8882            ADD Y, 1
+minesweeper.dasm (line 753):  [0x03E4] A802            ADD A, 9
+minesweeper.dasm (line 754):  [0x03E5] 7C20 042D       JSR checkblock
+minesweeper.dasm (line 755):  [0x03E7] 8862            ADD X, 1
+minesweeper.dasm (line 756):  [0x03E8] 8802            ADD A, 1
+minesweeper.dasm (line 757):  [0x03E9] 7C20 042D       JSR checkblock
+minesweeper.dasm (line 758):  [0x03EB] 8862            ADD X, 1
+minesweeper.dasm (line 759):  [0x03EC] 8802            ADD A, 1
+minesweeper.dasm (line 760):  [0x03ED] 7C20 042D       JSR checkblock
+minesweeper.dasm (line 761):  [0x03EF] 8863            SUB X, 1
+minesweeper.dasm (line 762):  [0x03F0] 8883            SUB Y, 1
+minesweeper.dasm (line 763):  [0x03F1] AC03            SUB A, 10
+minesweeper.dasm (line 764):  [0x03F2] 1501            SET [A], Z
+minesweeper.dasm (line 765):  [0x03F3] 17F4 0002       IFG 2, Z
+minesweeper.dasm (line 766):  [0x03F5] 7C20 03F8       JSR countsurroundings
+minesweeper.dasm (line 767):  [0x03F7] 6381            SET PC, POP
+minesweeper.dasm (line 769):  [0x03F8]               :countsurroundings
+minesweeper.dasm (line 770):  [0x03F8] 8862            ADD X, 1
+minesweeper.dasm (line 771):  [0x03F9] 8802            ADD A, 1
+minesweeper.dasm (line 772):  [0x03FA] 8512            IFE [A], 0
+minesweeper.dasm (line 773):  [0x03FB] 7C20 0421       JSR add_to_surroundings
+minesweeper.dasm (line 774):  [0x03FD] 8883            SUB Y, 1
+minesweeper.dasm (line 775):  [0x03FE] A803            SUB A, 9
+minesweeper.dasm (line 776):  [0x03FF] 8512            IFE [A], 0
+minesweeper.dasm (line 777):  [0x0400] 7C20 0421       JSR add_to_surroundings
+minesweeper.dasm (line 778):  [0x0402] 8863            SUB X, 1
+minesweeper.dasm (line 779):  [0x0403] 8803            SUB A, 1
+minesweeper.dasm (line 780):  [0x0404] 8512            IFE [A], 0
+minesweeper.dasm (line 781):  [0x0405] 7C20 0421       JSR add_to_surroundings
+minesweeper.dasm (line 782):  [0x0407] 8863            SUB X, 1
+minesweeper.dasm (line 783):  [0x0408] 8803            SUB A, 1
+minesweeper.dasm (line 784):  [0x0409] 8512            IFE [A], 0
+minesweeper.dasm (line 785):  [0x040A] 7C20 0421       JSR add_to_surroundings
+minesweeper.dasm (line 786):  [0x040C] 8882            ADD Y, 1
+minesweeper.dasm (line 787):  [0x040D] A802            ADD A, 9
+minesweeper.dasm (line 788):  [0x040E] 8512            IFE [A], 0
+minesweeper.dasm (line 789):  [0x040F] 7C20 0421       JSR add_to_surroundings
+minesweeper.dasm (line 790):  [0x0411] 8882            ADD Y, 1
+minesweeper.dasm (line 791):  [0x0412] A802            ADD A, 9
+minesweeper.dasm (line 792):  [0x0413] 8512            IFE [A], 0
+minesweeper.dasm (line 793):  [0x0414] 7C20 0421       JSR add_to_surroundings
+minesweeper.dasm (line 794):  [0x0416] 8862            ADD X, 1
+minesweeper.dasm (line 795):  [0x0417] 8802            ADD A, 1
+minesweeper.dasm (line 796):  [0x0418] 8512            IFE [A], 0
+minesweeper.dasm (line 797):  [0x0419] 7C20 0421       JSR add_to_surroundings
+minesweeper.dasm (line 798):  [0x041B] 8862            ADD X, 1
+minesweeper.dasm (line 799):  [0x041C] 8802            ADD A, 1
+minesweeper.dasm (line 800):  [0x041D] 8512            IFE [A], 0
+minesweeper.dasm (line 801):  [0x041E] 7C20 0421       JSR add_to_surroundings
+minesweeper.dasm (line 803):  [0x0420] 6381            SET PC, POP
+minesweeper.dasm (line 805):  [0x0421]               :add_to_surroundings
+minesweeper.dasm (line 806):  [0x0421] 88C2            ADD I, 1
+minesweeper.dasm (line 807):  [0x0422] A474            IFG X, 8
+minesweeper.dasm (line 808):  [0x0423] 6381            SET PC, POP
+minesweeper.dasm (line 809):  [0x0424] A494            IFG Y, 8
+minesweeper.dasm (line 810):  [0x0425] 6381            SET PC, POP
+minesweeper.dasm (line 811):  [0x0426] 0021            SET B, A
+minesweeper.dasm (line 812):  [0x0427] 7C23 051F       SUB B, board
+minesweeper.dasm (line 813):  [0x0429] 7C22 05C2       ADD B, surrounding_next
+minesweeper.dasm (line 814):  [0x042B] 8921            SET [B], 1
+minesweeper.dasm (line 815):  [0x042C] 6381            SET PC, POP
+minesweeper.dasm (line 817):  [0x042D]               :checkblock
+minesweeper.dasm (line 818):  [0x042D] A474            IFG X, 8
+minesweeper.dasm (line 819):  [0x042E] 6381            SET PC, POP
+minesweeper.dasm (line 820):  [0x042F] A494            IFG Y, 8
+minesweeper.dasm (line 821):  [0x0430] 6381            SET PC, POP
+minesweeper.dasm (line 822):  [0x0431] AD12            IFE [A], 10
+minesweeper.dasm (line 823):  [0x0432] 88A2            ADD Z, 1
+minesweeper.dasm (line 824):  [0x0433] 6381            SET PC, POP
+minesweeper.dasm (line 826):  [0x0434]               :lose
+minesweeper.dasm (line 827):  [0x0434] 7C01 0635       SET A, wtf_top
+minesweeper.dasm (line 828):  [0x0436] 9021            SET B, 3
+minesweeper.dasm (line 829):  [0x0437] 7C41 800E       SET C, 0x800E
+minesweeper.dasm (line 830):  [0x0439] 7C20 0616       JSR drawtiles
+minesweeper.dasm (line 832):  [0x043B] 7C01 0639       SET A, wtf_btm
+minesweeper.dasm (line 833):  [0x043D] 9021            SET B, 3
+minesweeper.dasm (line 834):  [0x043E] 7C41 802E       SET C, 0x802E
+minesweeper.dasm (line 835):  [0x0440] 7C20 0616       JSR drawtiles
+minesweeper.dasm (line 837):  [0x0442] 7C01 0373       SET A, tiletypes_left
+minesweeper.dasm (line 838):  [0x0444] AC02            ADD A, 10
+minesweeper.dasm (line 839):  [0x0445] 7D01 4C33       SET [A], 0x4C33
+minesweeper.dasm (line 841):  [0x0447] 7C01 037F       SET A, tiletypes_right
+minesweeper.dasm (line 842):  [0x0449] AC02            ADD A, 10
+minesweeper.dasm (line 843):  [0x044A] 7D01 4C34       SET [A], 0x4C34
+minesweeper.dasm (line 845):  [0x044C] 7C20 036A       JSR redraw_board
+minesweeper.dasm (line 847):  [0x044E] 8FC1 0201       SET [gamestate], 2
+minesweeper.dasm (line 849):  [0x0450] 6381            SET PC, POP
+minesweeper.dasm (line 852):  [0x0451]               :generate_board
+minesweeper.dasm (line 853):  [0x0451] 0301            SET PUSH, A
+minesweeper.dasm (line 854):  [0x0452] 0701            SET PUSH, B
+minesweeper.dasm (line 855):  [0x0453] 0B01            SET PUSH, C
+minesweeper.dasm (line 856):  [0x0454] 0F01            SET PUSH, X
+minesweeper.dasm (line 857):  [0x0455] 1B01            SET PUSH, I
+minesweeper.dasm (line 858):  [0x0456] 84C1            SET I, 0
+minesweeper.dasm (line 860):  [0x0457]               :g_board_loop
+minesweeper.dasm (line 861):  [0x0457] 8BC2 04CC       ADD [timer], 1
+minesweeper.dasm (line 862):  [0x0459] 7801 04CC       SET A, [timer]
+minesweeper.dasm (line 863):  [0x045B] WARNING: Redundant statement.
+minesweeper.dasm (line 863):  [0x045B] 0004            MUL A, A
+minesweeper.dasm (line 864):  [0x045C] A808            MOD A, 9
+minesweeper.dasm (line 865):  [0x045D] 7821 04CC       SET B, [timer]
+minesweeper.dasm (line 866):  [0x045F] 7C22 013D       ADD B, 317
+minesweeper.dasm (line 867):  [0x0461] WARNING: Redundant statement.
+minesweeper.dasm (line 867):  [0x0461] 0424            MUL B, B
+minesweeper.dasm (line 868):  [0x0462] A828            MOD B, 9
+minesweeper.dasm (line 870):  [0x0463] 0041            SET C, A
+minesweeper.dasm (line 871):  [0x0464] 7843 04CA       SUB C, [select_x]
+minesweeper.dasm (line 872):  [0x0466] AC42            ADD C, 10
+minesweeper.dasm (line 873):  [0x0467] 8461            SET X, 0
+minesweeper.dasm (line 874):  [0x0468] A454            IFG C, 8
+minesweeper.dasm (line 875):  [0x0469] 8862            ADD X, 1
+minesweeper.dasm (line 876):  [0x046A] 0BF4 000C       IFG 12, C
+minesweeper.dasm (line 877):  [0x046C] 8862            ADD X, 1
+minesweeper.dasm (line 879):  [0x046D] 0441            SET C, B
+minesweeper.dasm (line 880):  [0x046E] 7843 04CB       SUB C, [select_y]
+minesweeper.dasm (line 881):  [0x0470] AC42            ADD C, 10
+minesweeper.dasm (line 882):  [0x0471] A454            IFG C, 8
+minesweeper.dasm (line 883):  [0x0472] 8862            ADD X, 1
+minesweeper.dasm (line 884):  [0x0473] 0BF4 000C       IFG 12, C
+minesweeper.dasm (line 885):  [0x0475] 8862            ADD X, 1
+minesweeper.dasm (line 888):  [0x0476] 9472            IFE X, 4
+minesweeper.dasm (line 889):  [0x0477] 7F81 0457       SET PC, g_board_loop
+minesweeper.dasm (line 891):  [0x0479] A824            MUL B, 9
+minesweeper.dasm (line 892):  [0x047A] 0402            ADD A, B
+minesweeper.dasm (line 893):  [0x047B] 7C41 051F       SET C, board
+minesweeper.dasm (line 894):  [0x047D] 0042            ADD C, A
+minesweeper.dasm (line 895):  [0x047E] AD52            IFE [C], 10
+minesweeper.dasm (line 896):  [0x047F] 7F81 0457       SET PC, g_board_loop
+minesweeper.dasm (line 897):  [0x0481] AD41            SET [C], 10
+minesweeper.dasm (line 899):  [0x0482] 88C2            ADD I, 1
+minesweeper.dasm (line 900):  [0x0483] 1BD4 00EC       IFG [mines], I
+minesweeper.dasm (line 901):  [0x0485] 7F81 0457       SET PC, g_board_loop
+minesweeper.dasm (line 903):  [0x0487] 87C1 04CC       SET [timer], 0
+minesweeper.dasm (line 905):  [0x0489] 60C1            SET I, POP
+minesweeper.dasm (line 906):  [0x048A] 6061            SET X, POP
+minesweeper.dasm (line 907):  [0x048B] 6041            SET C, POP
+minesweeper.dasm (line 908):  [0x048C] 6021            SET B, POP
+minesweeper.dasm (line 909):  [0x048D] 6001            SET A, POP
+minesweeper.dasm (line 910):  [0x048E] 6381            SET PC, POP
+minesweeper.dasm (line 912):  [0x048F]               :old_select_operation
+minesweeper.dasm (line 913):  [0x048F] 7901 04C8       SET [A], [old_select_tile1]
+minesweeper.dasm (line 914):  [0x0491] 8802            ADD A, 1
+minesweeper.dasm (line 915):  [0x0492] 7901 04C9       SET [A], [old_select_tile2]
+minesweeper.dasm (line 916):  [0x0494] 6381            SET PC, POP
+minesweeper.dasm (line 918):  [0x0495]               :change_selection
+minesweeper.dasm (line 919):  [0x0495] 0301            SET PUSH, A
+minesweeper.dasm (line 920):  [0x0496] 0701            SET PUSH, B
+minesweeper.dasm (line 921):  [0x0497] 7801 04C6       SET A, [old_select_x]
+minesweeper.dasm (line 922):  [0x0499] 7821 04C7       SET B, [old_select_y]
+minesweeper.dasm (line 923):  [0x049B] 7C20 04BD       JSR get_selection
+minesweeper.dasm (line 925):  [0x049D] AFD3 04C6       IFN [old_select_x], 10
+minesweeper.dasm (line 926):  [0x049F] 7C20 048F       JSR old_select_operation
+minesweeper.dasm (line 928):  [0x04A1] 7801 04CA       SET A, [select_x]
+minesweeper.dasm (line 929):  [0x04A3] 7821 04CB       SET B, [select_y]
+minesweeper.dasm (line 930):  [0x04A5] 7C20 04BD       JSR get_selection
+minesweeper.dasm (line 932):  [0x04A7] 23C1 04C8       SET [old_select_tile1], [A]
+minesweeper.dasm (line 933):  [0x04A9] 950F            SHL [A], 4
+minesweeper.dasm (line 934):  [0x04AA] 950D            SHR [A], 4
+minesweeper.dasm (line 935):  [0x04AB] 7D0B 2A00       BOR [A], 0x2A00
+minesweeper.dasm (line 936):  [0x04AD] 8802            ADD A, 1
+minesweeper.dasm (line 937):  [0x04AE] 23C1 04C9       SET [old_select_tile2], [A]
+minesweeper.dasm (line 938):  [0x04B0] 950F            SHL [A], 4
+minesweeper.dasm (line 939):  [0x04B1] 950D            SHR [A], 4
+minesweeper.dasm (line 940):  [0x04B2] 7D0B 2A00       BOR [A], 0x2A00
+minesweeper.dasm (line 942):  [0x04B4] 7BC1 04CA 04C6  SET [old_select_x], [select_x]
+minesweeper.dasm (line 943):  [0x04B7] 7BC1 04CB 04C7  SET [old_select_y], [select_y]
+minesweeper.dasm (line 945):  [0x04BA] 6021            SET B, POP
+minesweeper.dasm (line 946):  [0x04BB] 6001            SET A, POP
+minesweeper.dasm (line 947):  [0x04BC] 6381            SET PC, POP
+minesweeper.dasm (line 949):  [0x04BD]               :get_selection
+minesweeper.dasm (line 950):  [0x04BD] 8C22            ADD B, 2
+minesweeper.dasm (line 951):  [0x04BE] 8C04            MUL A, 2
+minesweeper.dasm (line 952):  [0x04BF] A002            ADD A, 7
+minesweeper.dasm (line 953):  [0x04C0] 7C24 0020       MUL B, 32
+minesweeper.dasm (line 954):  [0x04C2] 0402            ADD A, B
+minesweeper.dasm (line 955):  [0x04C3] 7C02 8000       ADD A, 0x8000
+minesweeper.dasm (line 956):  [0x04C5] 6381            SET PC, POP
+minesweeper.dasm (line 958):  [0x04C6]               :old_select_x DAT 10
+minesweeper.dasm (line 958):  [0x04C6]                 .DAT 10
+minesweeper.dasm (line 958):  [0x04C6]                      000A
+minesweeper.dasm (line 959):  [0x04C7]               :old_select_y DAT 10
+minesweeper.dasm (line 959):  [0x04C7]                 .DAT 10
+minesweeper.dasm (line 959):  [0x04C7]                      000A
+minesweeper.dasm (line 960):  [0x04C8]               :old_select_tile1 DAT 10
+minesweeper.dasm (line 960):  [0x04C8]                 .DAT 10
+minesweeper.dasm (line 960):  [0x04C8]                      000A
+minesweeper.dasm (line 961):  [0x04C9]               :old_select_tile2 DAT 10
+minesweeper.dasm (line 961):  [0x04C9]                 .DAT 10
+minesweeper.dasm (line 961):  [0x04C9]                      000A
+minesweeper.dasm (line 962):  [0x04CA]               :select_x DAT 4
+minesweeper.dasm (line 962):  [0x04CA]                 .DAT 4
+minesweeper.dasm (line 962):  [0x04CA]                      0004
+minesweeper.dasm (line 963):  [0x04CB]               :select_y DAT 4
+minesweeper.dasm (line 963):  [0x04CB]                 .DAT 4
+minesweeper.dasm (line 963):  [0x04CB]                      0004
+minesweeper.dasm (line 965):  [0x04CC]               :timer DAT 0
+minesweeper.dasm (line 965):  [0x04CC]                 .DAT 0
+minesweeper.dasm (line 965):  [0x04CC]                      0000
+minesweeper.dasm (line 966):  [0x04CD]               :game_started DAT 0
+minesweeper.dasm (line 966):  [0x04CD]                 .DAT 0
+minesweeper.dasm (line 966):  [0x04CD]                      0000
+minesweeper.dasm (line 968):  [0x04CE]               :flag DAT 0, 0, 0, 0, 0, 0, 0, 0, 0
+minesweeper.dasm (line 968):  [0x04CE]                 .DAT 0, 0, 0, 0, 0, 0, 0, 0, 0
+minesweeper.dasm (line 968):  [0x04CE]                      0000 0000 0000 0000 0000 0000 0000 0000
+minesweeper.dasm (line 968):  [0x04D6]                      0000
+minesweeper.dasm (line 969):  [0x04D7]                 .DAT 0, 0, 0, 0, 0, 0, 0, 0, 0
+minesweeper.dasm (line 969):  [0x04D7]                      0000 0000 0000 0000 0000 0000 0000 0000
+minesweeper.dasm (line 969):  [0x04DF]                      0000
+minesweeper.dasm (line 970):  [0x04E0]                 .DAT 0, 0, 0, 0, 0, 0, 0, 0, 0
+minesweeper.dasm (line 970):  [0x04E0]                      0000 0000 0000 0000 0000 0000 0000 0000
+minesweeper.dasm (line 970):  [0x04E8]                      0000
+minesweeper.dasm (line 971):  [0x04E9]                 .DAT 0, 0, 0, 0, 0, 0, 0, 0, 0
+minesweeper.dasm (line 971):  [0x04E9]                      0000 0000 0000 0000 0000 0000 0000 0000
+minesweeper.dasm (line 971):  [0x04F1]                      0000
+minesweeper.dasm (line 972):  [0x04F2]                 .DAT 0, 0, 0, 0, 0, 0, 0, 0, 0
+minesweeper.dasm (line 972):  [0x04F2]                      0000 0000 0000 0000 0000 0000 0000 0000
+minesweeper.dasm (line 972):  [0x04FA]                      0000
+minesweeper.dasm (line 973):  [0x04FB]                 .DAT 0, 0, 0, 0, 0, 0, 0, 0, 0
+minesweeper.dasm (line 973):  [0x04FB]                      0000 0000 0000 0000 0000 0000 0000 0000
+minesweeper.dasm (line 973):  [0x0503]                      0000
+minesweeper.dasm (line 974):  [0x0504]                 .DAT 0, 0, 0, 0, 0, 0, 0, 0, 0
+minesweeper.dasm (line 974):  [0x0504]                      0000 0000 0000 0000 0000 0000 0000 0000
+minesweeper.dasm (line 974):  [0x050C]                      0000
+minesweeper.dasm (line 975):  [0x050D]                 .DAT 0, 0, 0, 0, 0, 0, 0, 0, 0
+minesweeper.dasm (line 975):  [0x050D]                      0000 0000 0000 0000 0000 0000 0000 0000
+minesweeper.dasm (line 975):  [0x0515]                      0000
+minesweeper.dasm (line 976):  [0x0516]                 .DAT 0, 0, 0, 0, 0, 0, 0, 0, 0
+minesweeper.dasm (line 976):  [0x0516]                      0000 0000 0000 0000 0000 0000 0000 0000
+minesweeper.dasm (line 976):  [0x051E]                      0000
+minesweeper.dasm (line 978):  [0x051F]               :board DAT 0, 0, 0, 0, 0, 0, 0, 0, 0
+minesweeper.dasm (line 978):  [0x051F]                 .DAT 0, 0, 0, 0, 0, 0, 0, 0, 0
+minesweeper.dasm (line 978):  [0x051F]                      0000 0000 0000 0000 0000 0000 0000 0000
+minesweeper.dasm (line 978):  [0x0527]                      0000
+minesweeper.dasm (line 979):  [0x0528]                 .DAT 0, 0, 0, 0, 0, 0, 0, 0, 0
+minesweeper.dasm (line 979):  [0x0528]                      0000 0000 0000 0000 0000 0000 0000 0000
+minesweeper.dasm (line 979):  [0x0530]                      0000
+minesweeper.dasm (line 980):  [0x0531]                 .DAT 0, 0, 0, 0, 0, 0, 0, 0, 0
+minesweeper.dasm (line 980):  [0x0531]                      0000 0000 0000 0000 0000 0000 0000 0000
+minesweeper.dasm (line 980):  [0x0539]                      0000
+minesweeper.dasm (line 981):  [0x053A]                 .DAT 0, 0, 0, 0, 0, 0, 0, 0, 0
+minesweeper.dasm (line 981):  [0x053A]                      0000 0000 0000 0000 0000 0000 0000 0000
+minesweeper.dasm (line 981):  [0x0542]                      0000
+minesweeper.dasm (line 982):  [0x0543]                 .DAT 0, 0, 0, 0, 0, 0, 0, 0, 0
+minesweeper.dasm (line 982):  [0x0543]                      0000 0000 0000 0000 0000 0000 0000 0000
+minesweeper.dasm (line 982):  [0x054B]                      0000
+minesweeper.dasm (line 983):  [0x054C]                 .DAT 0, 0, 0, 0, 0, 0, 0, 0, 0
+minesweeper.dasm (line 983):  [0x054C]                      0000 0000 0000 0000 0000 0000 0000 0000
+minesweeper.dasm (line 983):  [0x0554]                      0000
+minesweeper.dasm (line 984):  [0x0555]                 .DAT 0, 0, 0, 0, 0, 0, 0, 0, 0
+minesweeper.dasm (line 984):  [0x0555]                      0000 0000 0000 0000 0000 0000 0000 0000
+minesweeper.dasm (line 984):  [0x055D]                      0000
+minesweeper.dasm (line 985):  [0x055E]                 .DAT 0, 0, 0, 0, 0, 0, 0, 0, 0
+minesweeper.dasm (line 985):  [0x055E]                      0000 0000 0000 0000 0000 0000 0000 0000
+minesweeper.dasm (line 985):  [0x0566]                      0000
+minesweeper.dasm (line 986):  [0x0567]                 .DAT 0, 0, 0, 0, 0, 0, 0, 0, 0
+minesweeper.dasm (line 986):  [0x0567]                      0000 0000 0000 0000 0000 0000 0000 0000
+minesweeper.dasm (line 986):  [0x056F]                      0000
+minesweeper.dasm (line 988):  [0x0570]               :surrounding_work DAT 0, 0, 0, 0, 0, 0, 0, 0, 0
+minesweeper.dasm (line 988):  [0x0570]                 .DAT 0, 0, 0, 0, 0, 0, 0, 0, 0
+minesweeper.dasm (line 988):  [0x0570]                      0000 0000 0000 0000 0000 0000 0000 0000
+minesweeper.dasm (line 988):  [0x0578]                      0000
+minesweeper.dasm (line 989):  [0x0579]                 .DAT 0, 0, 0, 0, 0, 0, 0, 0, 0
+minesweeper.dasm (line 989):  [0x0579]                      0000 0000 0000 0000 0000 0000 0000 0000
+minesweeper.dasm (line 989):  [0x0581]                      0000
+minesweeper.dasm (line 990):  [0x0582]                 .DAT 0, 0, 0, 0, 0, 0, 0, 0, 0
+minesweeper.dasm (line 990):  [0x0582]                      0000 0000 0000 0000 0000 0000 0000 0000
+minesweeper.dasm (line 990):  [0x058A]                      0000
+minesweeper.dasm (line 991):  [0x058B]                 .DAT 0, 0, 0, 0, 0, 0, 0, 0, 0
+minesweeper.dasm (line 991):  [0x058B]                      0000 0000 0000 0000 0000 0000 0000 0000
+minesweeper.dasm (line 991):  [0x0593]                      0000
+minesweeper.dasm (line 992):  [0x0594]                 .DAT 0, 0, 0, 0, 0, 0, 0, 0, 0
+minesweeper.dasm (line 992):  [0x0594]                      0000 0000 0000 0000 0000 0000 0000 0000
+minesweeper.dasm (line 992):  [0x059C]                      0000
+minesweeper.dasm (line 993):  [0x059D]                 .DAT 0, 0, 0, 0, 0, 0, 0, 0, 0
+minesweeper.dasm (line 993):  [0x059D]                      0000 0000 0000 0000 0000 0000 0000 0000
+minesweeper.dasm (line 993):  [0x05A5]                      0000
+minesweeper.dasm (line 994):  [0x05A6]                 .DAT 0, 0, 0, 0, 0, 0, 0, 0, 0
+minesweeper.dasm (line 994):  [0x05A6]                      0000 0000 0000 0000 0000 0000 0000 0000
+minesweeper.dasm (line 994):  [0x05AE]                      0000
+minesweeper.dasm (line 995):  [0x05AF]                 .DAT 0, 0, 0, 0, 0, 0, 0, 0, 0
+minesweeper.dasm (line 995):  [0x05AF]                      0000 0000 0000 0000 0000 0000 0000 0000
+minesweeper.dasm (line 995):  [0x05B7]                      0000
+minesweeper.dasm (line 996):  [0x05B8]                 .DAT 0, 0, 0, 0, 0, 0, 0, 0, 0, 2
+minesweeper.dasm (line 996):  [0x05B8]                      0000 0000 0000 0000 0000 0000 0000 0000
+minesweeper.dasm (line 996):  [0x05C0]                      0000 0002
+minesweeper.dasm (line 998):  [0x05C2]               :surrounding_next DAT 0, 0, 0, 0, 0, 0, 0, 0, 0
+minesweeper.dasm (line 998):  [0x05C2]                 .DAT 0, 0, 0, 0, 0, 0, 0, 0, 0
+minesweeper.dasm (line 998):  [0x05C2]                      0000 0000 0000 0000 0000 0000 0000 0000
+minesweeper.dasm (line 998):  [0x05CA]                      0000
+minesweeper.dasm (line 999):  [0x05CB]                 .DAT 0, 0, 0, 0, 0, 0, 0, 0, 0
+minesweeper.dasm (line 999):  [0x05CB]                      0000 0000 0000 0000 0000 0000 0000 0000
+minesweeper.dasm (line 999):  [0x05D3]                      0000
+minesweeper.dasm (line 1000): [0x05D4]                 .DAT 0, 0, 0, 0, 0, 0, 0, 0, 0
+minesweeper.dasm (line 1000): [0x05D4]                      0000 0000 0000 0000 0000 0000 0000 0000
+minesweeper.dasm (line 1000): [0x05DC]                      0000
+minesweeper.dasm (line 1001): [0x05DD]                 .DAT 0, 0, 0, 0, 0, 0, 0, 0, 0
+minesweeper.dasm (line 1001): [0x05DD]                      0000 0000 0000 0000 0000 0000 0000 0000
+minesweeper.dasm (line 1001): [0x05E5]                      0000
+minesweeper.dasm (line 1002): [0x05E6]                 .DAT 0, 0, 0, 0, 0, 0, 0, 0, 0
+minesweeper.dasm (line 1002): [0x05E6]                      0000 0000 0000 0000 0000 0000 0000 0000
+minesweeper.dasm (line 1002): [0x05EE]                      0000
+minesweeper.dasm (line 1003): [0x05EF]                 .DAT 0, 0, 0, 0, 0, 0, 0, 0, 0
+minesweeper.dasm (line 1003): [0x05EF]                      0000 0000 0000 0000 0000 0000 0000 0000
+minesweeper.dasm (line 1003): [0x05F7]                      0000
+minesweeper.dasm (line 1004): [0x05F8]                 .DAT 0, 0, 0, 0, 0, 0, 0, 0, 0
+minesweeper.dasm (line 1004): [0x05F8]                      0000 0000 0000 0000 0000 0000 0000 0000
+minesweeper.dasm (line 1004): [0x0600]                      0000
+minesweeper.dasm (line 1005): [0x0601]                 .DAT 0, 0, 0, 0, 0, 0, 0, 0, 0
+minesweeper.dasm (line 1005): [0x0601]                      0000 0000 0000 0000 0000 0000 0000 0000
+minesweeper.dasm (line 1005): [0x0609]                      0000
+minesweeper.dasm (line 1006): [0x060A]                 .DAT 0, 0, 0, 0, 0, 0, 0, 0, 0, 2
+minesweeper.dasm (line 1006): [0x060A]                      0000 0000 0000 0000 0000 0000 0000 0000
+minesweeper.dasm (line 1006): [0x0612]                      0000 0002
+minesweeper.dasm (line 1008): [0x0614]               :end
+minesweeper.dasm (line 1009): [0x0614] 7F81 0614       SET PC, end
+minesweeper.dasm (line 1011): [0x0616]               :drawtiles
+minesweeper.dasm (line 1012): [0x0616] 1B01            SET PUSH, I
+minesweeper.dasm (line 1013): [0x0617] 0B01            SET PUSH, C
+minesweeper.dasm (line 1014): [0x0618] 84C1            SET I, 0
+minesweeper.dasm (line 1016): [0x0619]               :drawtiles_loop
+minesweeper.dasm (line 1017): [0x0619] 2141            SET [C], [A]
+minesweeper.dasm (line 1018): [0x061A] 8842            ADD C, 1
+minesweeper.dasm (line 1019): [0x061B] 8802            ADD A, 1
+minesweeper.dasm (line 1020): [0x061C] 88C2            ADD I, 1
+minesweeper.dasm (line 1021): [0x061D] 04D4            IFG I, B
+minesweeper.dasm (line 1022): [0x061E] 7F81 0622       SET PC, drawtiles_end
+minesweeper.dasm (line 1023): [0x0620] 7F81 0619       SET PC, drawtiles_loop
+minesweeper.dasm (line 1025): [0x0622]               :drawtiles_end
+minesweeper.dasm (line 1026): [0x0622] 6041            SET C, POP
+minesweeper.dasm (line 1027): [0x0623] 60C1            SET I, POP
+minesweeper.dasm (line 1028): [0x0624] 6381            SET PC, POP
+minesweeper.dasm (line 1032): [0x0625]               :norm_top DAT 0x6F03, 0x6F04, 0x6F05, 0x6F06
+minesweeper.dasm (line 1032): [0x0625]                 .DAT 0x6F03, 0x6F04, 0x6F05, 0x6F06
+minesweeper.dasm (line 1032): [0x0625]                      6F03 6F04 6F05 6F06
+minesweeper.dasm (line 1033): [0x0629]               :norm_btm DAT 0x6F07, 0x6F08, 0x6F09, 0x6F0A
+minesweeper.dasm (line 1033): [0x0629]                 .DAT 0x6F07, 0x6F08, 0x6F09, 0x6F0A
+minesweeper.dasm (line 1033): [0x0629]                      6F07 6F08 6F09 6F0A
+minesweeper.dasm (line 1035): [0x062D]               :surprised_top DAT 0x6F35, 0x6F36, 0x6F37, 0x6F38
+minesweeper.dasm (line 1035): [0x062D]                 .DAT 0x6F35, 0x6F36, 0x6F37, 0x6F38
+minesweeper.dasm (line 1035): [0x062D]                      6F35 6F36 6F37 6F38
+minesweeper.dasm (line 1036): [0x0631]               :surprised_btm DAT 0x6F39, 0x6F3A, 0x6F3B, 0x6F3C
+minesweeper.dasm (line 1036): [0x0631]                 .DAT 0x6F39, 0x6F3A, 0x6F3B, 0x6F3C
+minesweeper.dasm (line 1036): [0x0631]                      6F39 6F3A 6F3B 6F3C
+minesweeper.dasm (line 1038): [0x0635]               :wtf_top DAT 0x6F3D, 0x6F3E, 0x6F3F, 0x6F40
+minesweeper.dasm (line 1038): [0x0635]                 .DAT 0x6F3D, 0x6F3E, 0x6F3F, 0x6F40
+minesweeper.dasm (line 1038): [0x0635]                      6F3D 6F3E 6F3F 6F40
+minesweeper.dasm (line 1039): [0x0639]               :wtf_btm DAT 0x6F41, 0x6F42, 0x6F43, 0x6F44
+minesweeper.dasm (line 1039): [0x0639]                 .DAT 0x6F41, 0x6F42, 0x6F43, 0x6F44
+minesweeper.dasm (line 1039): [0x0639]                      6F41 6F42 6F43 6F44
+minesweeper.dasm (line 1041): [0x063D]               :boardtiles_l1 DAT 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x6F03, 0x6F04, 0x6F05, 0x6F06, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720
+minesweeper.dasm (line 1041): [0x063D]                 .DAT 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x6F03, 0x6F04, 0x6F05, 0x6F06, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720
+minesweeper.dasm (line 1041): [0x063D]                      8720 8720 8720 8720 8720 8720 8720 8720
+minesweeper.dasm (line 1041): [0x0645]                      8720 8720 8720 8720 8720 8720 6F03 6F04
+minesweeper.dasm (line 1041): [0x064D]                      6F05 6F06 8720 8720 8720 8720 8720 8720
+minesweeper.dasm (line 1041): [0x0655]                      8720 8720 8720 8720 8720 8720 8720 8720
+minesweeper.dasm (line 1043): [0x065D]               :boardtiles_l2 DAT 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x70B, 0x711, 0x711, 0x711, 0x711, 0x711, 0x711, 0x711, 0x6F07, 0x6F08, 0x6F09, 0x6F0A, 0x711, 0x711, 0x711, 0x711, 0x711, 0x711, 0x711, 0x70C, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720
+minesweeper.dasm (line 1043): [0x065D]                 .DAT 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x70B, 0x711, 0x711, 0x711, 0x711, 0x711, 0x711, 0x711, 0x6F07, 0x6F08, 0x6F09, 0x6F0A, 0x711, 0x711, 0x711, 0x711, 0x711, 0x711, 0x711, 0x70C, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720
+minesweeper.dasm (line 1043): [0x065D]                      8720 8720 8720 8720 8720 8720 070B 0711
+minesweeper.dasm (line 1043): [0x0665]                      0711 0711 0711 0711 0711 0711 6F07 6F08
+minesweeper.dasm (line 1043): [0x066D]                      6F09 6F0A 0711 0711 0711 0711 0711 0711
+minesweeper.dasm (line 1043): [0x0675]                      0711 070C 8720 8720 8720 8720 8720 8720
+minesweeper.dasm (line 1045): [0x067D]               :boardtiles_l3 DAT 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x70F, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x710, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720
+minesweeper.dasm (line 1045): [0x067D]                 .DAT 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x70F, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x710, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720
+minesweeper.dasm (line 1045): [0x067D]                      8720 8720 8720 8720 8720 8720 070F 8701
+minesweeper.dasm (line 1045): [0x0685]                      8702 8701 8702 8701 8702 8701 8702 8701
+minesweeper.dasm (line 1045): [0x068D]                      8702 8701 8702 8701 8702 8701 8702 8701
+minesweeper.dasm (line 1045): [0x0695]                      8702 0710 8720 8720 8720 8720 8720 8720
+minesweeper.dasm (line 1047): [0x069D]               :boardtiles_l4 DAT 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x70F, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x710, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720
+minesweeper.dasm (line 1047): [0x069D]                 .DAT 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x70F, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x710, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720
+minesweeper.dasm (line 1047): [0x069D]                      8720 8720 8720 8720 8720 8720 070F 8701
+minesweeper.dasm (line 1047): [0x06A5]                      8702 8701 8702 8701 8702 8701 8702 8701
+minesweeper.dasm (line 1047): [0x06AD]                      8702 8701 8702 8701 8702 8701 8702 8701
+minesweeper.dasm (line 1047): [0x06B5]                      8702 0710 8720 8720 8720 8720 8720 8720
+minesweeper.dasm (line 1049): [0x06BD]               :boardtiles_l5 DAT 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x70F, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x710, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720
+minesweeper.dasm (line 1049): [0x06BD]                 .DAT 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x70F, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x710, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720
+minesweeper.dasm (line 1049): [0x06BD]                      8720 8720 8720 8720 8720 8720 070F 8701
+minesweeper.dasm (line 1049): [0x06C5]                      8702 8701 8702 8701 8702 8701 8702 8701
+minesweeper.dasm (line 1049): [0x06CD]                      8702 8701 8702 8701 8702 8701 8702 8701
+minesweeper.dasm (line 1049): [0x06D5]                      8702 0710 8720 8720 8720 8720 8720 8720
+minesweeper.dasm (line 1051): [0x06DD]               :boardtiles_l6 DAT 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x70F, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x710, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720
+minesweeper.dasm (line 1051): [0x06DD]                 .DAT 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x70F, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x710, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720
+minesweeper.dasm (line 1051): [0x06DD]                      8720 8720 8720 8720 8720 8720 070F 8701
+minesweeper.dasm (line 1051): [0x06E5]                      8702 8701 8702 8701 8702 8701 8702 8701
+minesweeper.dasm (line 1051): [0x06ED]                      8702 8701 8702 8701 8702 8701 8702 8701
+minesweeper.dasm (line 1051): [0x06F5]                      8702 0710 8720 8720 8720 8720 8720 8720
+minesweeper.dasm (line 1053): [0x06FD]               :boardtiles_l7 DAT 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x70F, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x710, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720
+minesweeper.dasm (line 1053): [0x06FD]                 .DAT 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x70F, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x710, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720
+minesweeper.dasm (line 1053): [0x06FD]                      8720 8720 8720 8720 8720 8720 070F 8701
+minesweeper.dasm (line 1053): [0x0705]                      8702 8701 8702 8701 8702 8701 8702 8701
+minesweeper.dasm (line 1053): [0x070D]                      8702 8701 8702 8701 8702 8701 8702 8701
+minesweeper.dasm (line 1053): [0x0715]                      8702 0710 8720 8720 8720 8720 8720 8720
+minesweeper.dasm (line 1055): [0x071D]               :boardtiles_l8 DAT 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x70F, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x710, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720
+minesweeper.dasm (line 1055): [0x071D]                 .DAT 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x70F, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x710, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720
+minesweeper.dasm (line 1055): [0x071D]                      8720 8720 8720 8720 8720 8720 070F 8701
+minesweeper.dasm (line 1055): [0x0725]                      8702 8701 8702 8701 8702 8701 8702 8701
+minesweeper.dasm (line 1055): [0x072D]                      8702 8701 8702 8701 8702 8701 8702 8701
+minesweeper.dasm (line 1055): [0x0735]                      8702 0710 8720 8720 8720 8720 8720 8720
+minesweeper.dasm (line 1057): [0x073D]               :boardtiles_l9 DAT 0x8720, 0x8713, 0x8714, 0x8715, 0x8716, 0x8717, 0x70F, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x710, 0x8718, 0x8719, 0x871A, 0x871B, 0x871C, 0x8720
+minesweeper.dasm (line 1057): [0x073D]                 .DAT 0x8720, 0x8713, 0x8714, 0x8715, 0x8716, 0x8717, 0x70F, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x710, 0x8718, 0x8719, 0x871A, 0x871B, 0x871C, 0x8720
+minesweeper.dasm (line 1057): [0x073D]                      8720 8713 8714 8715 8716 8717 070F 8701
+minesweeper.dasm (line 1057): [0x0745]                      8702 8701 8702 8701 8702 8701 8702 8701
+minesweeper.dasm (line 1057): [0x074D]                      8702 8701 8702 8701 8702 8701 8702 8701
+minesweeper.dasm (line 1057): [0x0755]                      8702 0710 8718 8719 871A 871B 871C 8720
+minesweeper.dasm (line 1059): [0x075D]               :boardtiles_20 DAT 0x8720, 0x871D, 0x8F20, 0x8F20, 0x8F20, 0x8710, 0x70F, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x710, 0x871D, 0x8F20, 0x8F20, 0x8F20, 0x8710, 0x8720
+minesweeper.dasm (line 1059): [0x075D]                 .DAT 0x8720, 0x871D, 0x8F20, 0x8F20, 0x8F20, 0x8710, 0x70F, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x710, 0x871D, 0x8F20, 0x8F20, 0x8F20, 0x8710, 0x8720
+minesweeper.dasm (line 1059): [0x075D]                      8720 871D 8F20 8F20 8F20 8710 070F 8701
+minesweeper.dasm (line 1059): [0x0765]                      8702 8701 8702 8701 8702 8701 8702 8701
+minesweeper.dasm (line 1059): [0x076D]                      8702 8701 8702 8701 8702 8701 8702 8701
+minesweeper.dasm (line 1059): [0x0775]                      8702 0710 871D 8F20 8F20 8F20 8710 8720
+minesweeper.dasm (line 1061): [0x077D]               :boardtiles_21 DAT 0x8720, 0x870D, 0x8712, 0x8712, 0x8712, 0x870E, 0x70F, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x710, 0x870D, 0x8712, 0x8712, 0x8712, 0x870E, 0x8720
+minesweeper.dasm (line 1061): [0x077D]                 .DAT 0x8720, 0x870D, 0x8712, 0x8712, 0x8712, 0x870E, 0x70F, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x8701, 0x8702, 0x710, 0x870D, 0x8712, 0x8712, 0x8712, 0x870E, 0x8720
+minesweeper.dasm (line 1061): [0x077D]                      8720 870D 8712 8712 8712 870E 070F 8701
+minesweeper.dasm (line 1061): [0x0785]                      8702 8701 8702 8701 8702 8701 8702 8701
+minesweeper.dasm (line 1061): [0x078D]                      8702 8701 8702 8701 8702 8701 8702 8701
+minesweeper.dasm (line 1061): [0x0795]                      8702 0710 870D 8712 8712 8712 870E 8720
+minesweeper.dasm (line 1063): [0x079D]               :boardtiles_22 DAT 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x70D, 0x712, 0x712, 0x712, 0x712, 0x712, 0x712, 0x712, 0x712, 0x712, 0x712, 0x712, 0x712, 0x712, 0x712, 0x712, 0x712, 0x712, 0x712, 0x70E, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720
+minesweeper.dasm (line 1063): [0x079D]                 .DAT 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x70D, 0x712, 0x712, 0x712, 0x712, 0x712, 0x712, 0x712, 0x712, 0x712, 0x712, 0x712, 0x712, 0x712, 0x712, 0x712, 0x712, 0x712, 0x712, 0x70E, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720
+minesweeper.dasm (line 1063): [0x079D]                      8720 8720 8720 8720 8720 8720 070D 0712
+minesweeper.dasm (line 1063): [0x07A5]                      0712 0712 0712 0712 0712 0712 0712 0712
+minesweeper.dasm (line 1063): [0x07AD]                      0712 0712 0712 0712 0712 0712 0712 0712
+minesweeper.dasm (line 1063): [0x07B5]                      0712 070E 8720 8720 8720 8720 8720 8720
+minesweeper.dasm (line 1065): [0x07BD]               :boardtiles_23 DAT 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x70D, 0x712, 0x712, 0x712, 0x712, 0x712, 0x712, 0x712, 0x712, 0x712, 0x712, 0x712, 0x712, 0x712, 0x712, 0x712, 0x712, 0x712, 0x712, 0x70E, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720
+minesweeper.dasm (line 1065): [0x07BD]                 .DAT 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x70D, 0x712, 0x712, 0x712, 0x712, 0x712, 0x712, 0x712, 0x712, 0x712, 0x712, 0x712, 0x712, 0x712, 0x712, 0x712, 0x712, 0x712, 0x712, 0x70E, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720, 0x8720
+minesweeper.dasm (line 1065): [0x07BD]                      8720 8720 8720 8720 8720 8720 070D 0712
+minesweeper.dasm (line 1065): [0x07C5]                      0712 0712 0712 0712 0712 0712 0712 0712
+minesweeper.dasm (line 1065): [0x07CD]                      0712 0712 0712 0712 0712 0712 0712 0712
+minesweeper.dasm (line 1065): [0x07D5]                      0712 070E 8720 8720 8720 8720 8720 8720
+minesweeper.dasm (line 1070): [0x07DD]               :tile0 DAT 0xff83, 0x45a9
+minesweeper.dasm (line 1070): [0x07DD]                 .DAT 0xff83, 0x45a9
+minesweeper.dasm (line 1070): [0x07DD]                      FF83 45A9
+minesweeper.dasm (line 1071): [0x07DF]               :tile1 DAT 0x51b9, 0x7dff
+minesweeper.dasm (line 1071): [0x07DF]                 .DAT 0x51b9, 0x7dff
+minesweeper.dasm (line 1071): [0x07DF]                      51B9 7DFF
+minesweeper.dasm (line 1072): [0x07E1]               :tile2 DAT 0xff01, 0x1c1
+minesweeper.dasm (line 1072): [0x07E1]                 .DAT 0xff01, 0x1c1
+minesweeper.dasm (line 1072): [0x07E1]                      FF01 01C1
+minesweeper.dasm (line 1073): [0x07E3]               :tile3 DAT 0x7151, 0xc9c9
+minesweeper.dasm (line 1073): [0x07E3]                 .DAT 0x7151, 0xc9c9
+minesweeper.dasm (line 1073): [0x07E3]                      7151 C9C9
+minesweeper.dasm (line 1074): [0x07E5]               :tile4 DAT 0x49c9, 0xd171
+minesweeper.dasm (line 1074): [0x07E5]                 .DAT 0x49c9, 0xd171
+minesweeper.dasm (line 1074): [0x07E5]                      49C9 D171
+minesweeper.dasm (line 1075): [0x07E7]               :tile5 DAT 0xc101, 0x1ff
+minesweeper.dasm (line 1075): [0x07E7]                 .DAT 0xc101, 0x1ff
+minesweeper.dasm (line 1075): [0x07E7]                      C101 01FF
+minesweeper.dasm (line 1076): [0x07E9]               :tile6 DAT 0xff80, 0x8083
+minesweeper.dasm (line 1076): [0x07E9]                 .DAT 0xff80, 0x8083
+minesweeper.dasm (line 1076): [0x07E9]                      FF80 8083
+minesweeper.dasm (line 1077): [0x07EB]               :tile7 DAT 0x8c89, 0x9292
+minesweeper.dasm (line 1077): [0x07EB]                 .DAT 0x8c89, 0x9292
+minesweeper.dasm (line 1077): [0x07EB]                      8C89 9292
+minesweeper.dasm (line 1078): [0x07ED]               :tile8 DAT 0x9290, 0x888c
+minesweeper.dasm (line 1078): [0x07ED]                 .DAT 0x9290, 0x888c
+minesweeper.dasm (line 1078): [0x07ED]                      9290 888C
+minesweeper.dasm (line 1079): [0x07EF]               :tile9 DAT 0x8380, 0x80ff
+minesweeper.dasm (line 1079): [0x07EF]                 .DAT 0x8380, 0x80ff
+minesweeper.dasm (line 1079): [0x07EF]                      8380 80FF
+minesweeper.dasm (line 1080): [0x07F1]               :tile10 DAT 0x0, 0x80
+minesweeper.dasm (line 1080): [0x07F1]                 .DAT 0x0, 0x80
+minesweeper.dasm (line 1080): [0x07F1]                      0000 0080
+minesweeper.dasm (line 1081): [0x07F3]               :tile11 DAT 0x8000, 0x0
+minesweeper.dasm (line 1081): [0x07F3]                 .DAT 0x8000, 0x0
+minesweeper.dasm (line 1081): [0x07F3]                      8000 0000
+minesweeper.dasm (line 1082): [0x07F5]               :tile12 DAT 0x0, 0x1
+minesweeper.dasm (line 1082): [0x07F5]                 .DAT 0x0, 0x1
+minesweeper.dasm (line 1082): [0x07F5]                      0000 0001
+minesweeper.dasm (line 1083): [0x07F7]               :tile13 DAT 0x100, 0x0
+minesweeper.dasm (line 1083): [0x07F7]                 .DAT 0x100, 0x0
+minesweeper.dasm (line 1083): [0x07F7]                      0100 0000
+minesweeper.dasm (line 1084): [0x07F9]               :tile14 DAT 0x0, 0x55ff
+minesweeper.dasm (line 1084): [0x07F9]                 .DAT 0x0, 0x55ff
+minesweeper.dasm (line 1084): [0x07F9]                      0000 55FF
+minesweeper.dasm (line 1085): [0x07FB]               :tile15 DAT 0xff00, 0x0
+minesweeper.dasm (line 1085): [0x07FB]                 .DAT 0xff00, 0x0
+minesweeper.dasm (line 1085): [0x07FB]                      FF00 0000
+minesweeper.dasm (line 1086): [0x07FD]               :tile16 DAT 0xc080, 0xc080
+minesweeper.dasm (line 1086): [0x07FD]                 .DAT 0xc080, 0xc080
+minesweeper.dasm (line 1086): [0x07FD]                      C080 C080
+minesweeper.dasm (line 1087): [0x07FF]               :tile17 DAT 0x101, 0x101
+minesweeper.dasm (line 1087): [0x07FF]                 .DAT 0x101, 0x101
+minesweeper.dasm (line 1087): [0x07FF]                      0101 0101
+minesweeper.dasm (line 1088): [0x0801]               :tile18 DAT 0x3c, 0x888
+minesweeper.dasm (line 1088): [0x0801]                 .DAT 0x3c, 0x888
+minesweeper.dasm (line 1088): [0x0801]                      003C 0888
+minesweeper.dasm (line 1089): [0x0803]               :tile19 DAT 0xbc80, 0xbc80
+minesweeper.dasm (line 1089): [0x0803]                 .DAT 0xbc80, 0xbc80
+minesweeper.dasm (line 1089): [0x0803]                      BC80 BC80
+minesweeper.dasm (line 1090): [0x0805]               :tile20 DAT 0xbc88, 0x90bc
+minesweeper.dasm (line 1090): [0x0805]                 .DAT 0xbc88, 0x90bc
+minesweeper.dasm (line 1090): [0x0805]                      BC88 90BC
+minesweeper.dasm (line 1091): [0x0807]               :tile21 DAT 0x80bc, 0xaca4
+minesweeper.dasm (line 1091): [0x0807]                 .DAT 0x80bc, 0xaca4
+minesweeper.dasm (line 1091): [0x0807]                      80BC ACA4
+minesweeper.dasm (line 1092): [0x0809]               :tile22 DAT 0x8028, 0x2414
+minesweeper.dasm (line 1092): [0x0809]                 .DAT 0x8028, 0x2414
+minesweeper.dasm (line 1092): [0x0809]                      8028 2414
+minesweeper.dasm (line 1093): [0x080B]               :tile23 DAT 0x0, 0x84
+minesweeper.dasm (line 1093): [0x080B]                 .DAT 0x0, 0x84
+minesweeper.dasm (line 1093): [0x080B]                      0000 0084
+minesweeper.dasm (line 1094): [0x080D]               :tile24 DAT 0xbc84, 0x80bc
+minesweeper.dasm (line 1094): [0x080D]                 .DAT 0xbc84, 0x80bc
+minesweeper.dasm (line 1094): [0x080D]                      BC84 80BC
+minesweeper.dasm (line 1095): [0x080F]               :tile25 DAT 0x80bc, 0x8888
+minesweeper.dasm (line 1095): [0x080F]                 .DAT 0x80bc, 0x8888
+minesweeper.dasm (line 1095): [0x080F]                      80BC 8888
+minesweeper.dasm (line 1096): [0x0811]               :tile26 DAT 0xbc80, 0xbcac
+minesweeper.dasm (line 1096): [0x0811]                 .DAT 0xbc80, 0xbcac
+minesweeper.dasm (line 1096): [0x0811]                      BC80 BCAC
+minesweeper.dasm (line 1097): [0x0813]               :tile27 DAT 0xa400, 0x0
+minesweeper.dasm (line 1097): [0x0813]                 .DAT 0xa400, 0x0
+minesweeper.dasm (line 1097): [0x0813]                      A400 0000
+minesweeper.dasm (line 1098): [0x0815]               :tile28 DAT 0x0, 0xff
+minesweeper.dasm (line 1098): [0x0815]                 .DAT 0x0, 0xff
+minesweeper.dasm (line 1098): [0x0815]                      0000 00FF
+minesweeper.dasm (line 1099): [0x0817]               :tile29 DAT 0xff01, 0x101
+minesweeper.dasm (line 1099): [0x0817]                 .DAT 0xff01, 0x101
+minesweeper.dasm (line 1099): [0x0817]                      FF01 0101
+minesweeper.dasm (line 1100): [0x0819]               :tile30 DAT 0x101, 0x101
+minesweeper.dasm (line 1100): [0x0819]                 .DAT 0x101, 0x101
+minesweeper.dasm (line 1100): [0x0819]                      0101 0101
+minesweeper.dasm (line 1101): [0x081B]               :tile31 DAT 0x0, 0x0
+minesweeper.dasm (line 1101): [0x081B]                 .DAT 0x0, 0x0
+minesweeper.dasm (line 1101): [0x081B]                      0000 0000
+minesweeper.dasm (line 1102): [0x081D]               :tile32 DAT 0xff01, 0x149
+minesweeper.dasm (line 1102): [0x081D]                 .DAT 0xff01, 0x149
+minesweeper.dasm (line 1102): [0x081D]                      FF01 0149
+minesweeper.dasm (line 1103): [0x081F]               :tile33 DAT 0x7d41, 0x101
+minesweeper.dasm (line 1103): [0x081F]                 .DAT 0x7d41, 0x101
+minesweeper.dasm (line 1103): [0x081F]                      7D41 0101
+minesweeper.dasm (line 1104): [0x0821]               :tile34 DAT 0xff01, 0x149
+minesweeper.dasm (line 1104): [0x0821]                 .DAT 0xff01, 0x149
+minesweeper.dasm (line 1104): [0x0821]                      FF01 0149
+minesweeper.dasm (line 1105): [0x0823]               :tile35 DAT 0x6559, 0x101
+minesweeper.dasm (line 1105): [0x0823]                 .DAT 0x6559, 0x101
+minesweeper.dasm (line 1105): [0x0823]                      6559 0101
+minesweeper.dasm (line 1106): [0x0825]               :tile36 DAT 0xff01, 0x145
+minesweeper.dasm (line 1106): [0x0825]                 .DAT 0xff01, 0x145
+minesweeper.dasm (line 1106): [0x0825]                      FF01 0145
+minesweeper.dasm (line 1107): [0x0827]               :tile37 DAT 0x5539, 0x101
+minesweeper.dasm (line 1107): [0x0827]                 .DAT 0x5539, 0x101
+minesweeper.dasm (line 1107): [0x0827]                      5539 0101
+minesweeper.dasm (line 1108): [0x0829]               :tile38 DAT 0xff01, 0x11d
+minesweeper.dasm (line 1108): [0x0829]                 .DAT 0xff01, 0x11d
+minesweeper.dasm (line 1108): [0x0829]                      FF01 011D
+minesweeper.dasm (line 1109): [0x082B]               :tile39 DAT 0x117d, 0x101
+minesweeper.dasm (line 1109): [0x082B]                 .DAT 0x117d, 0x101
+minesweeper.dasm (line 1109): [0x082B]                      117D 0101
+minesweeper.dasm (line 1110): [0x082D]               :tile40 DAT 0xff01, 0x15d
+minesweeper.dasm (line 1110): [0x082D]                 .DAT 0xff01, 0x15d
+minesweeper.dasm (line 1110): [0x082D]                      FF01 015D
+minesweeper.dasm (line 1111): [0x082F]               :tile41 DAT 0x5525, 0x101
+minesweeper.dasm (line 1111): [0x082F]                 .DAT 0x5525, 0x101
+minesweeper.dasm (line 1111): [0x082F]                      5525 0101
+minesweeper.dasm (line 1112): [0x0831]               :tile42 DAT 0xff01, 0x139
+minesweeper.dasm (line 1112): [0x0831]                 .DAT 0xff01, 0x139
+minesweeper.dasm (line 1112): [0x0831]                      FF01 0139
+minesweeper.dasm (line 1113): [0x0833]               :tile43 DAT 0x5525, 0x101
+minesweeper.dasm (line 1113): [0x0833]                 .DAT 0x5525, 0x101
+minesweeper.dasm (line 1113): [0x0833]                      5525 0101
+minesweeper.dasm (line 1114): [0x0835]               :tile44 DAT 0xff01, 0x145
+minesweeper.dasm (line 1114): [0x0835]                 .DAT 0xff01, 0x145
+minesweeper.dasm (line 1114): [0x0835]                      FF01 0145
+minesweeper.dasm (line 1115): [0x0837]               :tile45 DAT 0x350d, 0x101
+minesweeper.dasm (line 1115): [0x0837]                 .DAT 0x350d, 0x101
+minesweeper.dasm (line 1115): [0x0837]                      350D 0101
+minesweeper.dasm (line 1116): [0x0839]               :tile46 DAT 0xff01, 0x129
+minesweeper.dasm (line 1116): [0x0839]                 .DAT 0xff01, 0x129
+minesweeper.dasm (line 1116): [0x0839]                      FF01 0129
+minesweeper.dasm (line 1117): [0x083B]               :tile47 DAT 0x5529, 0x101
+minesweeper.dasm (line 1117): [0x083B]                 .DAT 0x5529, 0x101
+minesweeper.dasm (line 1117): [0x083B]                      5529 0101
+minesweeper.dasm (line 1118): [0x083D]               :tile48 DAT 0xff83, 0x10d
+minesweeper.dasm (line 1118): [0x083D]                 .DAT 0xff83, 0x10d
+minesweeper.dasm (line 1118): [0x083D]                      FF83 010D
+minesweeper.dasm (line 1119): [0x083F]               :tile49 DAT 0xd7d, 0x183
+minesweeper.dasm (line 1119): [0x083F]                 .DAT 0xd7d, 0x183
+minesweeper.dasm (line 1119): [0x083F]                      0D7D 0183
+minesweeper.dasm (line 1120): [0x0841]               :tile50 DAT 0xff01, 0x5539
+minesweeper.dasm (line 1120): [0x0841]                 .DAT 0xff01, 0x5539
+minesweeper.dasm (line 1120): [0x0841]                      FF01 5539
+minesweeper.dasm (line 1121): [0x0843]               :tile51 DAT 0x6d39, 0x5501
+minesweeper.dasm (line 1121): [0x0843]                 .DAT 0x6d39, 0x5501
+minesweeper.dasm (line 1121): [0x0843]                      6D39 5501
+minesweeper.dasm (line 1122): [0x0845]               :tile52 DAT 0xff01, 0x1e1
+minesweeper.dasm (line 1122): [0x0845]                 .DAT 0xff01, 0x1e1
+minesweeper.dasm (line 1122): [0x0845]                      FF01 01E1
+minesweeper.dasm (line 1123): [0x0847]               :tile53 DAT 0x3131, 0xa969
+minesweeper.dasm (line 1123): [0x0847]                 .DAT 0x3131, 0xa969
+minesweeper.dasm (line 1123): [0x0847]                      3131 A969
+minesweeper.dasm (line 1124): [0x0849]               :tile54 DAT 0x69a9, 0x7171
+minesweeper.dasm (line 1124): [0x0849]                 .DAT 0x69a9, 0x7171
+minesweeper.dasm (line 1124): [0x0849]                      69A9 7171
+minesweeper.dasm (line 1125): [0x084B]               :tile55 DAT 0xa101, 0x1ff
+minesweeper.dasm (line 1125): [0x084B]                 .DAT 0xa101, 0x1ff
+minesweeper.dasm (line 1125): [0x084B]                      A101 01FF
+minesweeper.dasm (line 1126): [0x084D]               :tile56 DAT 0xff80, 0x8083
+minesweeper.dasm (line 1126): [0x084D]                 .DAT 0xff80, 0x8083
+minesweeper.dasm (line 1126): [0x084D]                      FF80 8083
+minesweeper.dasm (line 1127): [0x084F]               :tile57 DAT 0x8c88, 0x9096
+minesweeper.dasm (line 1127): [0x084F]                 .DAT 0x8c88, 0x9096
+minesweeper.dasm (line 1127): [0x084F]                      8C88 9096
+minesweeper.dasm (line 1128): [0x0851]               :tile58 DAT 0x9690, 0x888c
+minesweeper.dasm (line 1128): [0x0851]                 .DAT 0x9690, 0x888c
+minesweeper.dasm (line 1128): [0x0851]                      9690 888C
+minesweeper.dasm (line 1129): [0x0853]               :tile59 DAT 0x8380, 0x80ff
+minesweeper.dasm (line 1129): [0x0853]                 .DAT 0x8380, 0x80ff
+minesweeper.dasm (line 1129): [0x0853]                      8380 80FF
+minesweeper.dasm (line 1130): [0x0855]               :tile60 DAT 0xff01, 0x1c1
+minesweeper.dasm (line 1130): [0x0855]                 .DAT 0xff01, 0x1c1
+minesweeper.dasm (line 1130): [0x0855]                      FF01 01C1
+minesweeper.dasm (line 1131): [0x0857]               :tile61 DAT 0x3151, 0xc949
+minesweeper.dasm (line 1131): [0x0857]                 .DAT 0x3151, 0xc949
+minesweeper.dasm (line 1131): [0x0857]                      3151 C949
+minesweeper.dasm (line 1132): [0x0859]               :tile62 DAT 0x2999, 0x1131
+minesweeper.dasm (line 1132): [0x0859]                 .DAT 0x2999, 0x1131
+minesweeper.dasm (line 1132): [0x0859]                      2999 1131
+minesweeper.dasm (line 1133): [0x085B]               :tile63 DAT 0xc101, 0x1ff
+minesweeper.dasm (line 1133): [0x085B]                 .DAT 0xc101, 0x1ff
+minesweeper.dasm (line 1133): [0x085B]                      C101 01FF
+minesweeper.dasm (line 1134): [0x085D]               :tile64 DAT 0xff80, 0x8083
+minesweeper.dasm (line 1134): [0x085D]                 .DAT 0xff80, 0x8083
+minesweeper.dasm (line 1134): [0x085D]                      FF80 8083
+minesweeper.dasm (line 1135): [0x085F]               :tile65 DAT 0xcc88, 0xd0de
+minesweeper.dasm (line 1135): [0x085F]                 .DAT 0xcc88, 0xd0de
+minesweeper.dasm (line 1135): [0x085F]                      CC88 D0DE
+minesweeper.dasm (line 1136): [0x0861]               :tile66 DAT 0x9ed0, 0xc8cc
+minesweeper.dasm (line 1136): [0x0861]                 .DAT 0x9ed0, 0xc8cc
+minesweeper.dasm (line 1136): [0x0861]                      9ED0 C8CC
+minesweeper.dasm (line 1137): [0x0863]               :tile67 DAT 0x8380, 0x80ff
+minesweeper.dasm (line 1137): [0x0863]                 .DAT 0x8380, 0x80ff
+minesweeper.dasm (line 1137): [0x0863]                      8380 80FF
+minesweeper.dasm (line 1138): [0x0865]               :tile68 DAT 0x48, 0x7c40
+minesweeper.dasm (line 1138): [0x0865]                 .DAT 0x48, 0x7c40
+minesweeper.dasm (line 1138): [0x0865]                      0048 7C40
+minesweeper.dasm (line 1139): [0x0867]               :tile69 DAT 0x48, 0x6458
+minesweeper.dasm (line 1139): [0x0867]                 .DAT 0x48, 0x6458
+minesweeper.dasm (line 1139): [0x0867]                      0048 6458
+minesweeper.dasm (line 1140): [0x0869]               :tile70 DAT 0x44, 0x5438
+minesweeper.dasm (line 1140): [0x0869]                 .DAT 0x44, 0x5438
+minesweeper.dasm (line 1140): [0x0869]                      0044 5438
+minesweeper.dasm (line 1141): [0x086B]               :tile71 DAT 0x1c, 0x107c
+minesweeper.dasm (line 1141): [0x086B]                 .DAT 0x1c, 0x107c
+minesweeper.dasm (line 1141): [0x086B]                      001C 107C
+minesweeper.dasm (line 1142): [0x086D]               :tile72 DAT 0x5c, 0x5424
+minesweeper.dasm (line 1142): [0x086D]                 .DAT 0x5c, 0x5424
+minesweeper.dasm (line 1142): [0x086D]                      005C 5424
+minesweeper.dasm (line 1143): [0x086F]               :tile73 DAT 0x38, 0x5424
+minesweeper.dasm (line 1143): [0x086F]                 .DAT 0x38, 0x5424
+minesweeper.dasm (line 1143): [0x086F]                      0038 5424
+minesweeper.dasm (line 1144): [0x0871]               :tile74 DAT 0x44, 0x340c
+minesweeper.dasm (line 1144): [0x0871]                 .DAT 0x44, 0x340c
+minesweeper.dasm (line 1144): [0x0871]                      0044 340C
+minesweeper.dasm (line 1145): [0x0873]               :tile75 DAT 0x28, 0x5428
+minesweeper.dasm (line 1145): [0x0873]                 .DAT 0x28, 0x5428
+minesweeper.dasm (line 1145): [0x0873]                      0028 5428
+minesweeper.dasm (line 1146): [0x0875]               :tile76 DAT 0x48, 0x5438
+minesweeper.dasm (line 1146): [0x0875]                 .DAT 0x48, 0x5438
+minesweeper.dasm (line 1146): [0x0875]                      0048 5438
+minesweeper.dasm (line 1147): [0x0877]               :tile77 DAT 0x38, 0x4438
+minesweeper.dasm (line 1147): [0x0877]                 .DAT 0x38, 0x4438
+minesweeper.dasm (line 1147): [0x0877]                      0038 4438
+minesweeper.dasm (line 1148): [0x0879]               :tile78 DAT 0x18, 0xe018
+minesweeper.dasm (line 1148): [0x0879]                 .DAT 0x18, 0xe018
+minesweeper.dasm (line 1148): [0x0879]                      0018 E018
+minesweeper.dasm (line 1149): [0x087B]               :tile79 DAT 0x60, 0x9060
+minesweeper.dasm (line 1149): [0x087B]                 .DAT 0x60, 0x9060
+minesweeper.dasm (line 1149): [0x087B]                      0060 9060
+minesweeper.dasm (line 1150): [0x087D]               :tile80 DAT 0x70, 0x80f0
+minesweeper.dasm (line 1150): [0x087D]                 .DAT 0x70, 0x80f0
+minesweeper.dasm (line 1150): [0x087D]                      0070 80F0
+minesweeper.dasm (line 1151): [0x087F]               :tile81 DAT 0x0, 0xf8
+minesweeper.dasm (line 1151): [0x087F]                 .DAT 0x0, 0xf8
+minesweeper.dasm (line 1151): [0x087F]                      0000 00F8
+minesweeper.dasm (line 1152): [0x0881]               :tile82 DAT 0x8040, 0x80f8
+minesweeper.dasm (line 1152): [0x0881]                 .DAT 0x8040, 0x80f8
+minesweeper.dasm (line 1152): [0x0881]                      8040 80F8
+minesweeper.dasm (line 1153): [0x0883]               :tile83 DAT 0xe8, 0xf0
+minesweeper.dasm (line 1153): [0x0883]                 .DAT 0xe8, 0xf0
+minesweeper.dasm (line 1153): [0x0883]                      00E8 00F0
+minesweeper.dasm (line 1154): [0x0885]               :tile84 DAT 0x20e0, 0x0
+minesweeper.dasm (line 1154): [0x0885]                 .DAT 0x20e0, 0x0
+minesweeper.dasm (line 1154): [0x0885]                      20E0 0000
+minesweeper.dasm (line 1155): [0x0887]               :tile85 DAT 0xf8, 0x8080
+minesweeper.dasm (line 1155): [0x0887]                 .DAT 0xf8, 0x8080
+minesweeper.dasm (line 1155): [0x0887]                      00F8 8080
+minesweeper.dasm (line 1156): [0x0889]               :tile86 DAT 0x60, 0x9060
+minesweeper.dasm (line 1156): [0x0889]                 .DAT 0x60, 0x9060
+minesweeper.dasm (line 1156): [0x0889]                      0060 9060
+minesweeper.dasm (line 1157): [0x088B]               :tile87 DAT 0xb0, 0x90d0
+minesweeper.dasm (line 1157): [0x088B]                 .DAT 0xb0, 0x90d0
+minesweeper.dasm (line 1157): [0x088B]                      00B0 90D0
+minesweeper.dasm (line 1158): [0x088D]               :tile88 DAT 0xf0, 0x90b0
+minesweeper.dasm (line 1158): [0x088D]                 .DAT 0xf0, 0x90b0
+minesweeper.dasm (line 1158): [0x088D]                      00F0 90B0
+minesweeper.dasm (line 1163): [0x088F]               :intro0 DAT 0x0, 0x101
+minesweeper.dasm (line 1163): [0x088F]                 .DAT 0x0, 0x101
+minesweeper.dasm (line 1163): [0x088F]                      0000 0101
+minesweeper.dasm (line 1164): [0x0891]               :intro1 DAT 0xc3eb, 0xebeb
+minesweeper.dasm (line 1164): [0x0891]                 .DAT 0xc3eb, 0xebeb
+minesweeper.dasm (line 1164): [0x0891]                      C3EB EBEB
+minesweeper.dasm (line 1165): [0x0893]               :intro2 DAT 0xebea, 0xe8e0
+minesweeper.dasm (line 1165): [0x0893]                 .DAT 0xebea, 0xe8e0
+minesweeper.dasm (line 1165): [0x0893]                      EBEA E8E0
+minesweeper.dasm (line 1166): [0x0895]               :intro3 DAT 0xc000, 0x80e0
+minesweeper.dasm (line 1166): [0x0895]                 .DAT 0xc000, 0x80e0
+minesweeper.dasm (line 1166): [0x0895]                      C000 80E0
+minesweeper.dasm (line 1167): [0x0897]               :intro4 DAT 0xe0e8, 0xeaeb
+minesweeper.dasm (line 1167): [0x0897]                 .DAT 0xe0e8, 0xeaeb
+minesweeper.dasm (line 1167): [0x0897]                      E0E8 EAEB
+minesweeper.dasm (line 1168): [0x0899]               :intro5 DAT 0xebeb, 0xb01
+minesweeper.dasm (line 1168): [0x0899]                 .DAT 0xebeb, 0xb01
+minesweeper.dasm (line 1168): [0x0899]                      EBEB 0B01
+minesweeper.dasm (line 1169): [0x089B]               :intro6 DAT 0x101, 0x0
+minesweeper.dasm (line 1169): [0x089B]                 .DAT 0x101, 0x0
+minesweeper.dasm (line 1169): [0x089B]                      0101 0000
+minesweeper.dasm (line 1170): [0x089D]               :intro7 DAT 0x1, 0x1e1
+minesweeper.dasm (line 1170): [0x089D]                 .DAT 0x1, 0x1e1
+minesweeper.dasm (line 1170): [0x089D]                      0001 01E1
+minesweeper.dasm (line 1171): [0x089F]               :intro8 DAT 0xebeb, 0xebeb
+minesweeper.dasm (line 1171): [0x089F]                 .DAT 0xebeb, 0xebeb
+minesweeper.dasm (line 1171): [0x089F]                      EBEB EBEB
+minesweeper.dasm (line 1172): [0x08A1]               :intro9 DAT 0xeb0b, 0x101
+minesweeper.dasm (line 1172): [0x08A1]                 .DAT 0xeb0b, 0x101
+minesweeper.dasm (line 1172): [0x08A1]                      EB0B 0101
+minesweeper.dasm (line 1173): [0x08A3]               :intro10 DAT 0x100, 0x101
+minesweeper.dasm (line 1173): [0x08A3]                 .DAT 0x100, 0x101
+minesweeper.dasm (line 1173): [0x08A3]                      0100 0101
+minesweeper.dasm (line 1174): [0x08A5]               :intro11 DAT 0xc1eb, 0xebeb
+minesweeper.dasm (line 1174): [0x08A5]                 .DAT 0xc1eb, 0xebeb
+minesweeper.dasm (line 1174): [0x08A5]                      C1EB EBEB
+minesweeper.dasm (line 1175): [0x08A7]               :intro12 DAT 0xebea, 0xe8eb
+minesweeper.dasm (line 1175): [0x08A7]                 .DAT 0xebea, 0xe8eb
+minesweeper.dasm (line 1175): [0x08A7]                      EBEA E8EB
+minesweeper.dasm (line 1176): [0x08A9]               :intro13 DAT 0xe3eb, 0x2b03
+minesweeper.dasm (line 1176): [0x08A9]                 .DAT 0xe3eb, 0x2b03
+minesweeper.dasm (line 1176): [0x08A9]                      E3EB 2B03
+minesweeper.dasm (line 1177): [0x08AB]               :intro14 DAT 0x101, 0x0
+minesweeper.dasm (line 1177): [0x08AB]                 .DAT 0x101, 0x0
+minesweeper.dasm (line 1177): [0x08AB]                      0101 0000
+minesweeper.dasm (line 1178): [0x08AD]               :intro15 DAT 0x101, 0xc1eb
+minesweeper.dasm (line 1178): [0x08AD]                 .DAT 0x101, 0xc1eb
+minesweeper.dasm (line 1178): [0x08AD]                      0101 C1EB
+minesweeper.dasm (line 1179): [0x08AF]               :intro16 DAT 0xebeb, 0xebeb
+minesweeper.dasm (line 1179): [0x08AF]                 .DAT 0xebeb, 0xebeb
+minesweeper.dasm (line 1179): [0x08AF]                      EBEB EBEB
+minesweeper.dasm (line 1180): [0x08B1]               :intro17 DAT 0xeb43, 0xc1c1
+minesweeper.dasm (line 1180): [0x08B1]                 .DAT 0xeb43, 0xc1c1
+minesweeper.dasm (line 1180): [0x08B1]                      EB43 C1C1
+minesweeper.dasm (line 1181): [0x08B3]               :intro18 DAT 0x303, 0xb00
+minesweeper.dasm (line 1181): [0x08B3]                 .DAT 0x303, 0xb00
+minesweeper.dasm (line 1181): [0x08B3]                      0303 0B00
+minesweeper.dasm (line 1182): [0x08B5]               :intro19 DAT 0x0, 0x0
+minesweeper.dasm (line 1182): [0x08B5]                 .DAT 0x0, 0x0
+minesweeper.dasm (line 1182): [0x08B5]                      0000 0000
+minesweeper.dasm (line 1183): [0x08B7]               :intro20 DAT 0xf0f0, 0x3030
+minesweeper.dasm (line 1183): [0x08B7]                 .DAT 0xf0f0, 0x3030
+minesweeper.dasm (line 1183): [0x08B7]                      F0F0 3030
+minesweeper.dasm (line 1184): [0x08B9]               :intro21 DAT 0xc0c, 0xc0c
+minesweeper.dasm (line 1184): [0x08B9]                 .DAT 0xc0c, 0xc0c
+minesweeper.dasm (line 1184): [0x08B9]                      0C0C 0C0C
+minesweeper.dasm (line 1185): [0x08BB]               :intro22 DAT 0xc0c, 0xc0c
+minesweeper.dasm (line 1185): [0x08BB]                 .DAT 0xc0c, 0xc0c
+minesweeper.dasm (line 1185): [0x08BB]                      0C0C 0C0C
+minesweeper.dasm (line 1186): [0x08BD]               :intro23 DAT 0x3030, 0xf0f0
+minesweeper.dasm (line 1186): [0x08BD]                 .DAT 0x3030, 0xf0f0
+minesweeper.dasm (line 1186): [0x08BD]                      3030 F0F0
+minesweeper.dasm (line 1187): [0x08BF]               :intro24 DAT 0x303, 0x3333
+minesweeper.dasm (line 1187): [0x08BF]                 .DAT 0x303, 0x3333
+minesweeper.dasm (line 1187): [0x08BF]                      0303 3333
+minesweeper.dasm (line 1188): [0x08C1]               :intro25 DAT 0x303, 0x303
+minesweeper.dasm (line 1188): [0x08C1]                 .DAT 0x303, 0x303
+minesweeper.dasm (line 1188): [0x08C1]                      0303 0303
+minesweeper.dasm (line 1189): [0x08C3]               :intro26 DAT 0xf0f, 0xf0f
+minesweeper.dasm (line 1189): [0x08C3]                 .DAT 0xf0f, 0xf0f
+minesweeper.dasm (line 1189): [0x08C3]                      0F0F 0F0F
+minesweeper.dasm (line 1190): [0x08C5]               :intro27 DAT 0x303, 0xf0f
+minesweeper.dasm (line 1190): [0x08C5]                 .DAT 0x303, 0xf0f
+minesweeper.dasm (line 1190): [0x08C5]                      0303 0F0F
+minesweeper.dasm (line 1191): [0x08C7]               :intro28 DAT 0xf0f, 0x303
+minesweeper.dasm (line 1191): [0x08C7]                 .DAT 0xf0f, 0x303
+minesweeper.dasm (line 1191): [0x08C7]                      0F0F 0303
+minesweeper.dasm (line 1192): [0x08C9]               :intro29 DAT 0x1818, 0x1818
+minesweeper.dasm (line 1192): [0x08C9]                 .DAT 0x1818, 0x1818
+minesweeper.dasm (line 1192): [0x08C9]                      1818 1818
+minesweeper.dasm (line 1193): [0x08CB]               :intro30 DAT 0x7878, 0x7878
+minesweeper.dasm (line 1193): [0x08CB]                 .DAT 0x7878, 0x7878
+minesweeper.dasm (line 1193): [0x08CB]                      7878 7878
+minesweeper.dasm (line 1194): [0x08CD]               :intro31 DAT 0x1818, 0x7878
+minesweeper.dasm (line 1194): [0x08CD]                 .DAT 0x1818, 0x7878
+minesweeper.dasm (line 1194): [0x08CD]                      1818 7878
+minesweeper.dasm (line 1195): [0x08CF]               :intro32 DAT 0x4040, 0x6078
+minesweeper.dasm (line 1195): [0x08CF]                 .DAT 0x4040, 0x6078
+minesweeper.dasm (line 1195): [0x08CF]                      4040 6078
+minesweeper.dasm (line 1196): [0x08D1]               :intro33 DAT 0x7f61, 0x434f
+minesweeper.dasm (line 1196): [0x08D1]                 .DAT 0x7f61, 0x434f
+minesweeper.dasm (line 1196): [0x08D1]                      7F61 434F
+minesweeper.dasm (line 1197): [0x08D3]               :intro34 DAT 0x1f7f, 0x3f1f
+minesweeper.dasm (line 1197): [0x08D3]                 .DAT 0x1f7f, 0x3f1f
+minesweeper.dasm (line 1197): [0x08D3]                      1F7F 3F1F
+minesweeper.dasm (line 1198): [0x08D5]               :intro35 DAT 0x4f47, 0x417f
+minesweeper.dasm (line 1198): [0x08D5]                 .DAT 0x4f47, 0x417f
+minesweeper.dasm (line 1198): [0x08D5]                      4F47 417F
+minesweeper.dasm (line 1199): [0x08D7]               :intro36 DAT 0x7f7f, 0x7f7f
+minesweeper.dasm (line 1199): [0x08D7]                 .DAT 0x7f7f, 0x7f7f
+minesweeper.dasm (line 1199): [0x08D7]                      7F7F 7F7F
+minesweeper.dasm (line 1200): [0x08D9]               :intro37 DAT 0x7f6f, 0x4040
+minesweeper.dasm (line 1200): [0x08D9]                 .DAT 0x7f6f, 0x4040
+minesweeper.dasm (line 1200): [0x08D9]                      7F6F 4040
+minesweeper.dasm (line 1201): [0x08DB]               :intro38 DAT 0x0, 0x40
+minesweeper.dasm (line 1201): [0x08DB]                 .DAT 0x0, 0x40
+minesweeper.dasm (line 1201): [0x08DB]                      0000 0040
+minesweeper.dasm (line 1202): [0x08DD]               :intro39 DAT 0x4040, 0x787f
+minesweeper.dasm (line 1202): [0x08DD]                 .DAT 0x4040, 0x787f
+minesweeper.dasm (line 1202): [0x08DD]                      4040 787F
+minesweeper.dasm (line 1203): [0x08DF]               :intro40 DAT 0x7f7f, 0x7f7f
+minesweeper.dasm (line 1203): [0x08DF]                 .DAT 0x7f7f, 0x7f7f
+minesweeper.dasm (line 1203): [0x08DF]                      7F7F 7F7F
+minesweeper.dasm (line 1204): [0x08E1]               :intro41 DAT 0x4740, 0x4040
+minesweeper.dasm (line 1204): [0x08E1]                 .DAT 0x4740, 0x4040
+minesweeper.dasm (line 1204): [0x08E1]                      4740 4040
+minesweeper.dasm (line 1205): [0x08E3]               :intro42 DAT 0x40, 0x6070
+minesweeper.dasm (line 1205): [0x08E3]                 .DAT 0x40, 0x6070
+minesweeper.dasm (line 1205): [0x08E3]                      0040 6070
+minesweeper.dasm (line 1206): [0x08E5]               :intro43 DAT 0x7f71, 0x6347
+minesweeper.dasm (line 1206): [0x08E5]                 .DAT 0x7f71, 0x6347
+minesweeper.dasm (line 1206): [0x08E5]                      7F71 6347
+minesweeper.dasm (line 1207): [0x08E7]               :intro44 DAT 0xf1f, 0x3f7f
+minesweeper.dasm (line 1207): [0x08E7]                 .DAT 0xf1f, 0x3f7f
+minesweeper.dasm (line 1207): [0x08E7]                      0F1F 3F7F
+minesweeper.dasm (line 1208): [0x08E9]               :intro45 DAT 0x7f0f, 0x0
+minesweeper.dasm (line 1208): [0x08E9]                 .DAT 0x7f0f, 0x0
+minesweeper.dasm (line 1208): [0x08E9]                      7F0F 0000
+minesweeper.dasm (line 1209): [0x08EB]               :intro46 DAT 0x0, 0x4040
+minesweeper.dasm (line 1209): [0x08EB]                 .DAT 0x0, 0x4040
+minesweeper.dasm (line 1209): [0x08EB]                      0000 4040
+minesweeper.dasm (line 1210): [0x08ED]               :intro47 DAT 0x4060, 0x7f7f
+minesweeper.dasm (line 1210): [0x08ED]                 .DAT 0x4060, 0x7f7f
+minesweeper.dasm (line 1210): [0x08ED]                      4060 7F7F
+minesweeper.dasm (line 1211): [0x08EF]               :intro48 DAT 0x7f7f, 0x7f7f
+minesweeper.dasm (line 1211): [0x08EF]                 .DAT 0x7f7f, 0x7f7f
+minesweeper.dasm (line 1211): [0x08EF]                      7F7F 7F7F
+minesweeper.dasm (line 1212): [0x08F1]               :intro49 DAT 0x4340, 0x6073
+minesweeper.dasm (line 1212): [0x08F1]                 .DAT 0x4340, 0x6073
+minesweeper.dasm (line 1212): [0x08F1]                      4340 6073
+minesweeper.dasm (line 1213): [0x08F3]               :intro50 DAT 0x703c, 0x600
+minesweeper.dasm (line 1213): [0x08F3]                 .DAT 0x703c, 0x600
+minesweeper.dasm (line 1213): [0x08F3]                      703C 0600
+minesweeper.dasm (line 1214): [0x08F5]               :intro51 DAT 0x0, 0xffff
+minesweeper.dasm (line 1214): [0x08F5]                 .DAT 0x0, 0xffff
+minesweeper.dasm (line 1214): [0x08F5]                      0000 FFFF
+minesweeper.dasm (line 1215): [0x08F7]               :intro52 DAT 0x0, 0x3030
+minesweeper.dasm (line 1215): [0x08F7]                 .DAT 0x0, 0x3030
+minesweeper.dasm (line 1215): [0x08F7]                      0000 3030
+minesweeper.dasm (line 1216): [0x08F9]               :intro53 DAT 0xc3c3, 0xc0c0
+minesweeper.dasm (line 1216): [0x08F9]                 .DAT 0xc3c3, 0xc0c0
+minesweeper.dasm (line 1216): [0x08F9]                      C3C3 C0C0
+minesweeper.dasm (line 1217): [0x08FB]               :intro54 DAT 0xc0c0, 0x303
+minesweeper.dasm (line 1217): [0x08FB]                 .DAT 0xc0c0, 0x303
+minesweeper.dasm (line 1217): [0x08FB]                      C0C0 0303
+minesweeper.dasm (line 1218): [0x08FD]               :intro55 DAT 0x0, 0x0
+minesweeper.dasm (line 1218): [0x08FD]                 .DAT 0x0, 0x0
+minesweeper.dasm (line 1218): [0x08FD]                      0000 0000
+minesweeper.dasm (line 1219): [0x08FF]               :intro56 DAT 0xffff, 0x0
+minesweeper.dasm (line 1219): [0x08FF]                 .DAT 0xffff, 0x0
+minesweeper.dasm (line 1219): [0x08FF]                      FFFF 0000
+minesweeper.dasm (line 1220): [0x0901]               :intro57 DAT 0xf0f, 0xc0c
+minesweeper.dasm (line 1220): [0x0901]                 .DAT 0xf0f, 0xc0c
+minesweeper.dasm (line 1220): [0x0901]                      0F0F 0C0C
+minesweeper.dasm (line 1221): [0x0903]               :intro58 DAT 0x3030, 0x3030
+minesweeper.dasm (line 1221): [0x0903]                 .DAT 0x3030, 0x3030
+minesweeper.dasm (line 1221): [0x0903]                      3030 3030
+minesweeper.dasm (line 1222): [0x0905]               :intro59 DAT 0x3030, 0x3030
+minesweeper.dasm (line 1222): [0x0905]                 .DAT 0x3030, 0x3030
+minesweeper.dasm (line 1222): [0x0905]                      3030 3030
+minesweeper.dasm (line 1223): [0x0907]               :intro60 DAT 0xc0c, 0xf0f
+minesweeper.dasm (line 1223): [0x0907]                 .DAT 0xc0c, 0xf0f
+minesweeper.dasm (line 1223): [0x0907]                      0C0C 0F0F
+minesweeper.dasm (line 1224): [0x0909]               :intro61 DAT 0x7878, 0x1818
+minesweeper.dasm (line 1224): [0x0909]                 .DAT 0x7878, 0x1818
+minesweeper.dasm (line 1224): [0x0909]                      7878 1818
+minesweeper.dasm (line 1225): [0x090B]               :intro62 DAT 0xc0c0, 0xc0c0
+minesweeper.dasm (line 1225): [0x090B]                 .DAT 0xc0c0, 0xc0c0
+minesweeper.dasm (line 1225): [0x090B]                      C0C0 C0C0
+minesweeper.dasm (line 1226): [0x090D]               :intro63 DAT 0xc0c0, 0xc0c0
+minesweeper.dasm (line 1226): [0x090D]                 .DAT 0xc0c0, 0xc0c0
+minesweeper.dasm (line 1226): [0x090D]                      C0C0 C0C0
+minesweeper.dasm (line 1227): [0x090F]               :intro64 DAT 0xc0d0, 0xd4d4
+minesweeper.dasm (line 1227): [0x090F]                 .DAT 0xc0d0, 0xd4d4
+minesweeper.dasm (line 1227): [0x090F]                      C0D0 D4D4
+minesweeper.dasm (line 1228): [0x0911]               :intro65 DAT 0xd2d2, 0xc2c6
+minesweeper.dasm (line 1228): [0x0911]                 .DAT 0xd2d2, 0xc2c6
+minesweeper.dasm (line 1228): [0x0911]                      D2D2 C2C6
+minesweeper.dasm (line 1229): [0x0913]               :intro66 DAT 0xc6d6, 0x601
+minesweeper.dasm (line 1229): [0x0913]                 .DAT 0xc6d6, 0x601
+minesweeper.dasm (line 1229): [0x0913]                      C6D6 0601
+minesweeper.dasm (line 1230): [0x0915]               :intro67 DAT 0x0, 0x216
+minesweeper.dasm (line 1230): [0x0915]                 .DAT 0x0, 0x216
+minesweeper.dasm (line 1230): [0x0915]                      0000 0216
+minesweeper.dasm (line 1231): [0x0917]               :intro68 DAT 0xd6d6, 0xd6d6
+minesweeper.dasm (line 1231): [0x0917]                 .DAT 0xd6d6, 0xd6d6
+minesweeper.dasm (line 1231): [0x0917]                      D6D6 D6D6
+minesweeper.dasm (line 1232): [0x0919]               :intro69 DAT 0xd6d2, 0x12d0
+minesweeper.dasm (line 1232): [0x0919]                 .DAT 0xd6d2, 0x12d0
+minesweeper.dasm (line 1232): [0x0919]                      D6D2 12D0
+minesweeper.dasm (line 1233): [0x091B]               :intro70 DAT 0xd0d0, 0xd4d4
+minesweeper.dasm (line 1233): [0x091B]                 .DAT 0xd0d0, 0xd4d4
+minesweeper.dasm (line 1233): [0x091B]                      D0D0 D4D4
+minesweeper.dasm (line 1234): [0x091D]               :intro71 DAT 0xd486, 0x284
+minesweeper.dasm (line 1234): [0x091D]                 .DAT 0xd486, 0x284
+minesweeper.dasm (line 1234): [0x091D]                      D486 0284
+minesweeper.dasm (line 1235): [0x091F]               :intro72 DAT 0x4416, 0x602
+minesweeper.dasm (line 1235): [0x091F]                 .DAT 0x4416, 0x602
+minesweeper.dasm (line 1235): [0x091F]                      4416 0602
+minesweeper.dasm (line 1236): [0x0921]               :intro73 DAT 0x2, 0x2d6
+minesweeper.dasm (line 1236): [0x0921]                 .DAT 0x2, 0x2d6
+minesweeper.dasm (line 1236): [0x0921]                      0002 02D6
+minesweeper.dasm (line 1237): [0x0923]               :intro74 DAT 0xd6d6, 0xd6d6
+minesweeper.dasm (line 1237): [0x0923]                 .DAT 0xd6d6, 0xd6d6
+minesweeper.dasm (line 1237): [0x0923]                      D6D6 D6D6
+minesweeper.dasm (line 1238): [0x0925]               :intro75 DAT 0xd686, 0x8282
+minesweeper.dasm (line 1238): [0x0925]                 .DAT 0xd686, 0x8282
+minesweeper.dasm (line 1238): [0x0925]                      D686 8282
+minesweeper.dasm (line 1239): [0x0927]               :intro76 DAT 0x616, 0x0
+minesweeper.dasm (line 1239): [0x0927]                 .DAT 0x616, 0x0
+minesweeper.dasm (line 1239): [0x0927]                      0616 0000
+minesweeper.dasm (line 1240): [0x0929]               :intro77 DAT 0x2, 0x2d6
+minesweeper.dasm (line 1240): [0x0929]                 .DAT 0x2, 0x2d6
+minesweeper.dasm (line 1240): [0x0929]                      0002 02D6
+minesweeper.dasm (line 1241): [0x092B]               :intro78 DAT 0xd6d6, 0xd6d6
+minesweeper.dasm (line 1241): [0x092B]                 .DAT 0xd6d6, 0xd6d6
+minesweeper.dasm (line 1241): [0x092B]                      D6D6 D6D6
+minesweeper.dasm (line 1242): [0x092D]               :intro79 DAT 0xd686, 0x8282
+minesweeper.dasm (line 1242): [0x092D]                 .DAT 0xd686, 0x8282
+minesweeper.dasm (line 1242): [0x092D]                      D686 8282
+minesweeper.dasm (line 1243): [0x092F]               :intro80 DAT 0x616, 0x0
+minesweeper.dasm (line 1243): [0x092F]                 .DAT 0x616, 0x0
+minesweeper.dasm (line 1243): [0x092F]                      0616 0000
+minesweeper.dasm (line 1244): [0x0931]               :intro81 DAT 0x2, 0x2d6
+minesweeper.dasm (line 1244): [0x0931]                 .DAT 0x2, 0x2d6
+minesweeper.dasm (line 1244): [0x0931]                      0002 02D6
+minesweeper.dasm (line 1245): [0x0933]               :intro82 DAT 0xd6d6, 0xd6d6
+minesweeper.dasm (line 1245): [0x0933]                 .DAT 0xd6d6, 0xd6d6
+minesweeper.dasm (line 1245): [0x0933]                      D6D6 D6D6
+minesweeper.dasm (line 1246): [0x0935]               :intro83 DAT 0xd602, 0x2d6
+minesweeper.dasm (line 1246): [0x0935]                 .DAT 0xd602, 0x2d6
+minesweeper.dasm (line 1246): [0x0935]                      D602 02D6
+minesweeper.dasm (line 1247): [0x0937]               :intro84 DAT 0xd400, 0x2
+minesweeper.dasm (line 1247): [0x0937]                 .DAT 0xd400, 0x2
+minesweeper.dasm (line 1247): [0x0937]                      D400 0002
+minesweeper.dasm (line 1248): [0x0939]               :intro85 DAT 0x2d6, 0xd6d6
+minesweeper.dasm (line 1248): [0x0939]                 .DAT 0x2d6, 0xd6d6
+minesweeper.dasm (line 1248): [0x0939]                      02D6 D6D6
+minesweeper.dasm (line 1249): [0x093B]               :intro86 DAT 0xd6d6, 0xd686
+minesweeper.dasm (line 1249): [0x093B]                 .DAT 0xd6d6, 0xd686
+minesweeper.dasm (line 1249): [0x093B]                      D6D6 D686
+minesweeper.dasm (line 1250): [0x093D]               :intro87 DAT 0x8282, 0x616
+minesweeper.dasm (line 1250): [0x093D]                 .DAT 0x8282, 0x616
+minesweeper.dasm (line 1250): [0x093D]                      8282 0616
+minesweeper.dasm (line 1251): [0x093F]               :intro88 DAT 0x0, 0x0
+minesweeper.dasm (line 1251): [0x093F]                 .DAT 0x0, 0x0
+minesweeper.dasm (line 1251): [0x093F]                      0000 0000
+minesweeper.dasm (line 1252): [0x0941]               :intro89 DAT 0x202, 0xd6d6
+minesweeper.dasm (line 1252): [0x0941]                 .DAT 0x202, 0xd6d6
+minesweeper.dasm (line 1252): [0x0941]                      0202 D6D6
+minesweeper.dasm (line 1253): [0x0943]               :intro90 DAT 0xd6d6, 0xd6d6
+minesweeper.dasm (line 1253): [0x0943]                 .DAT 0xd6d6, 0xd6d6
+minesweeper.dasm (line 1253): [0x0943]                      D6D6 D6D6
+minesweeper.dasm (line 1254): [0x0945]               :intro91 DAT 0x606, 0x8454
+minesweeper.dasm (line 1254): [0x0945]                 .DAT 0x606, 0x8454
+minesweeper.dasm (line 1254): [0x0945]                      0606 8454
+minesweeper.dasm (line 1255): [0x0947]               :intro92 DAT 0xcfcf, 0xcfcf
+minesweeper.dasm (line 1255): [0x0947]                 .DAT 0xcfcf, 0xcfcf
+minesweeper.dasm (line 1255): [0x0947]                      CFCF CFCF
+minesweeper.dasm (line 1256): [0x0949]               :intro93 DAT 0xc0c0, 0xc0c0
+minesweeper.dasm (line 1256): [0x0949]                 .DAT 0xc0c0, 0xc0c0
+minesweeper.dasm (line 1256): [0x0949]                      C0C0 C0C0
+minesweeper.dasm (line 1257): [0x094B]               :intro94 DAT 0xc0c0, 0xc0c0
+minesweeper.dasm (line 1257): [0x094B]                 .DAT 0xc0c0, 0xc0c0
+minesweeper.dasm (line 1257): [0x094B]                      C0C0 C0C0
+minesweeper.dasm (line 1258): [0x094D]               :intro95 DAT 0x303, 0x303
+minesweeper.dasm (line 1258): [0x094D]                 .DAT 0x303, 0x303
+minesweeper.dasm (line 1258): [0x094D]                      0303 0303
+minesweeper.dasm (line 1259): [0x094F]               :intro96 DAT 0xfb67, 0xcf8f
+minesweeper.dasm (line 1259): [0x094F]                 .DAT 0xfb67, 0xcf8f
+minesweeper.dasm (line 1259): [0x094F]                      FB67 CF8F
+minesweeper.dasm (line 1260): [0x0951]               :intro97 DAT 0x9f9f, 0x9f7f
+minesweeper.dasm (line 1260): [0x0951]                 .DAT 0x9f9f, 0x9f7f
+minesweeper.dasm (line 1260): [0x0951]                      9F9F 9F7F
+minesweeper.dasm (line 1261): [0x0953]               :intro98 DAT 0x7f1f, 0x700
+minesweeper.dasm (line 1261): [0x0953]                 .DAT 0x7f1f, 0x700
+minesweeper.dasm (line 1261): [0x0953]                      7F1F 0700
+minesweeper.dasm (line 1262): [0x0955]               :intro99 DAT 0x0, 0x0
+minesweeper.dasm (line 1262): [0x0955]                 .DAT 0x0, 0x0
+minesweeper.dasm (line 1262): [0x0955]                      0000 0000
+minesweeper.dasm (line 1263): [0x0957]               :intro100 DAT 0xf7f, 0xffff
+minesweeper.dasm (line 1263): [0x0957]                 .DAT 0xf7f, 0xffff
+minesweeper.dasm (line 1263): [0x0957]                      0F7F FFFF
+minesweeper.dasm (line 1264): [0x0959]               :intro101 DAT 0x3f1f, 0xe03
+minesweeper.dasm (line 1264): [0x0959]                 .DAT 0x3f1f, 0xe03
+minesweeper.dasm (line 1264): [0x0959]                      3F1F 0E03
+minesweeper.dasm (line 1265): [0x095B]               :intro102 DAT 0xf3f, 0xff7f
+minesweeper.dasm (line 1265): [0x095B]                 .DAT 0xf3f, 0xff7f
+minesweeper.dasm (line 1265): [0x095B]                      0F3F FF7F
+minesweeper.dasm (line 1266): [0x095D]               :intro103 DAT 0x3f0f, 0x601
+minesweeper.dasm (line 1266): [0x095D]                 .DAT 0x3f0f, 0x601
+minesweeper.dasm (line 1266): [0x095D]                      3F0F 0601
+minesweeper.dasm (line 1267): [0x095F]               :intro104 DAT 0x0, 0x80
+minesweeper.dasm (line 1267): [0x095F]                 .DAT 0x0, 0x80
+minesweeper.dasm (line 1267): [0x095F]                      0000 0080
+minesweeper.dasm (line 1268): [0x0961]               :intro105 DAT 0x8080, 0xf0ff
+minesweeper.dasm (line 1268): [0x0961]                 .DAT 0x8080, 0xf0ff
+minesweeper.dasm (line 1268): [0x0961]                      8080 F0FF
+minesweeper.dasm (line 1269): [0x0963]               :intro106 DAT 0xffff, 0xffff
+minesweeper.dasm (line 1269): [0x0963]                 .DAT 0xffff, 0xffff
+minesweeper.dasm (line 1269): [0x0963]                      FFFF FFFF
+minesweeper.dasm (line 1270): [0x0965]               :intro107 DAT 0x87c0, 0xc3e7
+minesweeper.dasm (line 1270): [0x0965]                 .DAT 0x87c0, 0xc3e7
+minesweeper.dasm (line 1270): [0x0965]                      87C0 C3E7
+minesweeper.dasm (line 1271): [0x0967]               :intro108 DAT 0xf00c, 0x80
+minesweeper.dasm (line 1271): [0x0967]                 .DAT 0xf00c, 0x80
+minesweeper.dasm (line 1271): [0x0967]                      F00C 0080
+minesweeper.dasm (line 1272): [0x0969]               :intro109 DAT 0x8080, 0xf0ff
+minesweeper.dasm (line 1272): [0x0969]                 .DAT 0x8080, 0xf0ff
+minesweeper.dasm (line 1272): [0x0969]                      8080 F0FF
+minesweeper.dasm (line 1273): [0x096B]               :intro110 DAT 0xffff, 0xffff
+minesweeper.dasm (line 1273): [0x096B]                 .DAT 0xffff, 0xffff
+minesweeper.dasm (line 1273): [0x096B]                      FFFF FFFF
+minesweeper.dasm (line 1274): [0x096D]               :intro111 DAT 0x87c0, 0xc3e7
+minesweeper.dasm (line 1274): [0x096D]                 .DAT 0x87c0, 0xc3e7
+minesweeper.dasm (line 1274): [0x096D]                      87C0 C3E7
+minesweeper.dasm (line 1275): [0x096F]               :intro112 DAT 0xf00c, 0x80
+minesweeper.dasm (line 1275): [0x096F]                 .DAT 0xf00c, 0x80
+minesweeper.dasm (line 1275): [0x096F]                      F00C 0080
+minesweeper.dasm (line 1276): [0x0971]               :intro113 DAT 0x80c0, 0xfeff
+minesweeper.dasm (line 1276): [0x0971]                 .DAT 0x80c0, 0xfeff
+minesweeper.dasm (line 1276): [0x0971]                      80C0 FEFF
+minesweeper.dasm (line 1277): [0x0973]               :intro114 DAT 0xffff, 0xffff
+minesweeper.dasm (line 1277): [0x0973]                 .DAT 0xffff, 0xffff
+minesweeper.dasm (line 1277): [0x0973]                      FFFF FFFF
+minesweeper.dasm (line 1278): [0x0975]               :intro115 DAT 0x8282, 0x301
+minesweeper.dasm (line 1278): [0x0975]                 .DAT 0x8282, 0x301
+minesweeper.dasm (line 1278): [0x0975]                      8282 0301
+minesweeper.dasm (line 1279): [0x0977]               :intro116 DAT 0x80, 0x8080
+minesweeper.dasm (line 1279): [0x0977]                 .DAT 0x80, 0x8080
+minesweeper.dasm (line 1279): [0x0977]                      0080 8080
+minesweeper.dasm (line 1280): [0x0979]               :intro117 DAT 0xf0ff, 0xffff
+minesweeper.dasm (line 1280): [0x0979]                 .DAT 0xf0ff, 0xffff
+minesweeper.dasm (line 1280): [0x0979]                      F0FF FFFF
+minesweeper.dasm (line 1281): [0x097B]               :intro118 DAT 0xffff, 0x87c0
+minesweeper.dasm (line 1281): [0x097B]                 .DAT 0xffff, 0x87c0
+minesweeper.dasm (line 1281): [0x097B]                      FFFF 87C0
+minesweeper.dasm (line 1282): [0x097D]               :intro119 DAT 0xc3e7, 0xf00c
+minesweeper.dasm (line 1282): [0x097D]                 .DAT 0xc3e7, 0xf00c
+minesweeper.dasm (line 1282): [0x097D]                      C3E7 F00C
+minesweeper.dasm (line 1283): [0x097F]               :intro120 DAT 0x0, 0x8080
+minesweeper.dasm (line 1283): [0x097F]                 .DAT 0x0, 0x8080
+minesweeper.dasm (line 1283): [0x097F]                      0000 8080
+minesweeper.dasm (line 1284): [0x0981]               :intro121 DAT 0xc0fe, 0xffff
+minesweeper.dasm (line 1284): [0x0981]                 .DAT 0xc0fe, 0xffff
+minesweeper.dasm (line 1284): [0x0981]                      C0FE FFFF
+minesweeper.dasm (line 1285): [0x0983]               :intro122 DAT 0xffff, 0xbf81
+minesweeper.dasm (line 1285): [0x0983]                 .DAT 0xffff, 0xbf81
+minesweeper.dasm (line 1285): [0x0983]                      FFFF BF81
+minesweeper.dasm (line 1286): [0x0985]               :intro123 DAT 0x83ff, 0xfffe
+minesweeper.dasm (line 1286): [0x0985]                 .DAT 0x83ff, 0xfffe
+minesweeper.dasm (line 1286): [0x0985]                      83FF FFFE
+minesweeper.dasm (line 1287): [0x0987]               :intro124 DAT 0xc3c3, 0xf0f
+minesweeper.dasm (line 1287): [0x0987]                 .DAT 0xc3c3, 0xf0f
+minesweeper.dasm (line 1287): [0x0987]                      C3C3 0F0F
+minesweeper.dasm (line 1288): [0x0989]               :intro125 DAT 0x0, 0x303
+minesweeper.dasm (line 1288): [0x0989]                 .DAT 0x0, 0x303
+minesweeper.dasm (line 1288): [0x0989]                      0000 0303
+minesweeper.dasm (line 1289): [0x098B]               :intro126 DAT 0x303, 0x0
+minesweeper.dasm (line 1289): [0x098B]                 .DAT 0x303, 0x0
+minesweeper.dasm (line 1289): [0x098B]                      0303 0000
+minesweeper.dasm (line 1290): [0x098D]               :intro127 DAT 0x0, 0x0
+minesweeper.dasm (line 1290): [0x098D]                 .DAT 0x0, 0x0
+minesweeper.dasm (line 1290): [0x098D]                      0000 0000
+minesweeper.dasm (line 1292): [0x098F]               :storetiles
+minesweeper.dasm (line 1293): [0x098F] 1B01            SET PUSH, I
+minesweeper.dasm (line 1294): [0x0990] 8C24            MUL B, 2
+minesweeper.dasm (line 1295): [0x0991] 84C1            SET I, 0
+minesweeper.dasm (line 1297): [0x0992]               :storetiles_loop
+minesweeper.dasm (line 1298): [0x0992] 2141            SET [C], [A]
+minesweeper.dasm (line 1299): [0x0993] 8802            ADD A, 1
+minesweeper.dasm (line 1300): [0x0994] 88C2            ADD I, 1
+minesweeper.dasm (line 1301): [0x0995] 8842            ADD C, 1
+minesweeper.dasm (line 1302): [0x0996] 04D2            IFE I, B
+minesweeper.dasm (line 1303): [0x0997] 7F81 099B       SET PC, storetiles_end
+minesweeper.dasm (line 1304): [0x0999] 7F81 0992       SET PC, storetiles_loop
+minesweeper.dasm (line 1306): [0x099B]               :storetiles_end
+minesweeper.dasm (line 1307): [0x099B] 60C1            SET I, POP
+minesweeper.dasm (line 1308): [0x099C] 6381            SET PC, POP
+minesweeper.dasm (line 1310): [0x099D]               :screen dat 0
+minesweeper.dasm (line 1310): [0x099D]                 .dat 0
+minesweeper.dasm (line 1310): [0x099D]                      0000
+minesweeper.dasm (line 1311): [0x099E]               :keyboard dat 0
+minesweeper.dasm (line 1311): [0x099E]                 .dat 0
+minesweeper.dasm (line 1311): [0x099E]                      0000
+minesweeper.dasm (line 1313): [0x099F]               :map_hardware
+minesweeper.dasm (line 1314): [0x099F] 1B01            set push, i
+minesweeper.dasm (line 1316): [0x09A0] 1A00            hwn i
+minesweeper.dasm (line 1317): [0x09A1]               :map_hardware_loop
+minesweeper.dasm (line 1318): [0x09A1] 88C3            sub i, 1
+minesweeper.dasm (line 1319): [0x09A2] 1A20            hwq i
+minesweeper.dasm (line 1320): [0x09A3] 7C12 F615       ife a, 0xF615
+minesweeper.dasm (line 1321): [0x09A5] 7C32 7349       ife b, 0x7349
+minesweeper.dasm (line 1322): [0x09A7] 1BC1 099D       set [screen], i
+minesweeper.dasm (line 1323): [0x09A9] 7C12 7406       ife a, 0x7406
+minesweeper.dasm (line 1324): [0x09AB] 7C32 30CF       ife b, 0x30CF
+minesweeper.dasm (line 1325): [0x09AD] 1BC1 099E       set [keyboard], i
+minesweeper.dasm (line 1326): [0x09AF] 84D3            ifn i, 0
+minesweeper.dasm (line 1327): [0x09B0] 7F81 09A1       set pc, map_hardware_loop
+minesweeper.dasm (line 1329): [0x09B2] 60C1            set i, pop
+minesweeper.dasm (line 1330): [0x09B3] 6381            set pc, pop
+minesweeper.dasm (line 1334): [0x09B4]               :pause
+minesweeper.dasm (line 1335): [0x09B4] 0301            set push, a
+minesweeper.dasm (line 1336): [0x09B5] 0701            set push, b
+minesweeper.dasm (line 1338): [0x09B6] 8421            set b, 0
+minesweeper.dasm (line 1339): [0x09B7]               :pause_loop
+minesweeper.dasm (line 1340): [0x09B7] 8822            add b, 1
+minesweeper.dasm (line 1341): [0x09B8] 0033            ifn b, a
+minesweeper.dasm (line 1342): [0x09B9] 7F81 09B7       set pc, pause_loop
+minesweeper.dasm (line 1344): [0x09BB] 6021            set b, pop
+minesweeper.dasm (line 1345): [0x09BC] 6001            set a, pop
+minesweeper.dasm (line 1346): [0x09BD] 6381            set pc, pop

@@ -1,0 +1,26 @@
+.equ screen_buffer 0x8000
+.longform
+
+SET PC, start
+#include "util.dasm"
+
+start:
+    JSR screen_init
+    JSR find_keyboard
+    SET J, A
+loop:
+    SET [screen_buffer], 0
+    SET [screen_buffer + 1], 0
+    SET A, 2
+    SET B, 0x80
+    HWI J
+    IFE C, 1
+    JSR printup
+    SET PC, loop
+    
+printup:
+    prints(0, 0, up)
+    SET PC, POP
+    
+up:
+    .dat "UP", 0

@@ -1,0 +1,645 @@
+; --------------------------------------------
+; Title:   Snake
+; Author:  Wittmann
+; Date:    13.05.2012
+; Version: gamma
+; --------------------------------------------
+;WASD - to control 
+set pc, data
+
+	:snakeHeadX dat 0
+	:snakeHeadY dat 0
+	:snakeHeadD dat 2	;????????,  1-????? ? ??? ?? ???????
+	:newSnakeHeadD dat 2
+		
+:data
+
+:begin
+
+;????????????? ?????????
+
+	hwn i
+	set j,0xffff
+	
+	
+:loop_divice
+	set a,0
+	add j,1
+	hwq j
+	ife a,0xb402
+		set pc,timerFound
+	ife a,0x7406
+		set pc,keyboardFound
+	ife a,0xf615
+		set pc,monitorFound
+	ife a,0x4cae
+		set pc,floppyFound
+		
+	ife i,j
+		set pc,end_loop_divice
+	
+	set pc,loop_divice
+	
+:timerFound
+	set [timer],j
+	set pc,loop_divice
+
+:keyboardFound
+
+	set [keyboard],j
+	set pc,loop_divice
+	
+:monitorFound
+
+	set [monitor],j
+	set pc,loop_divice
+
+:floppyFound
+
+	set [floppy],j
+	set pc,loop_divice
+
+
+:end_loop_divice
+;?????? ?????? ?????????
+
+;???????????? ????????
+	set a,0
+	set j,[monitor]
+	set b,0x8000
+	hwi j
+	
+	
+	set a,3
+	set b,0x3
+	hwi j
+
+
+
+
+	
+;???????????? ???????
+	
+	set j,[timer]
+	
+	set b,60
+	set a,0
+	hwi j
+	
+	set a,2
+	hwi j
+	
+	ias interruptHeandler
+	
+;??????? ?????
+:start
+	
+	set i,0x8025
+	set b,0xf000
+	set a,helloStr
+	
+	jsr printString
+	
+	
+	set i,0x8045
+	set a,enterSeedStr
+	
+	jsr printString
+
+	set i,0x8065
+	set x,4
+	
+	set [seed],0
+	set y,0x1000
+	
+	
+:waiting
+
+	
+
+	set a,1
+	hwi [keyboard]
+
+	ife c,0
+		set pc,waiting
+		
+	ifl c,0x67	
+		ifg c,0x60	
+			and c,0xffdf
+		
+	ifl c,0x3a	
+		ifg c,0x2f
+			set a,c
+			
+	ifl c,0x47	
+		ifg c,0x40
+			set a,c		
+	
+	ife a,1
+		set pc,waiting
+		
+	add a,b
+	
+	set [i],a
+	add i,1
+	
+	ifl c,0x3a	
+		ifg c,0x2f
+			sub c,0x30
+			
+	ifl c,0x4a	
+		ifg c,0x40
+			sub c,0x37	
+	
+	set a,c
+	
+	
+	mul a,y
+	div y,0x10
+	add [seed],a
+	
+	sub x,1
+	ifn x,0
+		set pc,waiting
+
+
+
+;???????????? ?????
+	set  b,'k'
+	set a,3
+	hwi [keyboard]
+	
+	set i,0x8000
+	
+:cleaning
+	set [i],0
+	add i,1
+	
+	ifl i,0x8180
+		set pc,cleaning
+
+:main
+
+	
+	ife [isFood],0
+		jsr createFood
+		
+	jsr moveHead
+	
+	jsr feeding
+	
+	set c,0
+	
+	set b,0x8                            
+	set a,0xa 
+	hwi [timer]
+	
+	
+	:delay	
+		set a,1
+		hwi [timer]
+		
+		ifn c,[timeDelay]
+			set pc,delay
+		
+				
+	set pc,main
+	
+
+
+:setDir
+	
+	ife c,0x77
+		ifn [snakeHeadD],3
+			set [newSnakeHeadD],1
+		
+	ife c,0x73
+		ifn [snakeHeadD],1
+			set [newSnakeHeadD],3
+		
+	ife c,0x61
+		ifn [snakeHeadD],2
+			set [newSnakeHeadD],4
+		
+	ife c,0x64
+		ifn [snakeHeadD],4
+			set [newSnakeHeadD],2
+		
+	set pc,pop
+	
+	
+
+
+
+:moveHead
+	iaq 1
+	
+	set [snakeHeadD],[newSnakeHeadD]
+
+	ife [snakeHeadD],1
+		sub [snakeHeadY],1	
+	ife [snakeHeadY],0xffff
+		set [snakeHeadY],0xb
+
+		
+		
+	ife [snakeHeadD],2
+		add [snakeHeadX],1
+	ife [snakeHeadX],0x20
+		set [snakeHeadX],0
+
+		
+	ife [snakeHeadD],3
+		add [snakeHeadY],1
+	ife [snakeHeadY],0xC
+		set [snakeHeadY],0
+
+		
+	ife [snakeHeadD],4
+		sub [snakeHeadX],1
+	ife [snakeHeadX],0xffff
+		set [snakeHeadX],0x1f
+	
+	set i,0
+	add i,[snakeHeadY]
+	mul i,32
+	add i,[snakeHeadX]
+
+	set [0x8000+i],[head]
+	
+	set x,tails
+	add x,[length]
+	
+	set [x],0x8000
+	add [x],i
+	
+	
+	
+	set y,[length]
+	
+	
+	set z,[tails]
+	set [z],0
+	
+	
+	set z,tails
+	add z,1
+	
+	set x,tails
+:loop
+	
+	set [x],[z]
+	add x,1
+	add z,1
+	sub y,1
+	iaq 0
+	
+	ifn y,0
+		set pc,loop	
+	
+	
+	
+	
+	jsr collision 
+	
+	set pc,pop
+	
+	
+	
+	
+
+:collision
+		
+	
+		
+	set x,[length]
+	set z,tails
+	sub z,1
+	add i,0x8000
+	
+:loop2
+	
+	ife [z],i
+		set pc,end
+	
+	add z,1
+	sub x,1
+	
+	ifn x,0
+		set pc,loop2
+	
+	sub i,0x8000
+	
+	set pc,pop
+	
+	
+	
+	
+	
+
+
+:interruptHeandler
+	
+	iaq 1
+	
+	ife a,'k'
+		jsr keyTyped
+		
+	 
+	rfi	1
+	
+	
+	
+:keyTyped
+	
+	set a,1
+	hwi [keyboard]
+	
+
+	jsr setDir
+		
+	set pc, pop
+
+	
+	
+:createFood
+	set a,0x20
+	jsr getRandom
+	set x,b
+	
+	set [foodX],x
+
+	set a,0xc
+	jsr getRandom
+	set y,b
+	
+	set [foodY],y
+	
+	mul y,32
+	add y,0x8000
+	add y,x
+	
+	
+	
+	set x,[length]
+	set z,tails
+	
+	
+:loop1
+	
+	ife y,[z]
+		set pc,createFood
+	
+	add z,1
+	sub x,1
+	
+	ifn x,0
+		set pc,loop1
+		
+	set [isFood],1
+	
+	set [y],[food]
+	
+	set a,0
+	hwi [keyboard]
+	
+
+	set pc, pop
+	
+	
+
+
+
+:getRandom
+	shl [seed],1
+	
+	set b,[seed1]
+	mod b,a
+	set c,[seed]
+	ife ex,1
+		mod [seed1], [seed]
+		
+	ife ex,0
+		div [seed1], [seed]
+	
+	add [seed], [seed1]
+    add [seed1], 0xf567
+	set pc, pop
+
+
+
+
+:feeding
+	
+	ifn [snakeHeadY],[foodY]
+		set pc,pop
+		
+	ifn [snakeHeadX],[foodX]
+		set pc,pop
+	
+	add [length],1
+	
+	set [isFood],0
+	
+	set pc,pop
+	
+
+:end
+
+
+
+
+	set i,0x8225
+	set z,word
+	set a,4
+	
+:outputRow
+	
+	
+	jsr drawLetter
+	
+	add z,1
+	sub a,1
+	add i,6
+	
+	ifn a,0
+		set pc,outputRow
+	
+	
+	set a,4
+	set i,0x82e5
+	
+:outputRow1
+
+	iaq 1
+	
+	jsr drawLetter
+	
+	add z,1
+	sub a,1
+	add i,6
+	
+	ifn a,0
+		set pc,outputRow1
+
+	set a,0
+	set b,0x8200
+	hwi [monitor]
+	
+	
+	set a,ResultStr
+	set i,0x8205
+	set b,0x0f00
+	set c,result
+	
+	jsr printString		
+			
+	set b,0x0f00		
+	set a,[length]
+	set c,result
+	
+	jsr printHexToDec
+		
+	iaq 0
+
+stop:
+	
+	set pc, stop
+	
+	
+	
+:drawLetter
+	;i - ????? ??????? ??? ?????
+	;z - ?????? ?????
+	
+	set push, i
+	set push, c
+	set push, a 
+	
+	set a,5
+	set c,[z]
+	
+:drawing
+	
+	set push,a
+	set a,5
+	:drawLine
+		
+		set [i],[c]
+		
+		add i,1
+		add c,1
+		sub a,1
+	
+	ifn a,0
+		set pc,drawLine
+	
+	set a,pop
+	sub a,1
+	
+	add i,0x1b
+	
+ifn a,0
+	set pc,drawing
+	
+	
+set a, pop	
+set c, pop
+set i, pop
+
+
+set pc, pop   ;drawLetter
+
+
+
+:printString
+
+	;i - ??????? ??? ??????
+	;a - ?????? ?????
+	;b - ???????
+	
+	set x,[a]
+	add x,b
+	set [i],x
+		
+	add i,1
+	add a,1
+	
+	ife [a],0
+		set pc, pop
+	
+	set pc,printString
+	
+	
+:printHexToDec
+
+	;i - ??????? ??? ??????
+	;a - hex
+	;b - ???????
+	;c - ????? ??? dec
+
+	set x,a
+	mod x,10
+	div a,10
+	
+	set [c],x
+	add [c],0x30
+	add [c],b
+	add c,1
+	
+	ifn a,0
+		set pc,printHexToDec
+
+	sub c,1
+	
+	:printHexToDecloop
+		set [i],[c]
+		sub c,1
+		add i,1
+	
+		ifn [c],0
+			set pc, printHexToDecloop
+		
+			
+
+	set pc,pop
+	
+	
+	:length dat 1
+
+	:foodX dat 0x10
+	:foodY dat 0x6
+	:isFood dat 0
+	
+	:seed dat 0x6789
+	:seed1 dat 0x7873
+	
+	:head dat 0x5023
+	:timeDelay dat 0x1
+	:timer dat 0xffff
+	:keyboard dat 0xffff
+	:monitor dat 0xffff
+	:floppy dat 0xffff
+	:food dat 0xf02B
+	
+
+	
+	:ALetter dat 0,0,0xf0aa,0,0,0,0xf0aa,0,0xf0aa,0,0,0xf0aa,0xf0aa,0xf0aa,0,0xf0aa,0,0,0,0xf0aa,0xf0aa,0,0,0,0xf0aa
+	:GLetter dat 0xf0aa,0xf0aa,0xf0aa,0xf0aa,0xf0aa,0xf0aa,0,0,0,0,0xf0aa,0,0,0xf0aa,0xf0aa,0xf0aa,0,0,0,0xf0aa,0xf0aa,0xf0aa,0xf0aa,0xf0aa,0xf0aa
+	:MLetter dat 0xf0aa,0,0,0,0xf0aa,0xf0aa,0xf0aa,0,0xf0aa,0xf0aa,0xf0aa,0,0xf0aa,0,0xf0aa,0xf0aa,0,0,0,0xf0aa,0xf0aa,0,0,0,0xf0aa
+	:OLetter dat 0xf0aa,0xf0aa,0xf0aa,0xf0aa,0xf0aa,0xf0aa,0,0,0,0xf0aa,0xf0aa,0,0,0,0xf0aa,0xf0aa,0,0,0,0xf0aa,0xf0aa,0xf0aa,0xf0aa,0xf0aa,0xf0aa
+	:VLetter dat 0xf0aa,0,0,0,0xf0aa,0xf0aa,0,0,0,0xf0aa,0,0xf0aa,0,0xf0aa,0,0,0xf0aa,0,0xf0aa,0,0,0,0xf0aa,0,0
+	:ELetter dat 0xf0aa,0xf0aa,0xf0aa,0xf0aa,0xf0aa,0xf0aa,0,0,0,0,0xf0aa,0xf0aa,0xf0aa,0,0,0xf0aa,0,0,0,0,0xf0aa,0xf0aa,0xf0aa,0xf0aa,0xf0aa
+	:RLetter dat 0xf0aa,0xf0aa,0xf0aa,0xf0aa,0,0xf0aa,0,0,0,0xf0aa,0xf0aa,0xf0aa,0xf0aa,0xf0aa,0,0xf0aa,0,0,0xf0aa,0,0xf0aa,0,0,0,0xf0aa
+	
+	:Word dat GLetter,ALetter,MLetter,ELetter,OLetter,VLetter,ELetter,RLetter,0
+	
+	:helloStr dat "Snake welcomes you!",0
+	:enterSeedStr dat "Enter seed, 4 hex figures:",0
+	:ResultStr dat "Youre result:",0,0
+	
+	:result dat 0,0,0
+	 
+	:tails dat 0x8000,0
+	
+	

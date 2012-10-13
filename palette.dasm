@@ -1,0 +1,68 @@
+; Color test
+; Cause I got the default palette wrong in Tomato
+; Things you might get out of this file:
+; The palette values ;)
+; screen_init maps all connected screens to 0x8000
+
+	JSR screen_init    
+    ; Draw out palette
+	SET A, 0x8000
+    SET C, 0x0F00 ; color mask
+    SET X, text
+loop:
+	SET B, [X]
+    ADD X, 1
+    BOR B, C
+    SET [A], B
+    ADD A, 1
+    SUB C, 0x0100
+    ife A, 0x8008
+    BOR C, 0xF000
+    ifn A, 0x8010
+    SET PC, loop
+    
+    SET A, 0x8020
+    SET C, 0xF000 ; color mask
+    SET X, text
+loop_foreground:
+	SET B, [X]
+    ADD X, 1
+    BOR B, C
+    SET [A], B
+    ADD A, 1
+    SUB C, 0x1000
+    ife A, 0x8028
+    BOR C, 0x0F00
+    ifn A, 0x8030
+    SET PC, loop_foreground
+    
+    SUB PC, 1
+    
+text:
+	dat "0123456789ABCDEF"
+
+; Sets up the screen(s)
+screen_init:
+    HWN A
+    SUB A, 1
+screen_init_loop:
+    IFE A, 0xFFFF
+        SET PC, POP
+    SET PUSH, A
+        HWQ A
+        IFE A, 0xf615
+            IFE B, 0x7349
+                SET PC, init_screen
+    SET A, POP
+    SUB A, 1
+    SET PC, screen_init_loop
+init_screen:
+    SET A, POP
+    SET J, A
+    SET C, A
+    SET A, 0
+    SET B, 0x8000
+    HWI C
+    SET A, C
+    SUB A, 1
+    SET PC, screen_init_loop

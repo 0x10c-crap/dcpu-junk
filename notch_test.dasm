@@ -1,0 +1,364 @@
+; Very convenient macros!
+; by Markus Persson
+
+#macro pop(a){
+	set a,POP
+}
+
+#macro push(a){
+	set PUSH,a
+} 
+
+#macro pop(a,b){
+	set a,POP
+	set b,POP
+}
+
+#macro push(a,b){
+	set PUSH,b
+	set PUSH,a
+} 
+
+#macro pop(a,b,c){
+	set a,POP
+	set b,POP
+	set c,POP
+}
+
+#macro push(a,b,c){
+	set PUSH,c
+	set PUSH,b
+	set PUSH,a
+} 
+
+#macro pop(a,b,c,d){
+	set a,POP
+	set b,POP
+	set c,POP
+	set d,POP
+}
+
+#macro push(a,b,c,d){
+	set PUSH,d
+	set PUSH,c
+	set PUSH,b
+	set PUSH,a
+}
+#macro mem_copy(src, dst, len){
+	push(a, b, c)
+	set a, src
+	set b, dst
+	set c, len
+	jsr mem_copy
+	pop(a, b, c)
+}
+
+#macro mem_fill(dst, len, val){
+	push(a, b, c)
+	set a, val
+	set b, dst
+	set c, len
+	jsr mem_fill
+	pop(a, b, c)
+}
+
+:mem_copy {
+		push(i,j)
+		
+;		set j,c
+;		and j,0x1f
+;		set i,0x20
+;		sub i,j
+;		mul j,3
+;		add j,loop
+;		set PC,j
+
+		set i,c
+		and i,0x1f
+		set j,0x20
+		sub j,i
+		sub b,j
+		sub a,j
+		mul j,3
+		add j,loop
+		set PC,j
+
+:next
+		add a, 0x20
+		add b, 0x20
+		add i, 0x20
+
+:loop	set [0x0+b], [0x0+a]
+		set [0x1+b], [0x1+a]
+		set [0x2+b], [0x2+a]
+		set [0x3+b], [0x3+a]
+		set [0x4+b], [0x4+a]
+		set [0x5+b], [0x5+a]
+		set [0x6+b], [0x6+a]
+		set [0x7+b], [0x7+a]
+		set [0x8+b], [0x8+a]
+		set [0x9+b], [0x9+a]
+		set [0xa+b], [0xa+a]
+		set [0xb+b], [0xb+a]
+		set [0xc+b], [0xc+a]
+		set [0xd+b], [0xd+a]
+		set [0xe+b], [0xe+a]
+		set [0xf+b], [0xf+a]
+		set [0x10+b], [0x10+a]
+		set [0x11+b], [0x11+a]
+		set [0x12+b], [0x12+a]
+		set [0x13+b], [0x13+a]
+		set [0x14+b], [0x14+a]
+		set [0x15+b], [0x15+a]
+		set [0x16+b], [0x16+a]
+		set [0x17+b], [0x17+a]
+		set [0x18+b], [0x18+a]
+		set [0x19+b], [0x19+a]
+		set [0x1a+b], [0x1a+a]
+		set [0x1b+b], [0x1b+a]
+		set [0x1c+b], [0x1c+a]
+		set [0x1d+b], [0x1d+a]
+		set [0x1e+b], [0x1e+a]
+		set [0x1f+b], [0x1f+a]		
+		ifn i, c
+			set PC, next
+		
+		pop(i,j)
+		ret
+}
+
+:mem_fill {
+		push(i,j)
+
+		set i,c
+		and i,0x1f
+		set j,0x20
+		sub j,i
+		sub b,j
+		mul j,2
+		add j,loop
+		set PC,j
+		
+:next
+		add b, 0x20
+		add i, 0x20
+
+:loop	set [0x0+b], a
+		set [0x1+b], a
+		set [0x2+b], a
+		set [0x3+b], a
+		set [0x4+b], a
+		set [0x5+b], a
+		set [0x6+b], a
+		set [0x7+b], a
+		set [0x8+b], a
+		set [0x9+b], a
+		set [0xa+b], a
+		set [0xb+b], a
+		set [0xc+b], a
+		set [0xd+b], a
+		set [0xe+b], a
+		set [0xf+b], a
+		set [0x10+b], a
+		set [0x11+b], a
+		set [0x12+b], a
+		set [0x13+b], a
+		set [0x14+b], a
+		set [0x15+b], a
+		set [0x16+b], a
+		set [0x17+b], a
+		set [0x18+b], a
+		set [0x19+b], a
+		set [0x1a+b], a
+		set [0x1b+b], a
+		set [0x1c+b], a
+		set [0x1d+b], a
+		set [0x1e+b], a
+		set [0x1f+b], a		
+		ifn i, c
+			set PC, next
+		
+		pop(i,j)
+		ret
+}
+; Printing stuff to the screen
+; by Markus Persson
+
+#macro clear(color) {
+	push(a)
+	set a, color
+	shl a, 8
+	bor a, 0x20
+	mem_fill(0x8000, 0x180, a)
+	set [screen_p], 0
+	pop(a)
+}
+
+#macro print(text, color){
+	set a, text
+	set c, color
+	jsr print
+}
+
+#macro println(text, color){
+	push(a,b,c)
+	set a, text
+	set c, color
+	push([screen_p])
+	jsr print
+
+	pop(b)			
+	set a, [screen_p]
+	ife b, a
+		jmp draw
+
+	and a, 0x1f
+	ife a, 0
+		jmp end
+:draw	
+	and a, 0x1f
+	add a, emptystring
+	jsr print
+	pop(a,b,c)
+:end
+}
+
+#macro setbg(color) {
+	set [0x8280], color
+}
+
+:screen_p		dat 0
+:emptystring	dat "                                ", 0
+
+:print {
+			push(i, j, c)
+			set i, nextchar
+			add i, 1
+			set [i], a 
+			set i, 0
+			set j, [screen_p]
+			shl c, 8
+			
+:nextchar   
+			set a, [print+i]
+			add i, 1
+:writechar			
+			ife a, 0
+            	set PC, end
+			bor a, c
+			set [0x8000+j], a
+			add j, 1
+			ife j, 0x180
+				jsr scroll
+			set PC, nextchar
+
+:end
+			set [screen_p], j
+			pop(i, j, c)
+			ret
+}
+
+:scroll {
+			push(a)
+			mem_copy(0x8020, 0x8000, 352)
+			set a, [0x815f]
+			and a, 0xff00
+			add a, 0x20
+			mem_fill(0x8160, 0x20, a)
+			sub j, 32
+			pop(a)
+			ret
+}
+; Reading characters from the keyboard
+; by Markus Persson
+
+#macro nextkey(target) {
+	push(i)
+	set i,[keypointer]
+	add i,0x9000
+	set target,[i]
+	ife target,0
+		jmp end
+	
+	set [i],0
+	add [keypointer], 1
+	and [keypointer], 0xf
+:end
+	pop(i)
+}
+
+:keypointer
+dat 0
+
+set PC, start
+
+:str_empty	dat 0
+:str_tmp	dat 0, 0
+:str_1		dat "    **** DCPU BASIC 1.0 ****    ", 0
+:str_2		dat "  Copyright 2012 Mojang, Earth  ", 0
+:str_3		dat "       64K RAM   40K FREE       ", 0
+:str_rdy	dat "Ready.", 0
+
+:start
+			
+
+:reloop
+			setbg(0x9)
+			clear(0x1)
+
+
+			println(str_empty, 0x91)
+			println(str_1, 0x91)
+			println(str_2, 0x91)
+			println(str_3, 0x91)
+			println(str_empty, 0x91)
+			println(str_rdy, 0x91)
+			set a, [screen_p]
+			add a, 0x8000
+			set [a], 0x919b
+
+:mainloop
+			nextkey(a)
+			ifn a,0
+				jsr handlekey
+			jmp mainloop
+
+:handlekey
+			ife a,8
+				jmp backspace
+			ife a,10
+				jmp return
+			ifg 0x1f,a
+				ret
+				
+			set [str_tmp], a
+			print(str_tmp, 0x91)
+			set a, [screen_p]
+			add a, 0x8000
+			set [a], 0x919b
+			ret
+
+:backspace
+			set a, [screen_p]
+			ife a, 0
+				ret
+			add a, 0x8000
+			set [a], 0x9120
+			sub [screen_p], 1
+			set a, [screen_p]
+			add a, 0x8000
+			set [a], 0x919b
+			ret
+
+:return
+			set a, [screen_p]
+			add a, 0x8000
+			set [a], 0x9120
+			
+			println(str_empty, 0x91)
+
+			set a, [screen_p]
+			add a, 0x8000
+			set [a], 0x919b
+			ret
+			

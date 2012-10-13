@@ -1,0 +1,62 @@
+fibonacchi.dasm (line 3):  [0x0000] 7C20 0026       JSR screen_init
+fibonacchi.dasm (line 7):  [0x0002] 8861            SET X, 1
+fibonacchi.dasm (line 8):  [0x0003] 8881            SET Y, 1
+fibonacchi.dasm (line 9):  [0x0004] 8401            SET A, 0
+fibonacchi.dasm (line 10): [0x0005] 8421            SET B, 0
+fibonacchi.dasm (line 11): [0x0006]               fib_loop:
+fibonacchi.dasm (line 12): [0x0006] 0CA1            SET Z, X
+fibonacchi.dasm (line 13): [0x0007] 1062            ADD X, Y
+fibonacchi.dasm (line 14): [0x0008] 1481            SET Y, Z
+fibonacchi.dasm (line 15): [0x0009] 0C41            SET C, X
+fibonacchi.dasm (line 16): [0x000A] 7C20 0012       JSR print_num
+fibonacchi.dasm (line 17): [0x000C] 7C01 2710       SET A, 10000
+fibonacchi.dasm (line 18): [0x000E]               burn_time:
+fibonacchi.dasm (line 19): [0x000E] 8803            SUB A, 1
+fibonacchi.dasm (line 20): [0x000F] 8413            IFN A, 0
+fibonacchi.dasm (line 21): [0x0010] BF81            SET PC, burn_time
+fibonacchi.dasm (line 22): [0x0011] 9F81            SET PC, fib_loop
+fibonacchi.dasm (line 27): [0x0012]               print_num:
+fibonacchi.dasm (line 28): [0x0012] 0024            MUL B, A
+fibonacchi.dasm (line 29): [0x0013] 0022            ADD B, A
+fibonacchi.dasm (line 30): [0x0014] 7C22 7FFF       ADD B, 0x7FFF
+fibonacchi.dasm (line 31): [0x0016] 0B01            SET PUSH, C
+fibonacchi.dasm (line 32): [0x0017]               digit_loop:
+fibonacchi.dasm (line 33): [0x0017] 8822            ADD B, 1
+fibonacchi.dasm (line 34): [0x0018] AC46            DIV C, 10
+fibonacchi.dasm (line 35): [0x0019] 8453            IFN C, 0
+fibonacchi.dasm (line 36): [0x001A] E381            SET PC, digit_loop
+fibonacchi.dasm (line 37): [0x001B] 6041            SET C, POP
+fibonacchi.dasm (line 38): [0x001C]               print_num_loop:
+fibonacchi.dasm (line 39): [0x001C] 0801            SET A, C
+fibonacchi.dasm (line 40): [0x001D] AC08            MOD A, 10
+fibonacchi.dasm (line 41): [0x001E] 7C02 F030       ADD A, 0xF030
+fibonacchi.dasm (line 42): [0x0020] 0121            SET [B], A
+fibonacchi.dasm (line 43): [0x0021] 8823            SUB B, 1
+fibonacchi.dasm (line 44): [0x0022] AC46            DIV C, 10
+fibonacchi.dasm (line 45): [0x0023] 8453            IFN C, 0
+fibonacchi.dasm (line 46): [0x0024] F781            SET PC, print_num_loop
+fibonacchi.dasm (line 47): [0x0025] 6381            SET PC, POP
+fibonacchi.dasm (line 51): [0x0026]               add_n:
+fibonacchi.dasm (line 56): [0x0026]               screen_init:
+fibonacchi.dasm (line 57): [0x0026] 0200            HWN A
+fibonacchi.dasm (line 58): [0x0027] 8803            SUB A, 1
+fibonacchi.dasm (line 59): [0x0028]               screen_init_loop:
+fibonacchi.dasm (line 60): [0x0028] 8012            IFE A, 0xFFFF
+fibonacchi.dasm (line 61): [0x0029] 6381            SET PC, POP
+fibonacchi.dasm (line 62): [0x002A] 0301            SET PUSH, A
+fibonacchi.dasm (line 63): [0x002B] 0220            HWQ A
+fibonacchi.dasm (line 64): [0x002C] 7C12 F615       IFE A, 0xf615
+fibonacchi.dasm (line 65): [0x002E] 7C32 7349       IFE B, 0x7349
+fibonacchi.dasm (line 66): [0x0030] 7F81 0036       SET PC, init_screen
+fibonacchi.dasm (line 67): [0x0032] 6001            SET A, POP
+fibonacchi.dasm (line 68): [0x0033] 8803            SUB A, 1
+fibonacchi.dasm (line 69): [0x0034] 7F81 0028       SET PC, screen_init_loop
+fibonacchi.dasm (line 70): [0x0036]               init_screen:
+fibonacchi.dasm (line 71): [0x0036] 6001            SET A, POP
+fibonacchi.dasm (line 72): [0x0037] 0041            SET C, A
+fibonacchi.dasm (line 73): [0x0038] 8401            SET A, 0
+fibonacchi.dasm (line 74): [0x0039] 7C21 8000       SET B, 0x8000
+fibonacchi.dasm (line 75): [0x003B] 0A40            HWI C
+fibonacchi.dasm (line 76): [0x003C] 0801            SET A, C
+fibonacchi.dasm (line 77): [0x003D] 8803            SUB A, 1
+fibonacchi.dasm (line 78): [0x003E] 7F81 0028       SET PC, screen_init_loop

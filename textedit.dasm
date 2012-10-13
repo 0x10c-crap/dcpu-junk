@@ -1,0 +1,143 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;Made by Xilo27
+
+;Feel free to copy any portitions of this and use them your own code without citation as much as you'd like - this is just here to help people become familiar with the DCPU 1.7 (http://pastebin.com/raw.php?i=Q4JvQvnM, or http://dcpu.com/highnerd/rc_1 and click on the links at the bottom for the input devices)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;This code uses the following specifications:
+
+;In all functions (JSR), registrars A, B, and C can be modified and rewritten over, or clobbered, so don't rely on these in your main program.
+
+;The rest of the registrars may not be rewritten over for function specific use, but may be modified if the modification purpose fits with the progarm as a whole (like moving the screen cursor back one when the user presses backspace).
+
+;If a registrars needs to be used for temporary function use, they may be, but only after being backed up at the start and restored at the end (via PUSH and POP).
+
+;;;;;;;;;;;;;Function Descriptions;;;;;;;;;;;;;
+
+;setInputPorts assigns the following regstrars to the port #'s of various input devices:
+;[0x7000] port # of Screen (LEM1802)
+;[0x7001] port # of Generic Keyboard
+;[0x7002] port # of Generic Clock
+
+;outputScreen outputs whatever data you have stored from [0x8000] to [0x81ff], left to right, top to bottom (assuming [0x7000] holds the port # of the display (it will if you run setInputPorts)
+;this data is stored in 0xABCC format (explained here: http://dcpu.com/highnerd/rc_1/lem1802.txt), where A is the font color, B is the background color, and CC is the hexidecimal ASCII code.
+
+;getKeyboardDown stores the just pressed down key's key code to C
+;if no keys were just pressed down, it stores 0 to C instead
+
+;processSpecificKeys tests to see if the user pressed backspace or return, and acts accordingly
+;if the user did press one of these special keys, B is set to 1, otherwise, B is set to 0
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+;;;;;Initialization;;;;;
+JSR setInputPorts
+JSR initializeScreen
+SET I, 0xF000;font color
+SET J, 0;screen position
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;;;;;Main loop;;;;;;;
+:typingLoop
+JSR getKeyboardInputDown
+IFE C, 0;if no keys were pressed
+ SET PC, typingLoop
+JSR processSpecificKeys
+IFE B, 1;if the user pressed enter or return
+ SET PC, typingLoop
+BOR C, I;add correct color to typed character (don't worry to much about this if you don't understand it - it just does as claimed)
+SET [0x8000+J], C;output character pressed
+ ADD J, 1;move to next spot
+SET PC, typingLoop
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;;;;;;;;;;;;;;;;;;;
+:getKeyboardInputDown
+;;;;;;;;;;;;;;;;;;;;;
+
+;Stores the just pressed down key's key code to C
+;If no keys were just pressed down, this stores 0 to C
+
+SET A, 1
+HWI [0x7001]
+SET PC, POP
+
+;;;;;;;;;;;;;;;;;;;;
+:processSpecificKeys
+;;;;;;;;;;;;;;;;;;;;
+
+;Tests to see if the user pressed backspace or return, and acts accordingly
+;If the user did press one of these special keys, B is set to 1, otherwise, B is set to 0
+SET B, 0
+IFE C, 0x10;backspace
+ SET PC, backspace
+IFE C, 0x11;return
+ SET PC, return
+SET PC, POP
+
+:backspace
+SET B, 1
+IFE J, 0;if the cursor is at the initial spot
+ SET PC, POP
+SUB J, 1;move the cursor back one
+SET [0x8000+J], 0;and clear that spot
+SET PC, POP
+
+:return
+SET B, 1
+SEt PC, POP
+
+;;;;;;;;;;;;;;;;;
+:initializeScreen
+;;;;;;;;;;;;;;;;;
+
+;Outputs data you have stored from [0x8000] to [0x81ff] to the screen (LEM1802), left to right, top to bottom.
+;[0x08] must hold the port # of the screen (if will if you run setInputSpots)
+;if [0x08] is 0, this function does nothing
+
+IFE [0x7000], 0
+ SET PC, POP
+SET A, 0;MEM_MAP_SCREEN
+SET B, 0x8000;the starting position of the screen's output data (you can change this if you'd like)
+HWI [0x7000];send the output command to the LEM
+SET PC, POP
+
+;;;;;;;;;;;;;;
+:setInputPorts
+;;;;;;;;;;;;;;
+
+;See the links on http://dcpu.com/highnerd/rc_1/ for more info on each of these input devices and the DCPU itself.
+;Finds which ports each piece of hardware is attached to, and stores these port # to the following registrars:
+
+;[0x7000] port # of Screen (LEM1802)
+;[0x7001] port # of Generic Keyboard
+;[0x7002] port # of Generic Clock
+
+SET PUSH, X;backup working variables
+SET PUSH, Y
+SET PUSH, I
+SET PUSH, J
+SET [0x7000], 0 ;reset current port #'s
+SET [0x7001], 0
+SET [0x7002], 0
+HWN J;get total # of input devices
+;for all input devices
+SET I, 1
+:loopFish
+HWQ I;get data for current device
+IFE A, 0xf615;if LEM1802
+ SET [0x7000], I ;set to port #
+IFE A, 0x7406;if Generic Keyboard
+ SET [0x7001], I ;set to port #
+IFE A, 0xb402;if Generic Clock
+ SET [0x7002], I ;set to port #
+ADD I, 1;move on to next device
+IFN I, J
+ SET PC, loopFish
+
+SET J, POP;reassign working variables
+SET I, POP
+SET Y, POP
+SET X, POP
+SET PC, POP

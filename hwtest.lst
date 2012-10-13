@@ -1,0 +1,457 @@
+hwtest.dasm (line 4):   [0x0000] 7C20 0044       jsr GetScreen
+hwtest.dasm (line 5):   [0x0002] 7C20 0055       jsr MapScreen
+hwtest.dasm (line 6):   [0x0004] 7C20 005F       jsr GetKeyboard
+hwtest.dasm (line 8):   [0x0006]               :MainLoop
+hwtest.dasm (line 9):   [0x0006] 7C20 0173       jsr GetInfo
+hwtest.dasm (line 10):  [0x0008] 7C20 0070       jsr Display
+hwtest.dasm (line 11):  [0x000A] 7C20 0019       jsr HandleKeys
+hwtest.dasm (line 12):  [0x000C] 7C20 000F       jsr ClearScreen
+hwtest.dasm (line 13):  [0x000E] 9F81            set pc, MainLoop
+hwtest.dasm (line 15):  [0x000F]               :ClearScreen
+hwtest.dasm (line 16):  [0x000F] 84C1            set i, 0
+hwtest.dasm (line 17):  [0x0010] 7821 01B7       set b, [ScreenAddress]
+hwtest.dasm (line 18):  [0x0012]               :ClearScreen_Loop
+hwtest.dasm (line 19):  [0x0012] 8521            set [b], 0x0000
+hwtest.dasm (line 21):  [0x0013] 8822            add b, 1
+hwtest.dasm (line 22):  [0x0014] 88C2            add i, 1
+hwtest.dasm (line 23):  [0x0015] 7CD3 0180       ifn i, 0x180
+hwtest.dasm (line 24):  [0x0017] CF81            set pc, ClearScreen_Loop
+hwtest.dasm (line 25):  [0x0018] 6381            set pc, pop
+hwtest.dasm (line 27):  [0x0019]               :HandleKeys
+hwtest.dasm (line 28):  [0x0019] 8801            set a, 1
+hwtest.dasm (line 29):  [0x001A]               :HandleKeys_Loop
+hwtest.dasm (line 30):  [0x001A] 7A40 01B8       hwi [KeyboardID]
+hwtest.dasm (line 31):  [0x001C] 7C52 0064       ife c, 0x64
+hwtest.dasm (line 32):  [0x001E] 7F81 0035       set pc, HandleKeys_Left
+hwtest.dasm (line 33):  [0x0020] 7C52 0044       ife c, 0x44
+hwtest.dasm (line 34):  [0x0022] 7F81 0035       set pc, HandleKeys_Left
+hwtest.dasm (line 35):  [0x0024] 7C52 0082       ife c, 0x82
+hwtest.dasm (line 36):  [0x0026] 7F81 0035       set pc, HandleKeys_Left
+hwtest.dasm (line 37):  [0x0028] 7C52 0061       ife c, 0x61
+hwtest.dasm (line 38):  [0x002A] 7F81 0039       set pc, HandleKeys_Right
+hwtest.dasm (line 39):  [0x002C] 7C52 0041       ife c, 0x41
+hwtest.dasm (line 40):  [0x002E] 7F81 0039       set pc, HandleKeys_Right
+hwtest.dasm (line 41):  [0x0030] 7C52 0083       ife c, 0x83
+hwtest.dasm (line 42):  [0x0032] 7F81 0039       set pc, HandleKeys_Right
+hwtest.dasm (line 43):  [0x0034] EF81            set pc, HandleKeys_Loop
+hwtest.dasm (line 45):  [0x0035]               :HandleKeys_Left
+hwtest.dasm (line 46):  [0x0035] 8BC2 01B9       add [CurrentDevice], 1
+hwtest.dasm (line 47):  [0x0037] 7F81 003D       set pc, HandleKeys_End
+hwtest.dasm (line 48):  [0x0039]               :HandleKeys_Right
+hwtest.dasm (line 49):  [0x0039] 8BC3 01B9       sub [CurrentDevice], 1
+hwtest.dasm (line 50):  [0x003B] 7F81 003D       set pc, HandleKeys_End
+hwtest.dasm (line 52):  [0x003D]               :HandleKeys_End
+hwtest.dasm (line 53):  [0x003D] 1A00            hwn i
+hwtest.dasm (line 54):  [0x003E] 1BC8 01B9       mod [CurrentDevice], i
+hwtest.dasm (line 56):  [0x0040] 8401            set a, 0
+hwtest.dasm (line 57):  [0x0041] 7A40 01B8       hwi [KeyboardID]
+hwtest.dasm (line 59):  [0x0043] 6381            set pc, pop
+hwtest.dasm (line 61):  [0x0044]               :GetScreen
+hwtest.dasm (line 62):  [0x0044] 1A00            hwn i
+hwtest.dasm (line 63):  [0x0045]               :GetScreen_Loop
+hwtest.dasm (line 64):  [0x0045] 88C3            sub i, 1
+hwtest.dasm (line 65):  [0x0046] 80D2            ife i, 0xFFFF
+hwtest.dasm (line 66):  [0x0047] 7F81 0054       set pc, GetScreen_End
+hwtest.dasm (line 67):  [0x0049] 1A20            hwq i
+hwtest.dasm (line 68):  [0x004A] 7C13 F615       ifn a, 0xF615
+hwtest.dasm (line 69):  [0x004C] 7F81 0045       set pc, GetScreen_Loop
+hwtest.dasm (line 70):  [0x004E] 7C33 7349       ifn b, 0x7349
+hwtest.dasm (line 71):  [0x0050] 7F81 0045       set pc, GetScreen_Loop
+hwtest.dasm (line 72):  [0x0052] 1BC1 01B6       set [ScreenID], i
+hwtest.dasm (line 73):  [0x0054]               :GetScreen_End
+hwtest.dasm (line 74):  [0x0054] 6381            set pc, pop
+hwtest.dasm (line 77):  [0x0055]               :MapScreen
+hwtest.dasm (line 78):  [0x0055] 0301            set push, a
+hwtest.dasm (line 79):  [0x0056] 0701            set push, b
+hwtest.dasm (line 81):  [0x0057] 8401            set a, 0
+hwtest.dasm (line 82):  [0x0058] 7821 01B7       set b, [ScreenAddress]
+hwtest.dasm (line 83):  [0x005A] 7A40 01B6       hwi [ScreenID]
+hwtest.dasm (line 85):  [0x005C] 6021            set b, pop
+hwtest.dasm (line 86):  [0x005D] 6001            set a, pop
+hwtest.dasm (line 87):  [0x005E] 6381            set pc, pop
+hwtest.dasm (line 89):  [0x005F]               :GetKeyboard
+hwtest.dasm (line 90):  [0x005F] 1A00            hwn i
+hwtest.dasm (line 91):  [0x0060]               :GetKeyboard_Loop
+hwtest.dasm (line 92):  [0x0060] 88C3            sub i, 1
+hwtest.dasm (line 93):  [0x0061] 80D2            ife i, 0xFFFF
+hwtest.dasm (line 94):  [0x0062] 7F81 006F       set pc, GetKeyboard_End
+hwtest.dasm (line 95):  [0x0064] 1A20            hwq i
+hwtest.dasm (line 96):  [0x0065] 7C13 7406       ifn a, 0x7406
+hwtest.dasm (line 97):  [0x0067] 7F81 0060       set pc, GetKeyboard_Loop
+hwtest.dasm (line 98):  [0x0069] 7C33 30CF       ifn b, 0x30CF
+hwtest.dasm (line 99):  [0x006B] 7F81 0060       set pc, GetKeyboard_Loop
+hwtest.dasm (line 100): [0x006D] 1BC1 01B8       set [KeyboardID], i
+hwtest.dasm (line 101): [0x006F]               :GetKeyboard_End
+hwtest.dasm (line 102): [0x006F] 6381            set pc, pop
+hwtest.dasm (line 104): [0x0070]               :Display
+hwtest.dasm (line 105): [0x0070] 7C21 0020       set b, 0x20
+hwtest.dasm (line 106): [0x0072] 7801 01BD       set a, [CurrentName]
+hwtest.dasm (line 107): [0x0074] 7C41 7000       set c, 0x7000
+hwtest.dasm (line 108): [0x0076] 7C20 011F       jsr PrintScreen
+hwtest.dasm (line 109): [0x0078] 7C2A FFE0       and b, 0xffe0
+hwtest.dasm (line 110): [0x007A] 7C22 0020       add b, 0x20
+hwtest.dasm (line 113): [0x007C] 87D2 01BE       ife [CurrentModel], 0
+hwtest.dasm (line 114): [0x007E] 7F81 008F       set pc, Display_SkipModel
+hwtest.dasm (line 115): [0x0080] 7C2A FFE0       and b, 0xffe0
+hwtest.dasm (line 116): [0x0082] 7C22 0020       add b, 0x20
+hwtest.dasm (line 117): [0x0084] 7C41 8000       set c, 0x8000
+hwtest.dasm (line 118): [0x0086] 7C01 01C8       set a, String_Model
+hwtest.dasm (line 119): [0x0088] 7C20 011F       jsr PrintScreen
+hwtest.dasm (line 120): [0x008A] 8822            add b, 1
+hwtest.dasm (line 121): [0x008B] 7801 01BE       set a, [CurrentModel]
+hwtest.dasm (line 122): [0x008D] 7C20 011F       jsr PrintScreen
+hwtest.dasm (line 123): [0x008F]               :Display_SkipModel
+hwtest.dasm (line 126): [0x008F] 7C2A FFE0       and b, 0xffe0
+hwtest.dasm (line 127): [0x0091] 7C22 0020       add b, 0x20
+hwtest.dasm (line 128): [0x0093] 7C01 01D3       set a, String_Version
+hwtest.dasm (line 129): [0x0095] 7C41 8000       set c, 0x8000
+hwtest.dasm (line 130): [0x0097] 7C20 011F       jsr PrintScreen
+hwtest.dasm (line 131): [0x0099] 8822            add b, 1
+hwtest.dasm (line 132): [0x009A] 7C01 01EF       set a, String_0x
+hwtest.dasm (line 133): [0x009C] 7C20 011F       jsr PrintScreen
+hwtest.dasm (line 134): [0x009E] 7801 01BA       set a, [CurrentVer]
+hwtest.dasm (line 135): [0x00A0] C4E1            set j, 16
+hwtest.dasm (line 136): [0x00A1] 94A1            set z, 4
+hwtest.dasm (line 137): [0x00A2] 7C20 0145       jsr PrintNumber
+hwtest.dasm (line 138): [0x00A4] 8822            add b, 1
+hwtest.dasm (line 139): [0x00A5] 7C01 0028       set a, 0x28
+hwtest.dasm (line 140): [0x00A7] 7C20 0138       jsr PrintChar
+hwtest.dasm (line 141): [0x00A9] 7801 01BA       set a, [CurrentVer]
+hwtest.dasm (line 142): [0x00AB] ACE1            set j, 10
+hwtest.dasm (line 143): [0x00AC] 88A1            set z, 1
+hwtest.dasm (line 144): [0x00AD] 7C20 0145       jsr PrintNumber
+hwtest.dasm (line 145): [0x00AF] 7C01 0029       set a, 0x29
+hwtest.dasm (line 146): [0x00B1] 7C20 0138       jsr PrintChar
+hwtest.dasm (line 149): [0x00B3] 7C2A FFE0       and b, 0xffe0
+hwtest.dasm (line 150): [0x00B5] 7C22 0020       add b, 0x20
+hwtest.dasm (line 151): [0x00B7] 7C01 01CF       set a, String_ID
+hwtest.dasm (line 152): [0x00B9] 7C20 011F       jsr PrintScreen
+hwtest.dasm (line 153): [0x00BB] 8822            add b, 1
+hwtest.dasm (line 154): [0x00BC] 7C01 01EF       set a, String_0x
+hwtest.dasm (line 155): [0x00BE] 7C20 011F       jsr PrintScreen
+hwtest.dasm (line 157): [0x00C0] 7CC1 01BB       set i, CurrentID
+hwtest.dasm (line 158): [0x00C2] 5801 0000       set a, [i+0]
+hwtest.dasm (line 159): [0x00C4] C4E1            set j, 16
+hwtest.dasm (line 160): [0x00C5] 94A1            set z, 4
+hwtest.dasm (line 161): [0x00C6] 7C20 0145       jsr PrintNumber
+hwtest.dasm (line 163): [0x00C8] 5801 0001       set a, [i+1]
+hwtest.dasm (line 164): [0x00CA] 7C20 0145       jsr PrintNumber
+hwtest.dasm (line 166): [0x00CC] 7C2A FFE0       and b, 0xffe0
+hwtest.dasm (line 167): [0x00CE] 7C22 0020       add b, 0x20
+hwtest.dasm (line 170): [0x00D0] 87D2 01BF       ife [CurrentVendor], 0
+hwtest.dasm (line 171): [0x00D2] 7F81 00E1       set pc, Display_SkipVendor
+hwtest.dasm (line 173): [0x00D4] 7C2A FFE0       and b, 0xFFE0
+hwtest.dasm (line 174): [0x00D6] 7C22 0020       add b, 0x20
+hwtest.dasm (line 175): [0x00D8] 7C01 01DC       set a, String_Vendor
+hwtest.dasm (line 176): [0x00DA] 7C20 011F       jsr PrintScreen
+hwtest.dasm (line 177): [0x00DC] 8822            add b, 1
+hwtest.dasm (line 178): [0x00DD] 7801 01BF       set a, [CurrentVendor]
+hwtest.dasm (line 179): [0x00DF] 7C20 011F       jsr PrintScreen
+hwtest.dasm (line 180): [0x00E1]               :Display_SkipVendor
+hwtest.dasm (line 182): [0x00E1] 7C2A FFE0       and b, 0xffe0
+hwtest.dasm (line 183): [0x00E3] 7C22 0020       add b, 0x20
+hwtest.dasm (line 184): [0x00E5] 7C01 01E4       set a, String_VendorID
+hwtest.dasm (line 185): [0x00E7] 7C20 011F       jsr PrintScreen
+hwtest.dasm (line 186): [0x00E9] 8822            add b, 1
+hwtest.dasm (line 187): [0x00EA] 7C01 01EF       set a, String_0x
+hwtest.dasm (line 188): [0x00EC] 7C20 011F       jsr PrintScreen
+hwtest.dasm (line 190): [0x00EE] 7CC1 01C0       set i, CurrentVendorID
+hwtest.dasm (line 191): [0x00F0] 5801 0000       set a, [i+0]
+hwtest.dasm (line 192): [0x00F2] C4E1            set j, 16
+hwtest.dasm (line 193): [0x00F3] 94A1            set z, 4
+hwtest.dasm (line 194): [0x00F4] 7C20 0145       jsr PrintNumber
+hwtest.dasm (line 196): [0x00F6] 5801 0001       set a, [i+1]
+hwtest.dasm (line 197): [0x00F8] 7C20 0145       jsr PrintNumber
+hwtest.dasm (line 201): [0x00FA] 7801 01B9       set a, [CurrentDevice]
+hwtest.dasm (line 202): [0x00FC] 8802            add a, 1
+hwtest.dasm (line 203): [0x00FD] 7C21 0160       set b, 0x160
+hwtest.dasm (line 204): [0x00FF] 7C41 7000       set c, 0x7000
+hwtest.dasm (line 205): [0x0101] ACE1            set j, 10
+hwtest.dasm (line 206): [0x0102] 88A1            set z, 1
+hwtest.dasm (line 207): [0x0103] 7C20 0145       jsr PrintNumber
+hwtest.dasm (line 209): [0x0105] 7C01 002F       set a, 0x2F
+hwtest.dasm (line 210): [0x0107] 8822            add b, 1
+hwtest.dasm (line 211): [0x0108] 7C41 8000       set c, 0x8000
+hwtest.dasm (line 212): [0x010A] 7C20 0138       jsr PrintChar
+hwtest.dasm (line 214): [0x010C] 0200            hwn a
+hwtest.dasm (line 215): [0x010D] 8822            add b, 1
+hwtest.dasm (line 216): [0x010E] 7C41 7000       set c, 0x7000
+hwtest.dasm (line 217): [0x0110] ACE1            set j, 10
+hwtest.dasm (line 218): [0x0111] 88A1            set z, 1
+hwtest.dasm (line 219): [0x0112] 7C20 0145       jsr PrintNumber
+hwtest.dasm (line 221): [0x0114] 7C01 01C2       set a, AppName
+hwtest.dasm (line 222): [0x0116] 7C21 0180       set b, 0x180
+hwtest.dasm (line 223): [0x0118] 7823 01C2       sub b, [AppName]
+hwtest.dasm (line 224): [0x011A] 7C41 F000       set c, 0xF000
+hwtest.dasm (line 225): [0x011C] 7C20 011F       jsr PrintScreen
+hwtest.dasm (line 227): [0x011E] 6381            set pc, pop
+hwtest.dasm (line 233): [0x011F]               :PrintScreen
+hwtest.dasm (line 234): [0x011F] 0F01            set push, x
+hwtest.dasm (line 235): [0x0120] 1301            set push, y
+hwtest.dasm (line 236): [0x0121] 1B01            set push, i
+hwtest.dasm (line 238): [0x0122] 2081            set y, [a]
+hwtest.dasm (line 239): [0x0123] 88C1            set i, 1
+hwtest.dasm (line 240): [0x0124] 7822 01B7       add b, [ScreenAddress]
+hwtest.dasm (line 241): [0x0126]               :PrintScreen_Loop
+hwtest.dasm (line 242): [0x0126] 10D4            ifg i, y
+hwtest.dasm (line 243): [0x0127] 7F81 0132       set pc, PrintScreen_End
+hwtest.dasm (line 244): [0x0129] 0061            set x, a
+hwtest.dasm (line 245): [0x012A] 1862            add x, i
+hwtest.dasm (line 246): [0x012B] 2C61            set x, [x]
+hwtest.dasm (line 247): [0x012C] 086B            bor x, c
+hwtest.dasm (line 248): [0x012D] 0D21            set [b], x
+hwtest.dasm (line 250): [0x012E] 8822            add b, 1
+hwtest.dasm (line 251): [0x012F] 88C2            add i, 1
+hwtest.dasm (line 253): [0x0130] 7F81 0126       set pc, PrintScreen_Loop
+hwtest.dasm (line 254): [0x0132]               :PrintScreen_End
+hwtest.dasm (line 255): [0x0132] 7823 01B7       sub b, [ScreenAddress]
+hwtest.dasm (line 256): [0x0134] 60C1            set i, pop
+hwtest.dasm (line 257): [0x0135] 6081            set y, pop
+hwtest.dasm (line 258): [0x0136] 6061            set x, pop
+hwtest.dasm (line 259): [0x0137] 6381            set pc, pop
+hwtest.dasm (line 264): [0x0138]               :PrintChar
+hwtest.dasm (line 265): [0x0138] 1701            set push, z
+hwtest.dasm (line 266): [0x0139] 7822 01B7       add b, [ScreenAddress]
+hwtest.dasm (line 268): [0x013B] 00A1            set z, a
+hwtest.dasm (line 269): [0x013C] 7CAA 007F       and z, 0x007F
+hwtest.dasm (line 270): [0x013E] 08AB            bor z, c
+hwtest.dasm (line 272): [0x013F] 1521            set [b], z
+hwtest.dasm (line 274): [0x0140] 8822            add b, 1
+hwtest.dasm (line 275): [0x0141] 7823 01B7       sub b, [ScreenAddress]
+hwtest.dasm (line 276): [0x0143] 60A1            set z, pop
+hwtest.dasm (line 277): [0x0144] 6381            set pc, pop
+hwtest.dasm (line 285): [0x0145]               :PrintNumber
+hwtest.dasm (line 286): [0x0145] 0F01            set push, x
+hwtest.dasm (line 287): [0x0146] 1301            set push, y
+hwtest.dasm (line 288): [0x0147] 1B01            set push, i
+hwtest.dasm (line 290): [0x0148] 0061            set x, a
+hwtest.dasm (line 291): [0x0149] 84C1            set i, 0
+hwtest.dasm (line 292): [0x014A] 7822 01B7       add b, [ScreenAddress]
+hwtest.dasm (line 293): [0x014C]               :PrintNumber_Loop
+hwtest.dasm (line 294): [0x014C] 0CF4            ifg j, x
+hwtest.dasm (line 295): [0x014D] 7F81 0156       set pc, PrintNumber_LoopEnd
+hwtest.dasm (line 296): [0x014F] 0C81            set y, x
+hwtest.dasm (line 297): [0x0150] 1C66            div x, j
+hwtest.dasm (line 298): [0x0151] 1C88            mod y, j
+hwtest.dasm (line 299): [0x0152] 1301            set push, y
+hwtest.dasm (line 300): [0x0153] 88C2            add i, 1
+hwtest.dasm (line 301): [0x0154] 7F81 014C       set pc, PrintNumber_Loop
+hwtest.dasm (line 302): [0x0156]               :PrintNumber_LoopEnd
+hwtest.dasm (line 303): [0x0156] 0F01            set push, x
+hwtest.dasm (line 304): [0x0157] 88C2            add i, 1
+hwtest.dasm (line 306): [0x0158] 88A3            sub z, 1
+hwtest.dasm (line 307): [0x0159]               :PrintNumber_AddPadding
+hwtest.dasm (line 308): [0x0159] 14D4            ifg i, z
+hwtest.dasm (line 309): [0x015A] 7F81 0160       set pc, PrintNumber_AddPadding_End
+hwtest.dasm (line 310): [0x015C] 88C2            add i, 1
+hwtest.dasm (line 311): [0x015D] 8701            set push, 0
+hwtest.dasm (line 312): [0x015E] 7F81 0159       set pc, PrintNumber_AddPadding
+hwtest.dasm (line 313): [0x0160]               :PrintNumber_AddPadding_End
+hwtest.dasm (line 314): [0x0160] 88A2            add z, 1
+hwtest.dasm (line 316): [0x0161]               :PrintNumber_Loop2
+hwtest.dasm (line 317): [0x0161] 6061            set x, pop
+hwtest.dasm (line 318): [0x0162] A874            ifg x, 9
+hwtest.dasm (line 319): [0x0163] A062            add x, 0x07
+hwtest.dasm (line 320): [0x0164] 7C62 0030       add x, 0x30
+hwtest.dasm (line 321): [0x0166] 086B            bor x, c
+hwtest.dasm (line 323): [0x0167] 0D21            set [b], x
+hwtest.dasm (line 324): [0x0168] 8822            add b, 1
+hwtest.dasm (line 325): [0x0169] 88C3            sub i, 1
+hwtest.dasm (line 326): [0x016A] 84D3            ifn i, 0
+hwtest.dasm (line 327): [0x016B] 7F81 0161       set pc, PrintNumber_Loop2
+hwtest.dasm (line 328): [0x016D]               :PrintNumber_End
+hwtest.dasm (line 329): [0x016D] 7823 01B7       sub b, [ScreenAddress]
+hwtest.dasm (line 330): [0x016F] 60C1            set i, pop
+hwtest.dasm (line 331): [0x0170] 6081            set y, pop
+hwtest.dasm (line 332): [0x0171] 6061            set x, pop
+hwtest.dasm (line 333): [0x0172] 6381            set pc, pop
+hwtest.dasm (line 336): [0x0173]               :GetInfo
+hwtest.dasm (line 337): [0x0173] 7A20 01B9       hwq [CurrentDevice]
+hwtest.dasm (line 339): [0x0175] 7CC1 01BB       set i, CurrentID
+hwtest.dasm (line 340): [0x0177] 06C1 0000       set [i+0], b
+hwtest.dasm (line 341): [0x0179] 02C1 0001       set [i+1], a
+hwtest.dasm (line 342): [0x017B] 0BC1 01BA       set [CurrentVer], c
+hwtest.dasm (line 344): [0x017D] 7FC1 01F2 01BD  set [CurrentName], String_UnknownDevice
+hwtest.dasm (line 345): [0x0180] 87C1 01BE       set [CurrentModel], 0
+hwtest.dasm (line 347): [0x0182] 87C1 01BF       set [CurrentVendor], 0
+hwtest.dasm (line 348): [0x0184] 7CC1 01C0       set i, CurrentVendorID
+hwtest.dasm (line 349): [0x0186] 12C1 0000       set [i+0], y
+hwtest.dasm (line 350): [0x0188] 0EC1 0001       set [i+1], x
+hwtest.dasm (line 353): [0x018A] 78E1 0201       set j, [Hardwares]
+hwtest.dasm (line 354): [0x018C]               :GetInfo_LoopHW
+hwtest.dasm (line 355): [0x018C] 5CA1 0201       set z, [Hardwares+j]
+hwtest.dasm (line 357): [0x018E] 02B3 0003       ifn [z+3], a
+hwtest.dasm (line 358): [0x0190] 7F81 019D       set pc, GetInfo_LoopHW_Next
+hwtest.dasm (line 359): [0x0192] 06B3 0002       ifn [z+2], b
+hwtest.dasm (line 360): [0x0194] 7F81 019D       set pc, GetInfo_LoopHW_Next
+hwtest.dasm (line 362): [0x0196] 37C1 01BD       set [CurrentName], [z]
+hwtest.dasm (line 363): [0x0198] 57C1 0001 01BE  set [CurrentModel], [z+1]
+hwtest.dasm (line 364): [0x019B] 7F81 01A1       set pc, GetInfo_LoopHW_End
+hwtest.dasm (line 366): [0x019D]               :GetInfo_LoopHW_Next
+hwtest.dasm (line 367): [0x019D] 88E3            sub j, 1
+hwtest.dasm (line 368): [0x019E] 84F3            ifn j, 0
+hwtest.dasm (line 369): [0x019F] 7F81 018C       set pc, GetInfo_LoopHW
+hwtest.dasm (line 370): [0x01A1]               :GetInfo_LoopHW_End
+hwtest.dasm (line 372): [0x01A1] 78E1 02BF       set j, [Vendors]
+hwtest.dasm (line 373): [0x01A3]               :GetInfo_LoopVND
+hwtest.dasm (line 374): [0x01A3] 5CA1 02BF       set z, [Vendors+j]
+hwtest.dasm (line 375): [0x01A5] 12B3 0001       ifn [z+1], y
+hwtest.dasm (line 376): [0x01A7] 7F81 01B1       set pc, GetInfo_LoopVND_Next
+hwtest.dasm (line 377): [0x01A9] 0EB3 0002       ifn [z+2], x
+hwtest.dasm (line 378): [0x01AB] 7F81 01B1       set pc, GetInfo_LoopVND_Next
+hwtest.dasm (line 379): [0x01AD] 37C1 01BF       set [CurrentVendor], [z]
+hwtest.dasm (line 380): [0x01AF] 7F81 01B5       set pc, GetInfo_LoopVND_End
+hwtest.dasm (line 382): [0x01B1]               :GetInfo_LoopVND_Next
+hwtest.dasm (line 383): [0x01B1] 88E3            sub j, 1
+hwtest.dasm (line 384): [0x01B2] 84F3            ifn j, 0
+hwtest.dasm (line 385): [0x01B3] 7F81 01A3       set pc, GetInfo_LoopVND
+hwtest.dasm (line 386): [0x01B5]               :GetInfo_LoopVND_End
+hwtest.dasm (line 389): [0x01B5] 6381            set pc, pop
+hwtest.dasm (line 392): [0x01B6]               :ScreenID dat 0x0000
+hwtest.dasm (line 392): [0x01B6]                 .dat 0x0000
+hwtest.dasm (line 392): [0x01B6]                      0000
+hwtest.dasm (line 393): [0x01B7]               :ScreenAddress dat 0x1000
+hwtest.dasm (line 393): [0x01B7]                 .dat 0x1000
+hwtest.dasm (line 393): [0x01B7]                      1000
+hwtest.dasm (line 394): [0x01B8]               :KeyboardID dat 0x0000
+hwtest.dasm (line 394): [0x01B8]                 .dat 0x0000
+hwtest.dasm (line 394): [0x01B8]                      0000
+hwtest.dasm (line 396): [0x01B9]               :CurrentDevice dat 0
+hwtest.dasm (line 396): [0x01B9]                 .dat 0
+hwtest.dasm (line 396): [0x01B9]                      0000
+hwtest.dasm (line 398): [0x01BA]               :CurrentVer dat 0x0000
+hwtest.dasm (line 398): [0x01BA]                 .dat 0x0000
+hwtest.dasm (line 398): [0x01BA]                      0000
+hwtest.dasm (line 399): [0x01BB]               :CurrentID dat 0x0000, 0x0000
+hwtest.dasm (line 399): [0x01BB]                 .dat 0x0000, 0x0000
+hwtest.dasm (line 399): [0x01BB]                      0000 0000
+hwtest.dasm (line 400): [0x01BD]               :CurrentName dat 0x0000
+hwtest.dasm (line 400): [0x01BD]                 .dat 0x0000
+hwtest.dasm (line 400): [0x01BD]                      0000
+hwtest.dasm (line 401): [0x01BE]               :CurrentModel dat 0x0000
+hwtest.dasm (line 401): [0x01BE]                 .dat 0x0000
+hwtest.dasm (line 401): [0x01BE]                      0000
+hwtest.dasm (line 402): [0x01BF]               :CurrentVendor dat 0x0000
+hwtest.dasm (line 402): [0x01BF]                 .dat 0x0000
+hwtest.dasm (line 402): [0x01BF]                      0000
+hwtest.dasm (line 403): [0x01C0]               :CurrentVendorID dat 0x0000, 0x0000
+hwtest.dasm (line 403): [0x01C0]                 .dat 0x0000, 0x0000
+hwtest.dasm (line 403): [0x01C0]                      0000 0000
+hwtest.dasm (line 406): [0x01C2]               :AppName dat 5, "0xHDT"
+hwtest.dasm (line 406): [0x01C2]                 .dat 5, "0xHDT"
+hwtest.dasm (line 406): [0x01C2]                      0005 0030 0078 0048 0044 0054
+hwtest.dasm (line 407): [0x01C8]               :String_Model dat 6, "Model:"
+hwtest.dasm (line 407): [0x01C8]                 .dat 6, "Model:"
+hwtest.dasm (line 407): [0x01C8]                      0006 004D 006F 0064 0065 006C 003A
+hwtest.dasm (line 408): [0x01CF]               :String_ID dat 3, "ID:"
+hwtest.dasm (line 408): [0x01CF]                 .dat 3, "ID:"
+hwtest.dasm (line 408): [0x01CF]                      0003 0049 0044 003A
+hwtest.dasm (line 409): [0x01D3]               :String_Version dat 8, "Version:"
+hwtest.dasm (line 409): [0x01D3]                 .dat 8, "Version:"
+hwtest.dasm (line 409): [0x01D3]                      0008 0056 0065 0072 0073 0069 006F 006E
+hwtest.dasm (line 409): [0x01DB]                      003A
+hwtest.dasm (line 410): [0x01DC]               :String_Vendor dat 7, "Vendor:"
+hwtest.dasm (line 410): [0x01DC]                 .dat 7, "Vendor:"
+hwtest.dasm (line 410): [0x01DC]                      0007 0056 0065 006E 0064 006F 0072 003A
+hwtest.dasm (line 411): [0x01E4]               :String_VendorID dat 10, "Vendor ID:"
+hwtest.dasm (line 411): [0x01E4]                 .dat 10, "Vendor ID:"
+hwtest.dasm (line 411): [0x01E4]                      000A 0056 0065 006E 0064 006F 0072 0020
+hwtest.dasm (line 411): [0x01EC]                      0049 0044 003A
+hwtest.dasm (line 412): [0x01EF]               :String_0x dat 2, "0x"
+hwtest.dasm (line 412): [0x01EF]                 .dat 2, "0x"
+hwtest.dasm (line 412): [0x01EF]                      0002 0030 0078
+hwtest.dasm (line 413): [0x01F2]               :String_UnknownDevice dat 14, "Unknown Device"
+hwtest.dasm (line 413): [0x01F2]                 .dat 14, "Unknown Device"
+hwtest.dasm (line 413): [0x01F2]                      000E 0055 006E 006B 006E 006F 0077 006E
+hwtest.dasm (line 413): [0x01FA]                      0020 0044 0065 0076 0069 0063 0065
+hwtest.dasm (line 416): [0x0201]               :Hardwares dat 6, HW1, HW2, HW3, HW4, HW5, HW6
+hwtest.dasm (line 416): [0x0201]                 .dat 6, HW1, HW2, HW3, HW4, HW5, HW6
+hwtest.dasm (line 416): [0x0201]                      0006 0208 020C 0210 0214 0218 021C
+hwtest.dasm (line 418): [0x0208]               :HW1 dat HW1_Name, HW1_Model, 0x7349, 0xF615
+hwtest.dasm (line 418): [0x0208]                 .dat HW1_Name, HW1_Model, 0x7349, 0xF615
+hwtest.dasm (line 418): [0x0208]                      0220 0233 7349 F615
+hwtest.dasm (line 419): [0x020C]               :HW2 dat HW2_Name, 0x0000, 0x30CF, 0x7406
+hwtest.dasm (line 419): [0x020C]                 .dat HW2_Name, 0x0000, 0x30CF, 0x7406
+hwtest.dasm (line 419): [0x020C]                      0242 0000 30CF 7406
+hwtest.dasm (line 420): [0x0210]               :HW3 dat HW3_Name, 0x0000, 0x12D0, 0xB402
+hwtest.dasm (line 420): [0x0210]                 .dat HW3_Name, 0x0000, 0x12D0, 0xB402
+hwtest.dasm (line 420): [0x0210]                      0253 0000 12D0 B402
+hwtest.dasm (line 421): [0x0214]               :HW4 dat HW4_Name, HW4_Model, 0x74FA, 0x4CAE
+hwtest.dasm (line 421): [0x0214]                 .dat HW4_Name, HW4_Model, 0x74FA, 0x4CAE
+hwtest.dasm (line 421): [0x0214]                      0261 0274 74FA 4CAE
+hwtest.dasm (line 422): [0x0218]               :HW5 dat HW5_Name, HW5_Model, 0x3B50, 0x703A
+hwtest.dasm (line 422): [0x0218]                 .dat HW5_Name, HW5_Model, 0x3B50, 0x703A
+hwtest.dasm (line 422): [0x0218]                      027C 0295 3B50 703A
+hwtest.dasm (line 423): [0x021C]               :HW6 dat HW6_Name, HW6_Model, 0x40E4, 0x1D9D
+hwtest.dasm (line 423): [0x021C]                 .dat HW6_Name, HW6_Model, 0x40E4, 0x1D9D
+hwtest.dasm (line 423): [0x021C]                      029F 02B7 40E4 1D9D
+hwtest.dasm (line 425): [0x0220]               :HW1_Name dat 18, "Low Energy Monitor"
+hwtest.dasm (line 425): [0x0220]                 .dat 18, "Low Energy Monitor"
+hwtest.dasm (line 425): [0x0220]                      0012 004C 006F 0077 0020 0045 006E 0065
+hwtest.dasm (line 425): [0x0228]                      0072 0067 0079 0020 004D 006F 006E 0069
+hwtest.dasm (line 425): [0x0230]                      0074 006F 0072
+hwtest.dasm (line 426): [0x0233]               :HW1_Model dat 14, "LEM180X series"
+hwtest.dasm (line 426): [0x0233]                 .dat 14, "LEM180X series"
+hwtest.dasm (line 426): [0x0233]                      000E 004C 0045 004D 0031 0038 0030 0058
+hwtest.dasm (line 426): [0x023B]                      0020 0073 0065 0072 0069 0065 0073
+hwtest.dasm (line 427): [0x0242]               :HW2_Name dat 16, "Generic Keyboard"
+hwtest.dasm (line 427): [0x0242]                 .dat 16, "Generic Keyboard"
+hwtest.dasm (line 427): [0x0242]                      0010 0047 0065 006E 0065 0072 0069 0063
+hwtest.dasm (line 427): [0x024A]                      0020 004B 0065 0079 0062 006F 0061 0072
+hwtest.dasm (line 427): [0x0252]                      0064
+hwtest.dasm (line 428): [0x0253]               :HW3_Name dat 13, "Generic Clock"
+hwtest.dasm (line 428): [0x0253]                 .dat 13, "Generic Clock"
+hwtest.dasm (line 428): [0x0253]                      000D 0047 0065 006E 0065 0072 0069 0063
+hwtest.dasm (line 428): [0x025B]                      0020 0043 006C 006F 0063 006B
+hwtest.dasm (line 429): [0x0261]               :HW4_Name dat 18, "Harold Media Drive"
+hwtest.dasm (line 429): [0x0261]                 .dat 18, "Harold Media Drive"
+hwtest.dasm (line 429): [0x0261]                      0012 0048 0061 0072 006F 006C 0064 0020
+hwtest.dasm (line 429): [0x0269]                      004D 0065 0064 0069 0061 0020 0044 0072
+hwtest.dasm (line 429): [0x0271]                      0069 0076 0065
+hwtest.dasm (line 430): [0x0274]               :HW4_Model dat 7, "HMD2043"
+hwtest.dasm (line 430): [0x0274]                 .dat 7, "HMD2043"
+hwtest.dasm (line 430): [0x0274]                      0007 0048 004D 0044 0032 0030 0034 0033
+hwtest.dasm (line 431): [0x027C]               :HW5_Name dat 24, "Micro Casette Disk Drive"
+hwtest.dasm (line 431): [0x027C]                 .dat 24, "Micro Casette Disk Drive"
+hwtest.dasm (line 431): [0x027C]                      0018 004D 0069 0063 0072 006F 0020 0043
+hwtest.dasm (line 431): [0x0284]                      0061 0073 0065 0074 0074 0065 0020 0044
+hwtest.dasm (line 431): [0x028C]                      0069 0073 006B 0020 0044 0072 0069 0076
+hwtest.dasm (line 431): [0x0294]                      0065
+hwtest.dasm (line 432): [0x0295]               :HW5_Model dat 9, "BRG MCD-1"
+hwtest.dasm (line 432): [0x0295]                 .dat 9, "BRG MCD-1"
+hwtest.dasm (line 432): [0x0295]                      0009 0042 0052 0047 0020 004D 0043 0044
+hwtest.dasm (line 432): [0x029D]                      002D 0031
+hwtest.dasm (line 433): [0x029F]               :HW6_Name dat 23, "Suspension Chamber 2000"
+hwtest.dasm (line 433): [0x029F]                 .dat 23, "Suspension Chamber 2000"
+hwtest.dasm (line 433): [0x029F]                      0017 0053 0075 0073 0070 0065 006E 0073
+hwtest.dasm (line 433): [0x02A7]                      0069 006F 006E 0020 0043 0068 0061 006D
+hwtest.dasm (line 433): [0x02AF]                      0062 0065 0072 0020 0032 0030 0030 0030
+hwtest.dasm (line 434): [0x02B7]               :HW6_Model dat 7, "SPC2000"
+hwtest.dasm (line 434): [0x02B7]                 .dat 7, "SPC2000"
+hwtest.dasm (line 434): [0x02B7]                      0007 0053 0050 0043 0032 0030 0030 0030
+hwtest.dasm (line 436): [0x02BF]               :Vendors dat 3, VND1, VND2, VND3
+hwtest.dasm (line 436): [0x02BF]                 .dat 3, VND1, VND2, VND3
+hwtest.dasm (line 436): [0x02BF]                      0003 02C3 02C6 02C9
+hwtest.dasm (line 437): [0x02C3]               :VND1 dat VND1_Name, 0x1C6C, 0x8B36
+hwtest.dasm (line 437): [0x02C3]                 .dat VND1_Name, 0x1C6C, 0x8B36
+hwtest.dasm (line 437): [0x02C3]                      02CC 1C6C 8B36
+hwtest.dasm (line 438): [0x02C6]               :VND2 dat VND2_Name, 0x2154, 0x4948
+hwtest.dasm (line 438): [0x02C6]                 .dat VND2_Name, 0x2154, 0x4948
+hwtest.dasm (line 438): [0x02C6]                      02DB 2154 4948
+hwtest.dasm (line 439): [0x02C9]               :VND3 dat VND3_Name, 0x4855, 0x07A1
+hwtest.dasm (line 439): [0x02C9]                 .dat VND3_Name, 0x4855, 0x07A1
+hwtest.dasm (line 439): [0x02C9]                      02F3 4855 07A1
+hwtest.dasm (line 441): [0x02CC]               :VND1_Name dat 14, "Nya Elektriska"
+hwtest.dasm (line 441): [0x02CC]                 .dat 14, "Nya Elektriska"
+hwtest.dasm (line 441): [0x02CC]                      000E 004E 0079 0061 0020 0045 006C 0065
+hwtest.dasm (line 441): [0x02D4]                      006B 0074 0072 0069 0073 006B 0061
+hwtest.dasm (line 442): [0x02DB]               :VND2_Name dat 23, "Harold Innovation Tech."
+hwtest.dasm (line 442): [0x02DB]                 .dat 23, "Harold Innovation Tech."
+hwtest.dasm (line 442): [0x02DB]                      0017 0048 0061 0072 006F 006C 0064 0020
+hwtest.dasm (line 442): [0x02E3]                      0049 006E 006E 006F 0076 0061 0074 0069
+hwtest.dasm (line 442): [0x02EB]                      006F 006E 0020 0054 0065 0063 0068 002E
+hwtest.dasm (line 443): [0x02F3]               :VND3_Name dat 23, "Budapest Radiotech Gyar"
+hwtest.dasm (line 443): [0x02F3]                 .dat 23, "Budapest Radiotech Gyar"
+hwtest.dasm (line 443): [0x02F3]                      0017 0042 0075 0064 0061 0070 0065 0073
+hwtest.dasm (line 443): [0x02FB]                      0074 0020 0052 0061 0064 0069 006F 0074
+hwtest.dasm (line 443): [0x0303]                      0065 0063 0068 0020 0047 0079 0061 0072

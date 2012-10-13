@@ -1,0 +1,361 @@
+llama.dasm (line 1):   [0x0000] 7C20 0048       jsr search_hardware
+llama.dasm (line 2):   [0x0002] 7C20 006B       jsr init_video
+llama.dasm (line 3):   [0x0004] 7CE1 019B       set j, logo_font
+llama.dasm (line 4):   [0x0006] 7C20 00C0       jsr set_font
+llama.dasm (line 6):   [0x0008] 7801 00CA       set a,[mem_pal]
+llama.dasm (line 7):   [0x000A] 7D01 0201       set [a],0x0201
+llama.dasm (line 8):   [0x000C] A002            add a,0x7
+llama.dasm (line 9):   [0x000D] 7D01 0E72       set [a],0x0e72
+llama.dasm (line 10):  [0x000F] 8802            add a,0x1
+llama.dasm (line 11):  [0x0010] 7D01 0733       set [a],0x0733
+llama.dasm (line 13):  [0x0012] 7CE1 00E0       set j, logo_text
+llama.dasm (line 14):  [0x0014] 7C01 0041       set a, 0x41
+llama.dasm (line 15):  [0x0016] C421            set b, 0x10
+llama.dasm (line 16):  [0x0017] 7C20 0099       jsr write_rect
+llama.dasm (line 17):  [0x0019] 7FC1 7000 00D2  set [color], 0x7000
+llama.dasm (line 18):  [0x001C] 7CE1 0121       set j, logo_os
+llama.dasm (line 19):  [0x001E] 7C01 0051       set a, 0x51
+llama.dasm (line 20):  [0x0020] 9C21            set b, 0x6
+llama.dasm (line 21):  [0x0021] 7C20 0099       jsr write_rect
+llama.dasm (line 23):  [0x0023] 7FC1 8000 00D2  set [color], 0x8000
+llama.dasm (line 24):  [0x0026] 7CE1 0134       set j, logo_llama
+llama.dasm (line 25):  [0x0028] 7C01 00CC       set a, 0xcc
+llama.dasm (line 26):  [0x002A] AC21            set b, 0xa
+llama.dasm (line 27):  [0x002B] 7C20 0099       jsr write_rect
+llama.dasm (line 28):  [0x002D] 7CE1 015A       set j, logo_ground
+llama.dasm (line 29):  [0x002F] 7C01 0140       set a, 0x140
+llama.dasm (line 30):  [0x0031] 7C21 0020       set b, 0x20
+llama.dasm (line 31):  [0x0033] 7C20 0099       jsr write_rect
+llama.dasm (line 33):  [0x0035] 7C20 0085       jsr init_clock
+llama.dasm (line 34):  [0x0037]               :logowait
+llama.dasm (line 35):  [0x0037] 7C20 008B       jsr get_clock
+llama.dasm (line 36):  [0x0039] 0BF4 00B4       ifg 180, c
+llama.dasm (line 37):  [0x003B] 7F81 0037       set pc, logowait
+llama.dasm (line 38):  [0x003D] 7C20 00B2       jsr clear
+llama.dasm (line 39):  [0x003F] 78E1 00C9       set j, [mem_font]
+llama.dasm (line 40):  [0x0041] 7C20 00C0       jsr set_font
+llama.dasm (line 41):  [0x0043] 7CE1 00D3       set j, string
+llama.dasm (line 42):  [0x0045] 7C20 008F       jsr write
+llama.dasm (line 43):  [0x0047] 8B83            sub pc, 1
+llama.dasm (line 45):  [0x0048]               :search_hardware
+llama.dasm (line 46):  [0x0048] 1A00            hwn i
+llama.dasm (line 47):  [0x0049]               :search_hardware_loop
+llama.dasm (line 48):  [0x0049] 88C3            sub i, 1
+llama.dasm (line 49):  [0x004A] 1A20            hwq i
+llama.dasm (line 50):  [0x004B] 88E1            set j, 1
+llama.dasm (line 51):  [0x004C] 7832 00CB       ife b, [id_lem]
+llama.dasm (line 52):  [0x004E] 7C20 005C       jsr search_hardware_lem
+llama.dasm (line 53):  [0x0050] 7832 00CD       ife b, [id_key]
+llama.dasm (line 54):  [0x0052] 7C20 0061       jsr search_hardware_key
+llama.dasm (line 55):  [0x0054] 7832 00CF       ife b, [id_clock]
+llama.dasm (line 56):  [0x0056] 7C20 0066       jsr search_hardware_clock
+llama.dasm (line 57):  [0x0058] 84D3            ifn i, 0
+llama.dasm (line 58):  [0x0059] 7F81 0049       set pc, search_hardware_loop
+llama.dasm (line 59):  [0x005B] 6381            set pc, pop
+llama.dasm (line 60):  [0x005C]               :search_hardware_lem
+llama.dasm (line 61):  [0x005C] 5C12 00CB       ife a, [id_lem+j]
+llama.dasm (line 62):  [0x005E] 1BC1 00C5       set [add_lem], i
+llama.dasm (line 63):  [0x0060] 6381            set pc, pop
+llama.dasm (line 64):  [0x0061]               :search_hardware_key
+llama.dasm (line 65):  [0x0061] 5C12 00CD       ife a, [id_key+j]
+llama.dasm (line 66):  [0x0063] 1BC1 00C6       set [add_key], i
+llama.dasm (line 67):  [0x0065] 6381            set pc, pop
+llama.dasm (line 68):  [0x0066]               :search_hardware_clock
+llama.dasm (line 69):  [0x0066] 5C12 00CF       ife a, [id_clock+j]
+llama.dasm (line 70):  [0x0068] 1BC1 00C7       set [add_clock], i
+llama.dasm (line 71):  [0x006A] 6381            set pc, pop
+llama.dasm (line 73):  [0x006B]               :init_video
+llama.dasm (line 74):  [0x006B] 7821 00C8       set b, [mem_video]
+llama.dasm (line 75):  [0x006D] 8401            set a, 0
+llama.dasm (line 76):  [0x006E] 7A40 00C5       hwi [add_lem]
+llama.dasm (line 77):  [0x0070] 7821 00CA       set b, [mem_pal]
+llama.dasm (line 78):  [0x0072] 9801            set a, 5
+llama.dasm (line 79):  [0x0073] 7A40 00C5       hwi [add_lem]
+llama.dasm (line 80):  [0x0075] 7821 00CA       set b, [mem_pal]
+llama.dasm (line 81):  [0x0077] 8C01            set a, 2
+llama.dasm (line 82):  [0x0078] 7A40 00C5       hwi [add_lem]
+llama.dasm (line 83):  [0x007A] 7821 00C9       set b, [mem_font]
+llama.dasm (line 84):  [0x007C] 9401            set a, 4
+llama.dasm (line 85):  [0x007D] 7A40 00C5       hwi [add_lem]
+llama.dasm (line 86):  [0x007F] 7821 00C9       set b, [mem_font]
+llama.dasm (line 87):  [0x0081] 8801            set a, 1
+llama.dasm (line 88):  [0x0082] 7A40 00C5       hwi [add_lem]
+llama.dasm (line 89):  [0x0084] 6381            set pc, pop
+llama.dasm (line 91):  [0x0085]               :init_clock
+llama.dasm (line 92):  [0x0085] 7821 00D1       set b, [tk_clock]
+llama.dasm (line 93):  [0x0087] 8401            set a, 0
+llama.dasm (line 94):  [0x0088] 7A40 00C7       hwi [add_clock]
+llama.dasm (line 95):  [0x008A] 6381            set pc, pop
+llama.dasm (line 97):  [0x008B]               :get_clock
+llama.dasm (line 98):  [0x008B] 8801            set a, 1
+llama.dasm (line 99):  [0x008C] 7A40 00C7       hwi [add_clock]
+llama.dasm (line 100): [0x008E] 6381            set pc, pop
+llama.dasm (line 102): [0x008F]               :write
+llama.dasm (line 104): [0x008F] 78C1 00C8       set i, [mem_video]
+llama.dasm (line 105): [0x0091]               :write_loop
+llama.dasm (line 106): [0x0091] 3C21            set b, [j]
+llama.dasm (line 107): [0x0092] 7822 00D2       add b, [color]
+llama.dasm (line 108): [0x0094] 05DE            sti [i], b
+llama.dasm (line 109): [0x0095] 85F3            ifn [j], 0
+llama.dasm (line 110): [0x0096] 7F81 0091       set pc, write_loop
+llama.dasm (line 111): [0x0098] 6381            set pc, pop
+llama.dasm (line 113): [0x0099]               :write_rect
+llama.dasm (line 117): [0x0099] 78C1 00C8       set i, [mem_video]
+llama.dasm (line 118): [0x009B] 00C2            add i, a
+llama.dasm (line 119): [0x009C] 0461            set x, b
+llama.dasm (line 120): [0x009D] 7C08 0020       mod a, 0x20
+llama.dasm (line 121): [0x009F] 0062            add x, a
+llama.dasm (line 122): [0x00A0] 7C01 0020       set a, 0x20
+llama.dasm (line 123): [0x00A2] 0403            sub a, b
+llama.dasm (line 124): [0x00A3]               :write_rect_loop
+llama.dasm (line 125): [0x00A3] 3C21            set b, [j]
+llama.dasm (line 126): [0x00A4] 7822 00D2       add b, [color]
+llama.dasm (line 127): [0x00A6] 05DE            sti [i], b
+llama.dasm (line 128): [0x00A7] 1881            set y, i
+llama.dasm (line 129): [0x00A8] 7883 00C8       sub y, [mem_video]
+llama.dasm (line 130): [0x00AA] 7C88 0020       mod y, 0x20
+llama.dasm (line 131): [0x00AC] 0C92            ife y, x
+llama.dasm (line 132): [0x00AD] 00C2            add i, a
+llama.dasm (line 133): [0x00AE] 85F3            ifn [j], 0
+llama.dasm (line 134): [0x00AF] 7F81 00A3       set pc, write_rect_loop
+llama.dasm (line 135): [0x00B1] 6381            set pc, pop
+llama.dasm (line 137): [0x00B2]               :clear
+llama.dasm (line 138): [0x00B2] 78C1 00C8       set i, [mem_video]
+llama.dasm (line 139): [0x00B4] 1821            set b, i
+llama.dasm (line 140): [0x00B5] 7C22 0180       add b, 0x180
+llama.dasm (line 141): [0x00B7] 7C01 0020       set a, 0x20
+llama.dasm (line 142): [0x00B9] 7802 00D2       add a, [color]
+llama.dasm (line 143): [0x00BB]               :clear_loop
+llama.dasm (line 144): [0x00BB] 01DE            sti [i], a
+llama.dasm (line 145): [0x00BC] 04D3            ifn i, b
+llama.dasm (line 146): [0x00BD] 7F81 00BB       set pc, clear_loop
+llama.dasm (line 147): [0x00BF] 6381            set pc, pop
+llama.dasm (line 149): [0x00C0]               :set_font
+llama.dasm (line 151): [0x00C0] 1C21            set b, j
+llama.dasm (line 152): [0x00C1] 8801            set a, 1
+llama.dasm (line 153): [0x00C2] 7A40 00C5       hwi [add_lem]
+llama.dasm (line 154): [0x00C4] 6381            set pc, pop
+llama.dasm (line 156): [0x00C5]               :add_lem dat 0
+llama.dasm (line 156): [0x00C5]                 .dat 0
+llama.dasm (line 156): [0x00C5]                      0000
+llama.dasm (line 157): [0x00C6]               :add_key dat 0
+llama.dasm (line 157): [0x00C6]                 .dat 0
+llama.dasm (line 157): [0x00C6]                      0000
+llama.dasm (line 158): [0x00C7]               :add_clock dat 0
+llama.dasm (line 158): [0x00C7]                 .dat 0
+llama.dasm (line 158): [0x00C7]                      0000
+llama.dasm (line 159): [0x00C8]               :mem_video dat 0x1000
+llama.dasm (line 159): [0x00C8]                 .dat 0x1000
+llama.dasm (line 159): [0x00C8]                      1000
+llama.dasm (line 160): [0x00C9]               :mem_font dat 0x1182
+llama.dasm (line 160): [0x00C9]                 .dat 0x1182
+llama.dasm (line 160): [0x00C9]                      1182
+llama.dasm (line 161): [0x00CA]               :mem_pal dat 0x1282
+llama.dasm (line 161): [0x00CA]                 .dat 0x1282
+llama.dasm (line 161): [0x00CA]                      1282
+llama.dasm (line 162): [0x00CB]               :id_lem dat 0x7349, 0xf615
+llama.dasm (line 162): [0x00CB]                 .dat 0x7349, 0xf615
+llama.dasm (line 162): [0x00CB]                      7349 F615
+llama.dasm (line 163): [0x00CD]               :id_key dat 0x30cf, 0x7406
+llama.dasm (line 163): [0x00CD]                 .dat 0x30cf, 0x7406
+llama.dasm (line 163): [0x00CD]                      30CF 7406
+llama.dasm (line 164): [0x00CF]               :id_clock dat 0x12d0, 0xb402
+llama.dasm (line 164): [0x00CF]                 .dat 0x12d0, 0xb402
+llama.dasm (line 164): [0x00CF]                      12D0 B402
+llama.dasm (line 165): [0x00D1]               :tk_clock dat 1
+llama.dasm (line 165): [0x00D1]                 .dat 1
+llama.dasm (line 165): [0x00D1]                      0001
+llama.dasm (line 166): [0x00D2]               :color dat 0xf000
+llama.dasm (line 166): [0x00D2]                 .dat 0xf000
+llama.dasm (line 166): [0x00D2]                      F000
+llama.dasm (line 167): [0x00D3]               :string dat "COMING SOON",0xdf, 0
+llama.dasm (line 167): [0x00D3]                 .dat "COMING SOON",0xdf, 0
+llama.dasm (line 167): [0x00D3]                      0043 004F 004D 0049 004E 0047 0020 0053
+llama.dasm (line 167): [0x00DB]                      004F 004F 004E 00DF 0000
+llama.dasm (line 169): [0x00E0]               :logo_text
+llama.dasm (line 170): [0x00E0]                 .dat 0x01,0x02,0x01,0x02,0x20,0x20,0x20,0x20,0x20,0x20,0x20,0x20,0x20,0x20,0x20,0x20,0x03,0x04,0x03,0x04,0x07,0x08,0x09,0x01,0x10,0x11,0x12,0x11,0x13,0x07,0x08,0x09,0x03,0x04,0x03,0x04,0x0a,0x0b,0x0c,0x03,0x04,0x03,0x04,0x03,0x04,0x0a,0x0b,0x0c,0x05,0x06,0x05,0x06,0x0d,0x0e,0x0f,0x14,0x15,0x14,0x15,0x14,0x15,0x0d,0x0e,0x0f, 0
+llama.dasm (line 170): [0x00E0]                      0001 0002 0001 0002 0020 0020 0020 0020
+llama.dasm (line 170): [0x00E8]                      0020 0020 0020 0020 0020 0020 0020 0020
+llama.dasm (line 170): [0x00F0]                      0003 0004 0003 0004 0007 0008 0009 0001
+llama.dasm (line 170): [0x00F8]                      0010 0011 0012 0011 0013 0007 0008 0009
+llama.dasm (line 170): [0x0100]                      0003 0004 0003 0004 000A 000B 000C 0003
+llama.dasm (line 170): [0x0108]                      0004 0003 0004 0003 0004 000A 000B 000C
+llama.dasm (line 170): [0x0110]                      0005 0006 0005 0006 000D 000E 000F 0014
+llama.dasm (line 170): [0x0118]                      0015 0014 0015 0014 0015 000D 000E 000F
+llama.dasm (line 170): [0x0120]                      0000
+llama.dasm (line 172): [0x0121]               :logo_os
+llama.dasm (line 173): [0x0121]                 .dat 0x16,0x17,0x18,0x16,0x19,0x1a,0x1b,0x1c,0x1d,0x1e,0x1f,0x21,0x20,0x22,0x23,0x24,0x25,0x26, 0
+llama.dasm (line 173): [0x0121]                      0016 0017 0018 0016 0019 001A 001B 001C
+llama.dasm (line 173): [0x0129]                      001D 001E 001F 0021 0020 0022 0023 0024
+llama.dasm (line 173): [0x0131]                      0025 0026 0000
+llama.dasm (line 175): [0x0134]               :logo_llama
+llama.dasm (line 176): [0x0134]                 .dat 0x20,0x20,0x20,0x20,0x20,0x20,0x20,0x27,0x28,0x29,0x01,0x2a,0x2b,0x2b,0x2b,0x2c,0x2d,0x2e,0x2f,0x20,0x30,0x28,0x28,0x28,0x28,0x28,0x28,0x31,0x32,0x20,0x33,0x34,0x35,0x36,0x37,0x28,0x38, 0
+llama.dasm (line 176): [0x0134]                      0020 0020 0020 0020 0020 0020 0020 0027
+llama.dasm (line 176): [0x013C]                      0028 0029 0001 002A 002B 002B 002B 002C
+llama.dasm (line 176): [0x0144]                      002D 002E 002F 0020 0030 0028 0028 0028
+llama.dasm (line 176): [0x014C]                      0028 0028 0028 0031 0032 0020 0033 0034
+llama.dasm (line 176): [0x0154]                      0035 0036 0037 0028 0038 0000
+llama.dasm (line 178): [0x015A]               :logo_ground
+llama.dasm (line 179): [0x015A]                 .dat 0x20,0x20,0x20,0x20,0x20,0x16,0x39,0x39,0x3a,0x3a,0x3a,0x3b,0x3c,0x3d,0x3e,0x3c,0x4b,0x3f,0x40,0x3c,0x41,0x3a,0x3a,0x3a,0x39,0x39,0x42,0x20,0x20,0x20,0x20,0x20,0x43,0x44,0x45,0x46,0x47,0x28,0x28,0x28,0x28,0x28,0x28,0x28,0x28,0x28,0x28,0x28,0x28,0x28,0x28,0x28,0x28,0x28,0x28,0x28,0x28,0x28,0x28,0x48,0x46,0x49,0x2c,0x4a, 0
+llama.dasm (line 179): [0x015A]                      0020 0020 0020 0020 0020 0016 0039 0039
+llama.dasm (line 179): [0x0162]                      003A 003A 003A 003B 003C 003D 003E 003C
+llama.dasm (line 179): [0x016A]                      004B 003F 0040 003C 0041 003A 003A 003A
+llama.dasm (line 179): [0x0172]                      0039 0039 0042 0020 0020 0020 0020 0020
+llama.dasm (line 179): [0x017A]                      0043 0044 0045 0046 0047 0028 0028 0028
+llama.dasm (line 179): [0x0182]                      0028 0028 0028 0028 0028 0028 0028 0028
+llama.dasm (line 179): [0x018A]                      0028 0028 0028 0028 0028 0028 0028 0028
+llama.dasm (line 179): [0x0192]                      0028 0028 0028 0048 0046 0049 002C 004A
+llama.dasm (line 179): [0x019A]                      0000
+llama.dasm (line 180): [0x019B]               :logo_font
+llama.dasm (line 181): [0x019B]                 .dat 0xffff, 0xffff
+llama.dasm (line 181): [0x019B]                      FFFF FFFF
+llama.dasm (line 182): [0x019D]                 .dat 0x0000, 0x00c0
+llama.dasm (line 182): [0x019D]                      0000 00C0
+llama.dasm (line 183): [0x019F]                 .dat 0xc0c0, 0x0000
+llama.dasm (line 183): [0x019F]                      C0C0 0000
+llama.dasm (line 184): [0x01A1]                 .dat 0x0000, 0x00ff
+llama.dasm (line 184): [0x01A1]                      0000 00FF
+llama.dasm (line 185): [0x01A3]                 .dat 0xffff, 0x0000
+llama.dasm (line 185): [0x01A3]                      FFFF 0000
+llama.dasm (line 186): [0x01A5]                 .dat 0x0000, 0x0003
+llama.dasm (line 186): [0x01A5]                      0000 0003
+llama.dasm (line 187): [0x01A7]                 .dat 0x070f, 0x0e0c
+llama.dasm (line 187): [0x01A7]                      070F 0E0C
+llama.dasm (line 188): [0x01A9]                 .dat 0x0000, 0x0060
+llama.dasm (line 188): [0x01A9]                      0000 0060
+llama.dasm (line 189): [0x01AB]                 .dat 0x6060, 0x6060
+llama.dasm (line 189): [0x01AB]                      6060 6060
+llama.dasm (line 190): [0x01AD]                 .dat 0xe0c0, 0xc000
+llama.dasm (line 190): [0x01AD]                      E0C0 C000
+llama.dasm (line 191): [0x01AF]                 .dat 0x00e0, 0xf0f0
+llama.dasm (line 191): [0x01AF]                      00E0 F0F0
+llama.dasm (line 192): [0x01B1]                 .dat 0x3818, 0x1818
+llama.dasm (line 192): [0x01B1]                      3818 1818
+llama.dasm (line 193): [0x01B3]                 .dat 0x18ff, 0xffff
+llama.dasm (line 193): [0x01B3]                      18FF FFFF
+llama.dasm (line 194): [0x01B5]                 .dat 0x0003, 0x0707
+llama.dasm (line 194): [0x01B5]                      0003 0707
+llama.dasm (line 195): [0x01B7]                 .dat 0x0e0c, 0x0c0c
+llama.dasm (line 195): [0x01B7]                      0E0C 0C0C
+llama.dasm (line 196): [0x01B9]                 .dat 0x0c0f, 0x0f0f
+llama.dasm (line 196): [0x01B9]                      0C0F 0F0F
+llama.dasm (line 197): [0x01BB]                 .dat 0xe0e0, 0x6060
+llama.dasm (line 197): [0x01BB]                      E0E0 6060
+llama.dasm (line 198): [0x01BD]                 .dat 0x6060, 0xe0c0
+llama.dasm (line 198): [0x01BD]                      6060 E0C0
+llama.dasm (line 199): [0x01BF]                 .dat 0xc0c0, 0x6060
+llama.dasm (line 199): [0x01BF]                      C0C0 6060
+llama.dasm (line 200): [0x01C1]                 .dat 0xc000, 0x0000
+llama.dasm (line 200): [0x01C1]                      C000 0000
+llama.dasm (line 201): [0x01C3]                 .dat 0x0000, 0x000f
+llama.dasm (line 201): [0x01C3]                      0000 000F
+llama.dasm (line 202): [0x01C5]                 .dat 0x0f0f, 0x0000
+llama.dasm (line 202): [0x01C5]                      0F0F 0000
+llama.dasm (line 203): [0x01C7]                 .dat 0x0000, 0x0080
+llama.dasm (line 203): [0x01C7]                      0000 0080
+llama.dasm (line 204): [0x01C9]                 .dat 0xc0e0, 0x6060
+llama.dasm (line 204): [0x01C9]                      C0E0 6060
+llama.dasm (line 205): [0x01CB]                 .dat 0x60e0, 0xc080
+llama.dasm (line 205): [0x01CB]                      60E0 C080
+llama.dasm (line 206): [0x01CD]                 .dat 0xc060, 0x6060
+llama.dasm (line 206): [0x01CD]                      C060 6060
+llama.dasm (line 207): [0x01CF]                 .dat 0x6060, 0x0000
+llama.dasm (line 207): [0x01CF]                      6060 0000
+llama.dasm (line 208): [0x01D1]                 .dat 0x0000, 0x3f7f
+llama.dasm (line 208): [0x01D1]                      0000 3F7F
+llama.dasm (line 209): [0x01D3]                 .dat 0xe1c0, 0x8080
+llama.dasm (line 209): [0x01D3]                      E1C0 8080
+llama.dasm (line 210): [0x01D5]                 .dat 0x80c0, 0xe17f
+llama.dasm (line 210): [0x01D5]                      80C0 E17F
+llama.dasm (line 211): [0x01D7]                 .dat 0x3f00, 0x00c3
+llama.dasm (line 211): [0x01D7]                      3F00 00C3
+llama.dasm (line 212): [0x01D9]                 .dat 0x878e, 0x8e8c
+llama.dasm (line 212): [0x01D9]                      878E 8E8C
+llama.dasm (line 213): [0x01DB]                 .dat 0x0000, 0x0000
+llama.dasm (line 213): [0x01DB]                      0000 0000
+llama.dasm (line 214): [0x01DD]                 .dat 0x9cf8, 0x7000
+llama.dasm (line 214): [0x01DD]                      9CF8 7000
+llama.dasm (line 215): [0x01DF]                 .dat 0x0001, 0x0101
+llama.dasm (line 215): [0x01DF]                      0001 0101
+llama.dasm (line 216): [0x01E1]                 .dat 0x0101, 0x0000
+llama.dasm (line 216): [0x01E1]                      0101 0000
+llama.dasm (line 217): [0x01E3]                 .dat 0x0000, 0x0001
+llama.dasm (line 217): [0x01E3]                      0000 0001
+llama.dasm (line 218): [0x01E5]                 .dat 0x0101, 0x0101
+llama.dasm (line 218): [0x01E5]                      0101 0101
+llama.dasm (line 219): [0x01E7]                 .dat 0x0100, 0x0000
+llama.dasm (line 219): [0x01E7]                      0100 0000
+llama.dasm (line 220): [0x01E9]                 .dat 0x0001, 0xc3fb
+llama.dasm (line 220): [0x01E9]                      0001 C3FB
+llama.dasm (line 221): [0x01EB]                 .dat 0xffff, 0xffff
+llama.dasm (line 221): [0x01EB]                      FFFF FFFF
+llama.dasm (line 222): [0x01ED]                 .dat 0xff3c, 0x3c18
+llama.dasm (line 222): [0x01ED]                      FF3C 3C18
+llama.dasm (line 223): [0x01EF]                 .dat 0xe0f0, 0xf0f8
+llama.dasm (line 223): [0x01EF]                      E0F0 F0F8
+llama.dasm (line 224): [0x01F1]                 .dat 0xf8f8, 0xf8f8
+llama.dasm (line 224): [0x01F1]                      F8F8 F8F8
+llama.dasm (line 225): [0x01F3]                 .dat 0xf8f8, 0xf0f0
+llama.dasm (line 225): [0x01F3]                      F8F8 F0F0
+llama.dasm (line 226): [0x01F5]                 .dat 0xf0f0, 0xf0f0
+llama.dasm (line 226): [0x01F5]                      F0F0 F0F0
+llama.dasm (line 227): [0x01F7]                 .dat 0xf8fe, 0xffff
+llama.dasm (line 227): [0x01F7]                      F8FE FFFF
+llama.dasm (line 228): [0x01F9]                 .dat 0xffff, 0xff3f
+llama.dasm (line 228): [0x01F9]                      FFFF FF3F
+llama.dasm (line 229): [0x01FB]                 .dat 0x00fc, 0xffff
+llama.dasm (line 229): [0x01FB]                      00FC FFFF
+llama.dasm (line 230): [0x01FD]                 .dat 0xff3f, 0x1f0f
+llama.dasm (line 230): [0x01FD]                      FF3F 1F0F
+llama.dasm (line 231): [0x01FF]                 .dat 0x0703, 0x0000
+llama.dasm (line 231): [0x01FF]                      0703 0000
+llama.dasm (line 232): [0x0201]                 .dat 0x0003, 0x0100
+llama.dasm (line 232): [0x0201]                      0003 0100
+llama.dasm (line 233): [0x0203]                 .dat 0x7fff, 0xffff
+llama.dasm (line 233): [0x0203]                      7FFF FFFF
+llama.dasm (line 234): [0x0205]                 .dat 0xffff, 0x1f07
+llama.dasm (line 234): [0x0205]                      FFFF 1F07
+llama.dasm (line 235): [0x0207]                 .dat 0x0001, 0x0707
+llama.dasm (line 235): [0x0207]                      0001 0707
+llama.dasm (line 236): [0x0209]                 .dat 0x0f0f, 0x07ff
+llama.dasm (line 236): [0x0209]                      0F0F 07FF
+llama.dasm (line 237): [0x020B]                 .dat 0x7f03, 0x0301
+llama.dasm (line 237): [0x020B]                      7F03 0301
+llama.dasm (line 238): [0x020D]                 .dat 0x8080, 0x8080
+llama.dasm (line 238): [0x020D]                      8080 8080
+llama.dasm (line 239): [0x020F]                 .dat 0xc0c0, 0xc0c0
+llama.dasm (line 239): [0x020F]                      C0C0 C0C0
+llama.dasm (line 240): [0x0211]                 .dat 0xc0e0, 0xe0e0
+llama.dasm (line 240): [0x0211]                      C0E0 E0E0
+llama.dasm (line 241): [0x0213]                 .dat 0xe0e0, 0xe0e0
+llama.dasm (line 241): [0x0213]                      E0E0 E0E0
+llama.dasm (line 242): [0x0215]                 .dat 0xe0ef, 0xffff
+llama.dasm (line 242): [0x0215]                      E0EF FFFF
+llama.dasm (line 243): [0x0217]                 .dat 0xffff, 0xf0e0
+llama.dasm (line 243): [0x0217]                      FFFF F0E0
+llama.dasm (line 244): [0x0219]                 .dat 0xefff, 0xffff
+llama.dasm (line 244): [0x0219]                      EFFF FFFF
+llama.dasm (line 245): [0x021B]                 .dat 0xf0e0, 0xe0e0
+llama.dasm (line 245): [0x021B]                      F0E0 E0E0
+llama.dasm (line 246): [0x021D]                 .dat 0xe0e0, 0xe0c0
+llama.dasm (line 246): [0x021D]                      E0E0 E0C0
+llama.dasm (line 247): [0x021F]                 .dat 0x8000, 0x0000
+llama.dasm (line 247): [0x021F]                      8000 0000
+llama.dasm (line 248): [0x0221]                 .dat 0x80c0, 0xe0f0
+llama.dasm (line 248): [0x0221]                      80C0 E0F0
+llama.dasm (line 249): [0x0223]                 .dat 0xf0f0, 0xf8f8
+llama.dasm (line 249): [0x0223]                      F0F0 F8F8
+llama.dasm (line 250): [0x0225]                 .dat 0xf8fc, 0xfcfc
+llama.dasm (line 250): [0x0225]                      F8FC FCFC
+llama.dasm (line 251): [0x0227]                 .dat 0xfefe, 0xfefe
+llama.dasm (line 251): [0x0227]                      FEFE FEFE
+llama.dasm (line 252): [0x0229]                 .dat 0xfeff, 0xffff
+llama.dasm (line 252): [0x0229]                      FEFF FFFF
+llama.dasm (line 253): [0x022B]                 .dat 0xffff, 0xfffe
+llama.dasm (line 253): [0x022B]                      FFFF FFFE
+llama.dasm (line 254): [0x022D]                 .dat 0xfcfc, 0xfcf8
+llama.dasm (line 254): [0x022D]                      FCFC FCF8
+llama.dasm (line 255): [0x022F]                 .dat 0xf0e0, 0xc080
+llama.dasm (line 255): [0x022F]                      F0E0 C080
+llama.dasm (line 256): [0x0231]                 .dat 0xe0e0, 0xe0e1
+llama.dasm (line 256): [0x0231]                      E0E0 E0E1

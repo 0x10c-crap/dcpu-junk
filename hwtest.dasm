@@ -1,0 +1,443 @@
+; 0x10^C Hardware Detection Tool
+; by xTibor
+
+jsr GetScreen
+jsr MapScreen
+jsr GetKeyboard
+
+:MainLoop
+	jsr GetInfo
+	jsr Display
+    jsr HandleKeys
+    jsr ClearScreen
+    set pc, MainLoop
+
+:ClearScreen
+	set i, 0
+    set b, [ScreenAddress]
+    :ClearScreen_Loop
+    	set [b], 0x0000
+        
+        add b, 1
+    	add i, 1
+    	ifn i, 0x180
+        set pc, ClearScreen_Loop
+    set pc, pop
+
+:HandleKeys	
+	set a, 1 ; Get char
+    :HandleKeys_Loop
+	    hwi [KeyboardID]
+        ife c, 0x64 ; d
+        	set pc, HandleKeys_Left
+        ife c, 0x44 ; D
+        	set pc, HandleKeys_Left            
+        ife c, 0x82
+        	set pc, HandleKeys_Left
+        ife c, 0x61 ; a
+        	set pc, HandleKeys_Right
+		ife c, 0x41 ; A
+        	set pc, HandleKeys_Right    
+		ife c, 0x83
+        	set pc, HandleKeys_Right
+        set pc, HandleKeys_Loop
+    
+    :HandleKeys_Left
+    	add [CurrentDevice], 1        
+        set pc, HandleKeys_End
+    :HandleKeys_Right
+    	sub [CurrentDevice], 1
+        set pc, HandleKeys_End
+
+    :HandleKeys_End
+    	hwn i
+        mod [CurrentDevice], i
+        
+        set a, 0
+        hwi [KeyboardID]
+        
+    	set pc, pop
+
+:GetScreen
+	hwn i
+    :GetScreen_Loop
+    	sub i, 1
+        ife i, 0xFFFF
+        	set pc, GetScreen_End        
+        hwq i        
+        ifn a, 0xF615	; ID #1
+        	set pc, GetScreen_Loop
+        ifn b, 0x7349	; ID #2
+        	set pc, GetScreen_Loop
+		set [ScreenID], i       
+    :GetScreen_End
+    	set pc, pop
+
+
+:MapScreen
+	set push, a
+    set push, b
+    
+	set a, 0	; MEM_MAP_SCREEN
+	set b, [ScreenAddress]
+	hwi [ScreenID]
+    
+    set b, pop
+    set a, pop
+	set pc, pop
+
+:GetKeyboard
+	hwn i
+    :GetKeyboard_Loop
+    	sub i, 1
+        ife i, 0xFFFF
+        	set pc, GetKeyboard_End        
+        hwq i        
+        ifn a, 0x7406	; ID #1
+        	set pc, GetKeyboard_Loop
+        ifn b, 0x30CF	; ID #2
+        	set pc, GetKeyboard_Loop
+		set [KeyboardID], i       
+    :GetKeyboard_End
+    	set pc, pop
+
+:Display
+	set b, 0x20
+	set a, [CurrentName]
+	set c, 0x7000
+	jsr PrintScreen
+	and b, 0xffe0
+    add b, 0x20
+
+	; Model
+	ife [CurrentModel], 0
+    	set pc, Display_SkipModel
+	and b, 0xffe0
+	add b, 0x20
+    set c, 0x8000    
+    set a, String_Model
+    jsr PrintScreen
+    add b, 1
+	set a, [CurrentModel]
+	jsr PrintScreen
+	:Display_SkipModel
+   
+	; Version
+	and b, 0xffe0
+    add b, 0x20
+	set a, String_Version    
+    set c, 0x8000    
+    jsr PrintScreen
+    add b, 1
+    set a, String_0x
+    jsr PrintScreen        
+    set a, [CurrentVer] 
+    set j, 16
+    set z, 4
+    jsr PrintNumber
+    add b, 1
+    set a, 0x28	; (
+    jsr PrintChar
+    set a, [CurrentVer]
+    set j, 10
+    set z, 1
+    jsr PrintNumber   
+	set a, 0x29 ; )
+    jsr PrintChar
+
+	; ID
+    and b, 0xffe0
+    add b, 0x20
+    set a, String_ID
+    jsr PrintScreen
+    add b, 1
+    set a, String_0x
+    jsr PrintScreen
+    
+    set i, CurrentID
+    set a, [i+0]
+    set j, 16
+    set z, 4
+    jsr PrintNumber
+    
+    set a, [i+1]
+ 	jsr PrintNumber
+
+	and b, 0xffe0
+    add b, 0x20
+
+	; Vendor
+    ife [CurrentVendor], 0
+    	set pc, Display_SkipVendor
+        
+    and b, 0xFFE0    
+    add b, 0x20
+    set a, String_Vendor
+    jsr PrintScreen
+    add b, 1
+    set a, [CurrentVendor]
+    jsr PrintScreen        
+    :Display_SkipVendor
+	;VendorID
+    and b, 0xffe0
+    add b, 0x20
+    set a, String_VendorID
+    jsr PrintScreen
+    add b, 1
+    set a, String_0x
+    jsr PrintScreen
+    
+    set i, CurrentVendorID
+    set a, [i+0]
+    set j, 16
+    set z, 4
+    jsr PrintNumber
+    
+    set a, [i+1]
+ 	jsr PrintNumber	
+
+
+	; Device count
+	set a, [CurrentDevice]
+	add a, 1
+	set b, 0x160
+	set c, 0x7000
+	set j, 10
+	set z, 1
+	jsr PrintNumber
+
+	set a, 0x2F ; /
+	add b, 1
+	set c, 0x8000
+	jsr PrintChar
+
+	hwn a
+	add b, 1
+	set c, 0x7000
+	set j, 10
+	set z, 1
+	jsr PrintNumber
+
+	set a, AppName
+	set b, 0x180
+	sub b, [AppName]
+	set c, 0xF000
+	jsr PrintScreen
+    
+	set pc, pop
+
+
+; A: String pointer
+; B: Screen position
+; C: Colour
+:PrintScreen	
+	set push, x
+	set push, y
+    set push, i    
+
+    set y, [a]	; Length       
+    set i, 1	; Index
+    add b, [ScreenAddress]	; #
+    :PrintScreen_Loop
+		ifg i, y	; Index > Length
+        	set pc, PrintScreen_End    
+    	set x, a
+        add x, i
+        set x, [x]
+    	bor x, c	; Add colour    
+    	set [b], x	; Store it
+        
+        add b, 1
+        add i, 1        
+        
+        set pc, PrintScreen_Loop    
+    :PrintScreen_End
+    	sub b, [ScreenAddress]	; #
+        set i, pop
+        set y, pop
+        set x, pop
+		set pc, pop
+
+; A: Value
+; B: Screen position
+; C: Colour
+:PrintChar
+	set push, z
+	add b, [ScreenAddress]
+    
+    set z, a
+    and z, 0x007F
+    bor z, c
+    
+    set [b], z
+    
+    add b, 1
+    sub b, [ScreenAddress]
+    set z, pop
+    set pc, pop
+
+; A: Value
+; B: Screen position
+; C: Colour
+; J: Base	(2-36)
+; Z: Min length
+; TODO: PUSH/POP
+:PrintNumber
+	set push, x
+    set push, y
+    set push, i
+
+	set x, a
+    set i, 0
+    add b, [ScreenAddress] ; #
+    :PrintNumber_Loop
+    	ifg j, x	; base > X
+        	set pc, PrintNumber_LoopEnd
+    	set y, x
+        div x, j	; X = X / base
+        mod y, j	; Y = X % base
+        set push, y	; push remainder onto the stack
+        add i, 1
+        set pc, PrintNumber_Loop        
+	:PrintNumber_LoopEnd
+    	set push, x
+        add i, 1
+    
+    sub z, 1	; because there's no >= only >
+    :PrintNumber_AddPadding    	
+    	ifg i, z        	
+       		set pc, PrintNumber_AddPadding_End
+        add i, 1
+        set push, 0
+        set pc, PrintNumber_AddPadding
+    :PrintNumber_AddPadding_End        
+    add z, 1	; -
+    
+	:PrintNumber_Loop2
+    	set x, pop
+        ifg x, 9
+        add x, 0x07
+        add x, 0x30
+        bor x, c
+        
+        set [b], x
+        add b, 1
+        sub i, 1
+        ifn i, 0
+        set pc, PrintNumber_Loop2
+	:PrintNumber_End 
+   		sub b, [ScreenAddress] ; #
+        set i, pop
+        set y, pop
+        set x, pop
+    	set pc, pop
+		
+
+:GetInfo
+	hwq [CurrentDevice]
+	
+    set i, CurrentID
+    set [i+0], b
+    set [i+1], a
+    set [CurrentVer], c
+    
+    set [CurrentName], String_UnknownDevice
+    set [CurrentModel], 0
+    
+    set [CurrentVendor], 0
+    set i, CurrentVendorID
+    set [i+0], y 
+    set [i+1], x
+    
+    
+    set j, [Hardwares]	; Hardware database record count
+    :GetInfo_LoopHW
+		set z, [Hardwares+j]
+                
+        ifn [z+3], a
+        	set pc, GetInfo_LoopHW_Next
+        ifn [z+2], b
+        	set pc, GetInfo_LoopHW_Next
+            
+        set [CurrentName], [z]    
+        set [CurrentModel], [z+1]    
+    	set pc, GetInfo_LoopHW_End
+            
+    	:GetInfo_LoopHW_Next
+        sub j, 1
+        ifn j, 0
+        set pc, GetInfo_LoopHW
+    :GetInfo_LoopHW_End
+    
+    set j, [Vendors]
+    :GetInfo_LoopVND
+    	set z, [Vendors+j]
+        ifn [z+1], y
+        	set pc, GetInfo_LoopVND_Next
+        ifn [z+2], x
+        	set pc, GetInfo_LoopVND_Next
+        set [CurrentVendor], [z]
+        set pc, GetInfo_LoopVND_End
+        
+        :GetInfo_LoopVND_Next
+        sub j, 1
+        ifn j, 0
+        set pc, GetInfo_LoopVND
+    :GetInfo_LoopVND_End
+    
+    
+	set pc, pop
+
+
+:ScreenID dat 0x0000
+:ScreenAddress dat 0x1000
+:KeyboardID	dat 0x0000
+
+:CurrentDevice dat 0
+
+:CurrentVer	dat 0x0000
+:CurrentID	dat 0x0000, 0x0000
+:CurrentName	dat 0x0000
+:CurrentModel	dat 0x0000
+:CurrentVendor dat 0x0000
+:CurrentVendorID dat 0x0000, 0x0000
+
+
+:AppName dat 5, "0xHDT"
+:String_Model dat 6, "Model:"
+:String_ID dat 3, "ID:"
+:String_Version dat 8, "Version:"
+:String_Vendor dat 7, "Vendor:"
+:String_VendorID dat 10, "Vendor ID:"
+:String_0x dat 2, "0x"
+:String_UnknownDevice dat 14, "Unknown Device"
+
+
+:Hardwares dat 6, HW1, HW2, HW3, HW4, HW5, HW6
+
+:HW1 dat HW1_Name, HW1_Model, 0x7349, 0xF615
+:HW2 dat HW2_Name, 0x0000, 0x30CF, 0x7406
+:HW3 dat HW3_Name, 0x0000, 0x12D0, 0xB402
+:HW4 dat HW4_Name, HW4_Model, 0x74FA, 0x4CAE
+:HW5 dat HW5_Name, HW5_Model, 0x3B50, 0x703A
+:HW6 dat HW6_Name, HW6_Model, 0x40E4, 0x1D9D
+
+:HW1_Name dat 18, "Low Energy Monitor"
+:HW1_Model dat 14, "LEM180X series"
+:HW2_Name dat 16, "Generic Keyboard"
+:HW3_Name dat 13, "Generic Clock"
+:HW4_Name dat 18, "Harold Media Drive"
+:HW4_Model dat 7, "HMD2043"
+:HW5_Name dat 24, "Micro Casette Disk Drive"
+:HW5_Model dat 9, "BRG MCD-1"
+:HW6_Name dat 23, "Suspension Chamber 2000"
+:HW6_Model dat 7, "SPC2000"
+
+:Vendors dat 3, VND1, VND2, VND3
+:VND1 dat VND1_Name, 0x1C6C, 0x8B36
+:VND2 dat VND2_Name, 0x2154, 0x4948
+:VND3 dat VND3_Name, 0x4855, 0x07A1 ; HU 1953
+
+:VND1_Name dat 14, "Nya Elektriska"
+:VND2_Name dat 23, "Harold Innovation Tech."
+:VND3_Name dat 23, "Budapest Radiotech Gyar"

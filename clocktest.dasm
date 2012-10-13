@@ -1,0 +1,39 @@
+.equ screen_buffer 0x8000
+.longform
+
+SET PC, start
+#include "util.dasm"
+
+start:
+    JSR screen_init
+    prints(0, 0, msg)
+    
+    JSR find_screen
+    SET Z, A
+    
+    SET PUSH, Z
+        JSR find_clock
+    SET Z, POP
+    
+    SET Y, A
+    IAS int_handler
+    SET B, 60
+    SET A, 0
+    HWI Y
+    
+    SET A, 2
+    SET B, 5
+    HWI Y
+    
+    SET B, 0
+loop:
+    SET PC, loop
+ 
+int_handler:
+    SET A, 3
+    ADD B, 1
+    HWI Z
+    RFI 0
+    
+msg:
+    dat "Hello, world!"

@@ -1,0 +1,67 @@
+	
+    JSR screen_init
+    SET A, 0 ; x
+    SET B, 0 ; y
+    SET C, 0xFFE4 ; value
+    JSR print_num_s
+    SUB PC, 1
+
+;;; Subroutines follow
+
+; print_num_s(x, y, value)
+print_num_s:
+	MUL B, A
+    ADD B, A ; Get offset from x, y
+    ADD B, 0x7FFF ; B is our screen buffer pointer   
+    SET PUSH, C
+    AND C, 0x8000
+    IFE C, 0x8000
+    	SET [B], 0xF02D
+    IFE C, 0x8000
+    	ADD B, 1
+    SET C, POP
+    AND C, 0x7FFF ; abs(C)
+    SET PUSH, C
+digit_loop: ; Find the number of digits
+	ADD B, 1
+	DIV C, 10
+    IFN C, 0
+    	SET PC, digit_loop
+    SET C, POP ; B is 0x8000 + number of digits in value
+print_num_loop:
+	SET A, C ; SET A to C temporarily
+    MOD A, 10 ; A %= 10 to get the last digit
+    ADD A, 0xF030 ; '0' ; Add it to the ASCII value for 0
+    SET [B], A ; Set that in our screen buffer
+    SUB B, 1
+    DIV C, 10 ; Divide C by ten to remove the finished digit
+    IFN C, 0 ; Loop until C = 0
+    	SET PC, print_num_loop
+    SET PC, POP
+	
+
+; Sets up the screen(s)
+; Connects all screens to 0x8000
+screen_init:
+    HWN A
+    SUB A, 1
+screen_init_loop:
+    IFE A, 0xFFFF
+        SET PC, POP
+    SET PUSH, A
+        HWQ A
+        IFE A, 0xf615
+            IFE B, 0x7349
+                SET PC, init_screen
+    SET A, POP
+    SUB A, 1
+    SET PC, screen_init_loop
+init_screen:
+    SET A, POP
+    SET C, A
+    SET A, 0
+    SET B, 0x8000 ; screen_buffer
+    HWI C
+    SET A, C
+    SUB A, 1
+    SET PC, screen_init_loop

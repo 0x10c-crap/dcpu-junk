@@ -1,0 +1,89 @@
+clocktest.dasm (line 1):  [0x0000]               .equ screen_buffer 0x8000
+clocktest.dasm (line 2):  [0x0000]               .longform
+clocktest.dasm (line 4):  [0x0000] 7F81 002F       SET PC, start
+util.dasm      (line 3):  [0x0002]               screen_init:
+util.dasm      (line 4):  [0x0002] 0200            HWN A
+util.dasm      (line 5):  [0x0003] 7C03 0001       SUB A, 1
+util.dasm      (line 6):  [0x0005]               screen_init_loop:
+util.dasm      (line 7):  [0x0005] 7C12 FFFF       IFE A, -1
+util.dasm      (line 8):  [0x0007] 7F81 0017       SET PC, done
+util.dasm      (line 9):  [0x0009] 0301            SET PUSH, A
+util.dasm      (line 10): [0x000A] 0220            HWQ A
+util.dasm      (line 11): [0x000B] 7C12 F615       IFE A, 0xf615
+util.dasm      (line 12): [0x000D] 7C32 7349       IFE B, 0x7349
+util.dasm      (line 13): [0x000F] 7F81 0016       SET PC, done_pop
+util.dasm      (line 14): [0x0011] 6001            SET A, POP
+util.dasm      (line 15): [0x0012] 7C03 0001       SUB A, 1
+util.dasm      (line 16): [0x0014] 7F81 0005       SET PC, screen_init_loop
+util.dasm      (line 17): [0x0016]               done_pop:
+util.dasm      (line 18): [0x0016] 6001            SET A, POP
+util.dasm      (line 19): [0x0017]               done:
+util.dasm      (line 20): [0x0017] 0041            SET C, A
+util.dasm      (line 21): [0x0018] 7C01 0000       SET A, 0
+util.dasm      (line 22): [0x001A] 7C21 8000       SET B, screen_buffer
+util.dasm      (line 23): [0x001C] 0A40            HWI C
+util.dasm      (line 24): [0x001D] 6381            SET PC, POP
+util.dasm      (line 28): [0x001E]               .macro prints(x, y, message)
+util.dasm      (line 28): [0x001E]               call(prints, x, y, message)
+util.dasm      (line 28): [0x001E]               .endmacro
+util.dasm      (line 29): [0x001E]               prints:
+util.dasm      (line 30): [0x001E] 0404            MUL A, B
+util.dasm      (line 31): [0x001F] 0402            ADD A, B
+util.dasm      (line 32): [0x0020] 7C02 8000       ADD A, screen_buffer
+util.dasm      (line 33): [0x0022]               prints_loop:
+util.dasm      (line 34): [0x0022] 7D52 0000       IFE [C], 0
+util.dasm      (line 35): [0x0024] 6381            SET PC, POP
+util.dasm      (line 36): [0x0025] 2821            SET B, [C]
+util.dasm      (line 37): [0x0026] 7C2B F000       BOR B, 0xF000
+util.dasm      (line 38): [0x0028] 0501            SET [A], B
+util.dasm      (line 39): [0x0029] 7C02 0001       ADD A, 1
+util.dasm      (line 40): [0x002B] 7C42 0001       ADD C, 1
+util.dasm      (line 41): [0x002D] 7F81 0022       SET PC, prints_loop
+util.dasm      (line 49): [0x002F]               .macro call(func, param)
+util.dasm      (line 49): [0x002F]               .if param !== A
+util.dasm      (line 49): [0x002F]               SET A, param
+util.dasm      (line 49): [0x002F]               .endif
+util.dasm      (line 49): [0x002F]               JSR func
+util.dasm      (line 49): [0x002F]               .endmacro
+util.dasm      (line 59): [0x002F]               .macro call(func, param1, param2)
+util.dasm      (line 59): [0x002F]               .if param1 !== A
+util.dasm      (line 59): [0x002F]               SET A, param1
+util.dasm      (line 59): [0x002F]               .endif
+util.dasm      (line 59): [0x002F]               .if param2 !== B
+util.dasm      (line 59): [0x002F]               SET B, param2
+util.dasm      (line 59): [0x002F]               .endif
+util.dasm      (line 59): [0x002F]               JSR func
+util.dasm      (line 59): [0x002F]               .endmacro
+util.dasm      (line 72): [0x002F]               .macro call(func, param1, param2, param3)
+util.dasm      (line 72): [0x002F]               .if param1 !== A
+util.dasm      (line 72): [0x002F]               SET A, param1
+util.dasm      (line 72): [0x002F]               .endif
+util.dasm      (line 72): [0x002F]               .if param2 !== B
+util.dasm      (line 72): [0x002F]               SET B, param2
+util.dasm      (line 72): [0x002F]               .endif
+util.dasm      (line 72): [0x002F]               .if param3 !== C
+util.dasm      (line 72): [0x002F]               SET C, param3
+util.dasm      (line 72): [0x002F]               .endif
+util.dasm      (line 72): [0x002F]               JSR func
+util.dasm      (line 72): [0x002F]               .endmacro
+clocktest.dasm (line 7):  [0x002F]               start:
+clocktest.dasm (line 8):  [0x002F] 7C20 0002       JSR screen_init
+clocktest.dasm (line 9):  [0x0031]               prints(0, 0, msg)
+clocktest.dasm (line 9):  [0x0031]               call(prints, 0, 0, msg)
+clocktest.dasm (line 9):  [0x0031]               .if 0 !== A
+clocktest.dasm (line 9):  [0x0031] 7C01 0000       SET A, 0
+clocktest.dasm (line 9):  [0x0033]               .endif
+clocktest.dasm (line 9):  [0x0033]               .if 0 !== B
+clocktest.dasm (line 9):  [0x0033] 7C21 0000       SET B, 0
+clocktest.dasm (line 9):  [0x0035]               .endif
+clocktest.dasm (line 9):  [0x0035]               .if msg !== C
+clocktest.dasm (line 9):  [0x0035] 7C41 003D       SET C, msg
+clocktest.dasm (line 9):  [0x0037]               .endif
+clocktest.dasm (line 9):  [0x0037] 7C20 001E       JSR prints
+clocktest.dasm (line 10): [0x0039]               loop:
+clocktest.dasm (line 11): [0x0039] 7C02 0001       ADD A, 1
+clocktest.dasm (line 12): [0x003B] 7F81 0039       SET PC, loop
+clocktest.dasm (line 14): [0x003D]               msg:
+clocktest.dasm (line 15): [0x003D]                 .dat "Hello, world!"
+clocktest.dasm (line 15): [0x003D]                      0048 0065 006C 006C 006F 002C 0020 0077
+clocktest.dasm (line 15): [0x0045]                      006F 0072 006C 0064 0021

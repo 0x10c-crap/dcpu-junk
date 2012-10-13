@@ -1,0 +1,252 @@
+; M35FD Test
+
+start:
+    JSR screen_init
+    JSR find_m35fd
+    JSR clearBuffer
+    SET A, 0 \ SET B, 0 \ SET C, insertDiskText
+    JSR prints
+.disk_loop:
+    SET A, 0
+    HWI [m35fd]
+    IFN B, 0
+        SET PC, .done
+    SET PC, .disk_loop
+.done:
+    JSR clearBuffer
+    IAS handleInterrupt
+    SET A, 0 \ SET B, 0 \ SET C, ejectDiskText
+    JSR prints
+    SET A, 1
+    SET X, [m35fd]
+    HWI [m35fd]
+    SUB PC, 1
+handleInterrupt:
+    SET A, POP
+    IAS 0
+    JSR clearBuffer
+    SET A, 1
+    SET X, 0
+    HWI [m35fd]
+    SET A, 0 \ SET B, 0 \ SET C, insertDiskText
+    JSR prints
+.disk_loop:
+    SET A, 0
+    HWI [m35fd]
+    IFN B, 0
+        SET PC, .done
+    SET PC, .disk_loop
+.done:
+    JSR clearBuffer
+    SET A, 0 \ SET B, 0 \ SET C, readingText
+    JSR prints
+dumpFirstSector:
+    SET A, 2
+    SET X, 0
+    SET Y, disk_temp_mem
+    HWI [m35fd]
+    SET A, 5000
+.delay:
+    SUB A, 1
+    IFN A, 0
+        SET PC, .delay
+    
+    JSR clearBuffer
+    SET A, 0 \ SET B, 0 \ SET C, firstSectorText
+    JSR prints
+    
+    SET A, 0 \ SET B, 1 \ SET C, disk_temp_mem
+    JSR dumpMem
+    
+.delay2:
+    SUB A, 1
+    IFN A, 0
+        SET PC, .delay2
+        
+    JSR clearBuffer
+    SET A, 0 \ SET B, 0 \ SET C, endOfFirstSectorText
+    JSR prints
+    
+    SET A, 0 \ SET B, 1 \ SET C, disk_temp_mem + 512 - 40
+    JSR dumpMem
+    
+writeSector:
+    SET A, 0xFFFF
+.delay:
+    SUB A, 1
+    IFN A, 0
+        SET PC, .delay
+    
+    JSR clearBuffer
+    SET A, 0 \ SET B, 0 \ SET C, writingText
+    JSR prints
+    
+    SET [disk_temp_mem], 0xFACE
+    SET A, 3
+    SET X, 0
+    SET Y, disk_temp_mem
+    HWI [m35fd]
+    
+    SET A, 5000
+.delay1:
+    SUB A, 1
+    IFN A, 0
+        SET PC, .delay1
+    
+    SET A, 0 \ SET B, 2 \ SET C, done
+    JSR prints
+    SUB PC, 1
+
+.equ screen_buffer 0x8000
+.equ disk_temp_mem 0x9000
+m35fd:
+    .dw 0
+insertDiskText:
+    .asciiz "Insert disk."
+ejectDiskText:
+    .asciiz "Eject disk."
+readingText:
+    .asciiz "Reading..."
+firstSectorText:
+    .asciiz "Dump of first sector:"
+endOfFirstSectorText:
+    .asciiz "Dump of end of first sector:"
+writingText:
+    .asciiz "Writing 0xFACE to 0x0000 of     sector 0..."
+done:
+    .asciiz "Done."
+
+find_m35fd:
+    HWN A
+    SUB A, 1
+find_m35fd_loop:
+    IFE A, -1
+        SET PC, POP
+    SET PUSH, A
+        HWQ A
+        IFE A, 0x5678
+            IFE B, 0x1234
+                SET PC, m35fd_found
+    SET A, POP
+    SUB A, 1
+    SET PC, find_m35fd_loop
+m35fd_found:
+    SET [m35fd], POP
+    SET PC, POP
+    
+; Sets up the screen(s)
+screen_init:
+    HWN A
+    SUB A, 1
+screen_init_loop:
+    IFE A, 0xFFFF
+        SET PC, POP
+    SET PUSH, A
+        HWQ A
+        IFE A, 0xf615
+            IFE B, 0x7349
+                SET PC, init_screen
+    SET A, POP
+    SUB A, 1
+    SET PC, screen_init_loop
+init_screen:
+    SET A, POP
+    SET I, A
+    SET C, A
+    SET A, 0
+    SET B, screen_buffer
+    HWI C
+    SET A, C
+    SUB A, 1
+    SET PC, screen_init_loop
+    
+prints:
+    MUL B, 32
+    ADD A, B
+    ADD A, screen_buffer
+prints_loop:
+    IFE [C], 0
+        SET PC, POP
+    SET B, [C]
+    BOR B, 0xF000
+    SET [A], B
+    ADD A, 1
+    ADD C, 1
+    SET PC, prints_loop
+    
+; Clears the screen buffer
+clearBuffer:
+    SET A, 12
+    SET B, 0
+    SET C, SP
+    SET SP, screen_buffer + (32 * 12)
+.loop:
+    SET PUSH, B
+    SET PUSH, B
+    SET PUSH, B
+    SET PUSH, B
+    SET PUSH, B
+    SET PUSH, B
+    SET PUSH, B
+    SET PUSH, B
+    SET PUSH, B
+    SET PUSH, B
+    SET PUSH, B
+    SET PUSH, B
+    SET PUSH, B
+    SET PUSH, B
+    SET PUSH, B
+    SET PUSH, B
+    SET PUSH, B
+    SET PUSH, B
+    SET PUSH, B
+    SET PUSH, B
+    SET PUSH, B
+    SET PUSH, B
+    SET PUSH, B
+    SET PUSH, B
+    SET PUSH, B
+    SET PUSH, B
+    SET PUSH, B
+    SET PUSH, B
+    SET PUSH, B
+    SET PUSH, B
+    SET PUSH, B
+    SET PUSH, B
+    SUB A, 1
+    IFN A, 0
+        SET PC, .loop
+    SET SP, C
+    SET PC, POP
+    
+; A: X, B: Y, C: Address
+; Dumps memory in hex until end of screen
+dumpMem:
+    MUL B, 32
+    ADD A, B
+    ADD A, screen_buffer
+.outerLoop:
+    IFE A, screen_buffer + (32 * 12)
+        SET PC, POP
+    SET B, [C]
+    ADD C, 1
+    SET Z, A
+    ADD Z, 3
+.innerLoop:
+    SET X, B
+    AND X, 0xF
+    ADD X, .hex
+    SET X, [X]
+    BOR X, 0xF000
+    SET [Z], X
+    SUB Z, 1
+    ASR B, 4
+    IFG Z, A
+        SET PC, .innerLoop
+    IFE Z, A
+        SET PC, .innerLoop
+    ADD A, 8
+    SET PC, .outerLoop
+    
+.hex:
+    .ascii "0123456789ABCDEF"

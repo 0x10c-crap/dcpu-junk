@@ -1,0 +1,152 @@
+testSPED3.dasm (line 1):   [0x0000]               .equ screen_buffer 0x8000
+testSPED3.dasm (line 8):   [0x0000]               .macro call(func, param)
+testSPED3.dasm (line 8):   [0x0000]               .if param !== A
+testSPED3.dasm (line 8):   [0x0000]               SET A, param
+testSPED3.dasm (line 8):   [0x0000]               .endif
+testSPED3.dasm (line 8):   [0x0000]               JSR func
+testSPED3.dasm (line 8):   [0x0000]               .endmacro
+testSPED3.dasm (line 17):  [0x0000]               .macro call(func, param1, param2)
+testSPED3.dasm (line 17):  [0x0000]               .if param1 !== A
+testSPED3.dasm (line 17):  [0x0000]               SET A, param1
+testSPED3.dasm (line 17):  [0x0000]               .endif
+testSPED3.dasm (line 17):  [0x0000]               .if param2 !== B
+testSPED3.dasm (line 17):  [0x0000]               SET B, param2
+testSPED3.dasm (line 17):  [0x0000]               .endif
+testSPED3.dasm (line 17):  [0x0000]               JSR func
+testSPED3.dasm (line 17):  [0x0000]               .endmacro
+testSPED3.dasm (line 29):  [0x0000]               .macro call(func, param1, param2, param3)
+testSPED3.dasm (line 29):  [0x0000]               .if param1 !== A
+testSPED3.dasm (line 29):  [0x0000]               SET A, param1
+testSPED3.dasm (line 29):  [0x0000]               .endif
+testSPED3.dasm (line 29):  [0x0000]               .if param2 !== B
+testSPED3.dasm (line 29):  [0x0000]               SET B, param2
+testSPED3.dasm (line 29):  [0x0000]               .endif
+testSPED3.dasm (line 29):  [0x0000]               .if param3 !== C
+testSPED3.dasm (line 29):  [0x0000]               SET C, param3
+testSPED3.dasm (line 29):  [0x0000]               .endif
+testSPED3.dasm (line 29):  [0x0000]               JSR func
+testSPED3.dasm (line 29):  [0x0000]               .endmacro
+testSPED3.dasm (line 32):  [0x0000]               .macro prints(x, y, message)
+testSPED3.dasm (line 32):  [0x0000]               call(prints, x, y, message)
+testSPED3.dasm (line 32):  [0x0000]               .endmacro
+testSPED3.dasm (line 34):  [0x0000] 7C20 0036       JSR screen_init
+testSPED3.dasm (line 35):  [0x0002]               prints(0, 0, lcd_message)
+testSPED3.dasm (line 35):  [0x0002]               call(prints, 0, 0, lcd_message)
+testSPED3.dasm (line 35):  [0x0002]               .if 0 !== A
+testSPED3.dasm (line 35):  [0x0002] 8401            SET A, 0
+testSPED3.dasm (line 35):  [0x0004]               .endif
+testSPED3.dasm (line 35):  [0x0004]               .if 0 !== B
+testSPED3.dasm (line 35):  [0x0004] 8421            SET B, 0
+testSPED3.dasm (line 35):  [0x0006]               .endif
+testSPED3.dasm (line 35):  [0x0006]               .if lcd_message !== C
+testSPED3.dasm (line 35):  [0x0006] 7C41 005F       SET C, lcd_message
+testSPED3.dasm (line 35):  [0x0008]               .endif
+testSPED3.dasm (line 35):  [0x0008] 7C20 0051       JSR prints
+testSPED3.dasm (line 37):  [0x0008]               find_sped3:
+testSPED3.dasm (line 38):  [0x0008] 0200            HWN A
+testSPED3.dasm (line 39):  [0x0009] 8803            SUB A, 1
+testSPED3.dasm (line 40):  [0x000A]               find_sped3_loop:
+testSPED3.dasm (line 41):  [0x000A] 8012            IFE A, -1
+testSPED3.dasm (line 42):  [0x000B] 6381            SET PC, POP
+testSPED3.dasm (line 43):  [0x000C] 0301            SET PUSH, A
+testSPED3.dasm (line 44):  [0x000D] 0220            HWQ A
+testSPED3.dasm (line 45):  [0x000E] 7C12 BF3C       IFE A, 0xbf3c
+testSPED3.dasm (line 46):  [0x0010] 7C32 42BA       IFE B, 0x42ba
+testSPED3.dasm (line 47):  [0x0012] DF81            SET PC, sped3_found
+testSPED3.dasm (line 48):  [0x0013] 6001            SET A, POP
+testSPED3.dasm (line 49):  [0x0014] 8803            SUB A, 1
+testSPED3.dasm (line 50):  [0x0015] AF81            SET PC, find_sped3_loop
+testSPED3.dasm (line 51):  [0x0016]               sped3_found:
+testSPED3.dasm (line 52):  [0x0016] 60C1            SET I, POP
+testSPED3.dasm (line 54):  [0x0017] 7C61 0026       SET X, test_shape
+testSPED3.dasm (line 55):  [0x0019] C481            SET Y, test_shape_end - test_shape
+testSPED3.dasm (line 56):  [0x001A] 8801            SET A, 1
+testSPED3.dasm (line 57):  [0x001B] 1A40            HWI I
+testSPED3.dasm (line 59):  [0x001C] 8461            SET X, 0
+testSPED3.dasm (line 60):  [0x001D]               rotate:
+testSPED3.dasm (line 61):  [0x001D] 8C01            SET A, 2
+testSPED3.dasm (line 62):  [0x001E] AC62            ADD X, 10
+testSPED3.dasm (line 63):  [0x001F] 1A40            HWI I
+testSPED3.dasm (line 64):  [0x0020] 8401            SET A, 0
+testSPED3.dasm (line 65):  [0x0021]               wait:
+testSPED3.dasm (line 66):  [0x0021] 1A40            HWI I
+testSPED3.dasm (line 67):  [0x0022] 8832            IFE B, 1
+testSPED3.dasm (line 68):  [0x0023] FB81            SET PC, rotate
+testSPED3.dasm (line 69):  [0x0024] 7F81 0021       SET PC, wait
+testSPED3.dasm (line 71):  [0x0026]               test_shape:
+testSPED3.dasm (line 72):  [0x0026]               .equ green 0
+testSPED3.dasm (line 73):  [0x0026]               .equ red 1
+testSPED3.dasm (line 75):  [0x0026]                 .dat 00 | (00 << 5) | (00 << 10) | (green << 15)
+testSPED3.dasm (line 75):  [0x0026]                      0000
+testSPED3.dasm (line 76):  [0x0027]                 .dat 00 | (31 << 5) | (00 << 10) | (green << 15)
+testSPED3.dasm (line 76):  [0x0027]                      03E0
+testSPED3.dasm (line 77):  [0x0028]                 .dat 31 | (31 << 5) | (00 << 10) | (green << 15)
+testSPED3.dasm (line 77):  [0x0028]                      03FF
+testSPED3.dasm (line 78):  [0x0029]                 .dat 31 | (00 << 5) | (00 << 10) | (green << 15)
+testSPED3.dasm (line 78):  [0x0029]                      001F
+testSPED3.dasm (line 79):  [0x002A]                 .dat 00 | (00 << 5) | (00 << 10) | (green << 15)
+testSPED3.dasm (line 79):  [0x002A]                      0000
+testSPED3.dasm (line 80):  [0x002B]                 .dat 00 | (00 << 5) | (31 << 10) | (green << 15)
+testSPED3.dasm (line 80):  [0x002B]                      7C00
+testSPED3.dasm (line 81):  [0x002C]                 .dat 31 | (00 << 5) | (31 << 10) | (green << 15)
+testSPED3.dasm (line 81):  [0x002C]                      7C1F
+testSPED3.dasm (line 82):  [0x002D]                 .dat 31 | (00 << 5) | (00 << 10) | (green << 15)
+testSPED3.dasm (line 82):  [0x002D]                      001F
+testSPED3.dasm (line 83):  [0x002E]                 .dat 31 | (00 << 5) | (31 << 10) | (green << 15)
+testSPED3.dasm (line 83):  [0x002E]                      7C1F
+testSPED3.dasm (line 84):  [0x002F]                 .dat 31 | (31 << 5) | (31 << 10) | (green << 15)
+testSPED3.dasm (line 84):  [0x002F]                      7FFF
+testSPED3.dasm (line 85):  [0x0030]                 .dat 31 | (31 << 5) | (00 << 10) | (green << 15)
+testSPED3.dasm (line 85):  [0x0030]                      03FF
+testSPED3.dasm (line 86):  [0x0031]                 .dat 31 | (31 << 5) | (31 << 10) | (green << 15)
+testSPED3.dasm (line 86):  [0x0031]                      7FFF
+testSPED3.dasm (line 87):  [0x0032]                 .dat 00 | (31 << 5) | (31 << 10) | (green << 15)
+testSPED3.dasm (line 87):  [0x0032]                      7FE0
+testSPED3.dasm (line 88):  [0x0033]                 .dat 00 | (00 << 5) | (31 << 10) | (green << 15)
+testSPED3.dasm (line 88):  [0x0033]                      7C00
+testSPED3.dasm (line 89):  [0x0034]                 .dat 00 | (31 << 5) | (31 << 10) | (green << 15)
+testSPED3.dasm (line 89):  [0x0034]                      7FE0
+testSPED3.dasm (line 90):  [0x0035]                 .dat 00 | (31 << 5) | (00 << 10) | (green << 15)
+testSPED3.dasm (line 90):  [0x0035]                      03E0
+testSPED3.dasm (line 91):  [0x0036]               test_shape_end:
+testSPED3.dasm (line 94):  [0x0036]               screen_init:
+testSPED3.dasm (line 95):  [0x0036] 0200            HWN A
+testSPED3.dasm (line 96):  [0x0037] 8803            SUB A, 1
+testSPED3.dasm (line 97):  [0x0038]               screen_init_loop:
+testSPED3.dasm (line 98):  [0x0038] 8012            IFE A, 0xFFFF
+testSPED3.dasm (line 99):  [0x0039] 6381            SET PC, POP
+testSPED3.dasm (line 100): [0x003A] 0301            SET PUSH, A
+testSPED3.dasm (line 101): [0x003B] 0220            HWQ A
+testSPED3.dasm (line 102): [0x003C] 7C12 F615       IFE A, 0xf615
+testSPED3.dasm (line 103): [0x003E] 7C32 7349       IFE B, 0x7349
+testSPED3.dasm (line 104): [0x0040] 7F81 0046       SET PC, init_screen
+testSPED3.dasm (line 105): [0x0042] 6001            SET A, POP
+testSPED3.dasm (line 106): [0x0043] 8803            SUB A, 1
+testSPED3.dasm (line 107): [0x0044] 7F81 0038       SET PC, screen_init_loop
+testSPED3.dasm (line 108): [0x0046]               init_screen:
+testSPED3.dasm (line 109): [0x0046] 6001            SET A, POP
+testSPED3.dasm (line 110): [0x0047] 00C1            SET I, A
+testSPED3.dasm (line 111): [0x0048] 0041            SET C, A
+testSPED3.dasm (line 112): [0x0049] 8401            SET A, 0
+testSPED3.dasm (line 113): [0x004A] 7C21 8000       SET B, screen_buffer
+testSPED3.dasm (line 114): [0x004C] 0A40            HWI C
+testSPED3.dasm (line 115): [0x004D] 0801            SET A, C
+testSPED3.dasm (line 116): [0x004E] 8803            SUB A, 1
+testSPED3.dasm (line 117): [0x004F] 7F81 0038       SET PC, screen_init_loop
+testSPED3.dasm (line 119): [0x0051]               prints:
+testSPED3.dasm (line 120): [0x0051] 0404            MUL A, B
+testSPED3.dasm (line 121): [0x0052] 0402            ADD A, B
+testSPED3.dasm (line 122): [0x0053] 7C02 8000       ADD A, screen_buffer
+testSPED3.dasm (line 123): [0x0055]               prints_loop:
+testSPED3.dasm (line 124): [0x0055] 8552            IFE [C], 0
+testSPED3.dasm (line 125): [0x0056] 6381            SET PC, POP
+testSPED3.dasm (line 126): [0x0057] 2821            SET B, [C]
+testSPED3.dasm (line 127): [0x0058] 7C2B F000       BOR B, 0xF000
+testSPED3.dasm (line 128): [0x005A] 0501            SET [A], B
+testSPED3.dasm (line 129): [0x005B] 8802            ADD A, 1
+testSPED3.dasm (line 130): [0x005C] 8842            ADD C, 1
+testSPED3.dasm (line 131): [0x005D] 7F81 0055       SET PC, prints_loop
+testSPED3.dasm (line 133): [0x005F]               lcd_message:
+testSPED3.dasm (line 134): [0x005F]                 .dat "Hello, world!", 0
+testSPED3.dasm (line 134): [0x005F]                      0048 0065 006C 006C 006F 002C 0020 0077
+testSPED3.dasm (line 134): [0x0067]                      006F 0072 006C 0064 0021 0000

@@ -1,0 +1,331 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;
+;   uptime
+;
+;         by @lowey2002
+;
+
+jsr detect_hardware
+jsr add_clock
+set pc, end
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;
+;  create the clock interrupt 
+;
+:add_clock
+set a, 0
+set b, 60
+hwi [clock]    ; set clock interrupt to once per second
+set a, 2
+set b, [clock_interrupt_message]
+hwi [clock]  ; set the interrupt message
+ias clock_interrupt_handler  ; set the interrupt handler
+set pc, pop
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;
+;  handle for clock interrupt
+;
+:clock_interrupt_handler
+ifn a, [clock_interrupt_message]
+   rfi 0
+add [seconds], 1
+jsr display_ticks
+rfi 0
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;
+;    display_ticks
+;
+:display_ticks
+ife [seconds], 0x3b
+	jsr increase_minutes
+
+ife [minutes], 0x3c
+	jsr increase_hours
+
+set a, [seconds]
+set b, ticks_string
+jsr itoa
+
+set a, [minutes]
+set b, minutes_string
+jsr itoa
+
+set a, [hours]
+set b, hours_string
+jsr itoa
+
+
+ife [seconds], 0
+	set pc, zero_seconds
+
+ifl [seconds], 0xa
+	set pc, padded_seconds
+    
+ifg [seconds], 0x9
+	set pc, non_padded_seconds
+
+:end_seconds
+ifl [minutes], 0xa
+	set pc, padded_minutes
+    
+set a, minutes_string
+set b, 0
+set c, 3
+jsr print
+
+:end_minutes
+ifl [hours], 0xa
+	set pc, padded_hours
+    
+set a, hours_string
+set b, 0
+set c, 0
+jsr print
+
+:end_hours
+jsr print_columns
+set pc, pop
+
+
+:padded_minutes
+set a, zero_string
+set b, 0
+set c, 3
+jsr print
+set a, minutes_string
+set b, 0
+set c, 4
+jsr print
+set pc, end_minutes
+
+:padded_hours
+set a, zero_string
+set b, 0
+set c, 0
+jsr print
+set a, hours_string
+set b, 0
+set c, 1
+jsr print
+set pc, end_hours
+
+:print_columns
+set a, column_string
+set b, 0
+set c, 2
+jsr print
+set a, column_string
+set b, 0
+set c, 5
+jsr print
+set pc, pop
+
+:increase_hours
+add [hours], 1
+set [minutes], 0
+set pc, pop
+
+:increase_minutes
+add [minutes], 1
+set [seconds], 0
+set pc, pop
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;  Seconds
+;
+:non_padded_seconds
+set a, ticks_string
+set b, 0
+set c, 6
+jsr print
+set pc, end_seconds
+
+:padded_seconds
+set a, zero_string
+set b, 0
+set c, 6
+jsr print
+set a, ticks_string
+set b, 0
+set c, 7
+jsr print
+set pc, end_seconds
+
+:zero_seconds
+set a, zero_string
+set b, 0
+set c, 6
+jsr print
+set a, zero_string
+set b, 0
+set c, 7
+jsr print
+
+
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;
+;     detect_hardware
+;
+:detect_hardware
+set j, 0xffff
+hwn i
+:detect_hardware_loop
+add j, 1
+ife j, i
+   set pc, pop
+hwq j
+ife a, 0xf615
+	ife b, 0x7349
+		set [monitor], j
+ife a, 0x7406
+	ife b, 0x30cf
+		set [keyboard], j
+ife a, 0xb402
+	ife b, 0x12d0
+		set [clock], j
+set pc, detect_hardware_loop
+     
+     
+     
+     
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;
+;					Print
+;
+;  parameters 
+;      a - pointer to string
+;      b - line number
+;      c - column number
+:print
+mul b, 0x20
+add b, c
+set i, a
+set j, 0x8000
+add j, b
+:print_loop
+ife [i], 0
+	set pc, print_loop_end
+set [j], [i]
+bor [j], 0x7000
+add i, 1
+add j, 1
+set pc, print_loop
+
+:print_loop_end
+set a, 0
+set b, 0x8000
+hwi [monitor]
+set pc, pop
+
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;;           Convert integer to string
+;;                    (itoa)
+;;
+;;
+;;  Paramters
+;;     A - the integer
+;;     B - the address of the destination string
+;;
+;;  Notes
+;;     - address string must be a DAT with 0x5 reserved
+;;       to prevent overflow
+;;     - no support for radix or sign
+;;     - 0 will evaluate '0' or 0x30
+;;
+:itoa
+IFE A, 0
+SET PC, itoa_zero_string
+SET J, 0        ; stack count
+
+:itoa_loop1
+IFE A, 0
+SET PC, itoa_loop1_end
+SET I, A
+MOD I, 0xa      ; 10
+DIV A, 0xa      ; 10
+SET PUSH, i     ; the integer at this magnitude
+ADD J, 1        ; next magnitude
+SET PC, itoa_loop1
+
+:itoa_loop1_end
+SET Z, 0        ; character count
+
+:itoa_loop2
+IFE J, 0        ; stack cleared, all values accumulated
+SET PC, itoa_loop2_end
+SET I, POP
+SET A, 0x30     ; add '0' to get the ASCII value
+ADD A, I
+SET C, B
+ADD C, Z
+SET [C], A
+ADD Z, 1        ; next character
+SUB J, 1        ; decrement stack count
+SET PC, itoa_loop2
+
+:itoa_loop2_end SET C, B
+ADD C, Z
+SET [C], 0x0 ; null terminate
+:itoaret SET A, Z
+SET PC, POP
+
+:itoa_zero_string
+SET [B], 0x30
+ADD B, 1
+SET PC, POP
+
+
+
+:end
+set pc, end
+
+
+
+:monitor
+dat 0
+
+:keyboard
+dat 0
+
+:clock
+dat 0
+
+:clock_interrupt_message
+dat 0x0001
+
+:zero_string
+dat "0", 0
+
+:column_string
+dat ":", 0
+
+:ticks_string
+dat 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000
+
+:minutes_string
+dat 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000
+
+:hours_string
+dat 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000
+
+
+:seconds
+dat 0
+
+:minutes
+dat 0
+
+:hours
+dat 0

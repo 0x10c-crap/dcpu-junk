@@ -1,0 +1,130 @@
+; Sets up the screen(s)
+screen_init:
+    HWN A
+    SUB A, 1
+screen_init_loop:
+    IFE A, 0xFFFF
+        SET PC, POP
+    SET PUSH, A
+        HWQ A
+        IFE A, 0xf615
+            IFE B, 0x7349
+                SET PC, init_screen
+    SET A, POP
+    SUB A, 1
+    SET PC, screen_init_loop
+init_screen:
+    SET A, POP
+    SET I, A
+    SET C, A
+    SET A, 0
+    SET B, screen_buffer
+    HWI C
+    SET A, C
+    SUB A, 1
+    SET PC, screen_init_loop
+    
+; Finds an attached keyboard
+find_keyboard:
+    HWN A
+    SUB A, 1
+find_keyboard_loop:
+    IFE A, -1
+        SET PC, POP
+    SET PUSH, A
+        HWQ A
+        IFE A, 0x7406
+            IFE B, 0x30cf
+                SET PC, keyboard_found
+    SET A, POP
+    SUB A, 1
+    SET PC, find_keyboard_loop
+keyboard_found:
+    SET A, POP
+    SET PC, POP
+    
+; Finds an attached clock
+find_clock:
+        HWN A
+    SUB A, 1
+find_clock_loop:
+    IFE A, -1
+        SET PC, POP
+    SET PUSH, A
+        HWQ A
+        IFE A, 0xb402
+            IFE B, 0x12d0
+                SET PC, clock_found
+    SET A, POP
+    SUB A, 1
+    SET PC, find_clock_loop
+clock_found:
+    SET A, POP
+    SET PC, POP
+    
+; Finds an attached screen
+find_screen:
+    HWN A
+    SUB A, 1
+find_screen_loop:
+    IFE A, -1
+        SET PC, POP
+    SET PUSH, A
+        HWQ A
+        IFE A, 0xf615
+            IFE B, 0x7349
+                SET PC, screen_found
+    SET A, POP
+    SUB A, 1
+    SET PC, find_screen_loop
+screen_found:
+    SET A, POP
+    SET PC, POP
+    
+.macro prints(x, y, message)
+    call(prints, x, y, message)
+.endmacro
+prints:
+    MUL A, B
+    ADD A, B
+    ADD A, screen_buffer
+prints_loop:
+    IFE [C], 0
+        SET PC, POP
+    SET B, [C]
+    BOR B, 0xF000
+    SET [A], B
+    ADD A, 1
+    ADD C, 1
+    SET PC, prints_loop
+    
+    
+.macro call(func, param)
+    .if param !== A
+        SET A, param
+    .endif
+    JSR func
+.endmacro
+
+.macro call(func, param1, param2)
+    .if param1 !== A
+        SET A, param1
+    .endif
+    .if param2 !== B
+        SET B, param2
+    .endif
+    JSR func
+.endmacro
+
+.macro call(func, param1, param2, param3)
+    .if param1 !== A
+        SET A, param1
+    .endif
+    .if param2 !== B
+        SET B, param2
+    .endif
+    .if param3 !== C
+        SET C, param3
+    .endif
+    JSR func
+.endmacro

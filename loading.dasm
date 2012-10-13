@@ -1,0 +1,47 @@
+; So all of your friends can think that you're super-leet
+:start
+    JSR screen_init
+    SET A, data
+:loop
+    SET B, A
+    BOR B, 0xF000
+    SET [0x8000], B
+    ADD A, 1
+    SET B, 0
+:delay
+    ADD B, 1
+    IFN B, 1000
+        SET PC, delay
+    IFE A, data_end
+        SET A, data
+    SET PC, loop
+    
+:data
+    dat "\\|/-"
+:data_end
+    
+; Sets up the screen(s)
+:screen_init
+    HWN A
+    SUB A, 1
+:screen_init_loop
+    IFE A, -1
+        SET PC, POP
+    SET PUSH, A
+        HWQ A
+        IFE A, 0xf615
+            IFE B, 0x7349
+                SET PC, init_screen
+    SET A, POP
+    SUB A, 1
+    SET PC, screen_init_loop
+:init_screen
+    SET A, POP
+    SET I, A
+    SET C, A
+    SET A, 0
+    SET B, 0x8000
+    HWI C
+    SET A, C
+    SUB A, 1
+    SET PC, screen_init_loop
